@@ -1,0 +1,2007 @@
+start of encrypt_cl
+data, keydata, results
+initFns
+Loaded library name:/system/lib/libllvm-a3xx.so
+Connect to a compute device
+has 2 devices
+Device name is QUALCOMM Adreno(TM)
+Device name is QUALCOMM Krait(TM)
+Create a compute context
+Create a command commands
+Create the compute program from the source buffer
+file len is: 34
+full path is: /data/local/tmp/eng_opencl_aes.cl
+file opened, fd is 4
+file size is 20236 byte
+read in size is: 20236
+Build the program executable
+Create the compute kernel in the program we wish to run
+Create the input and output arrays in device memory for our calculation
+Get the maximum work group size for executing the kernel on the device
+local is 128
+encrypt_cl: count = 128
+rd_key 3"global is 128
+profile time: 1.160000 msinput data is
+0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 encrypted data is
+6A 50 AE C 58 8A 89 61 40 A6 70 83 43 E8 F7 91 6A 50 AE C 58 8A 89 61 40 A6 70 83 43 E8 F7 91 6A 50 AE C 58 8A 89 61 40 A6 70 83 43 E8 F7 91 6A 50 AE C 58 8A 89 61 40 A6 70 83 43 E8 F7 91 6A 50 AE C 58 8A 89 61 40 A6 70 83 43 E8 F7 91 6A 50 AE C 58 8A 89 61 40 A6 70 83 43 E8 F7 91 6A 50 AE C 58 8A 89 61 40 A6 70 83 43 E8 F7 91 6A 50 AE C 58 8A 89 61 40 A6 70 83 43 E8 F7 91 -----------------------------------------------encrypt_cl Time taken: 0.01s
+cl Fill data Time taken: 0.00s
+cl memory copy Time taken: 0.00s
+cl set Argument Time taken: 0.00s
+cl Execute kernel time taken: 0.00s
+cl read memory taken: 0.00s
+Computed '128/128' correct values!
+start of encrypt_cl
+data, keydata, results
+initFns
+Loaded library name:/system/lib/libllvm-a3xx.so
+Connect to a compute device
+has 2 devices
+Device name is QUALCOMM Adreno(TM)
+Device name is QUALCOMM Krait(TM)
+Create a compute context
+Create a command commands
+Create the compute program from the source buffer
+file len is: 34
+full path is: /data/local/tmp/eng_opencl_aes.cl
+file opened, fd is 4
+file size is 20236 byte
+read in size is: 20236
+Build the program executable
+Create the compute kernel in the program we wish to run
+Create the input and output arrays in device memory for our calculation
+Get the maximum work group size for executing the kernel on the device
+local is 128
+encrypt_cl: count = 128
+rd_key 3"global is 128
+profile time: 1.221000 msinput data is
+0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 encrypted data is
+6A 50 AE C 58 8A 89 61 40 A6 70 83 43 E8 F7 91 6A 50 AE C 58 8A 89 61 40 A6 70 83 43 E8 F7 91 6A 50 AE C 58 8A 89 61 40 A6 70 83 43 E8 F7 91 6A 50 AE C 58 8A 89 61 40 A6 70 83 43 E8 F7 91 6A 50 AE C 58 8A 89 61 40 A6 70 83 43 E8 F7 91 6A 50 AE C 58 8A 89 61 40 A6 70 83 43 E8 F7 91 6A 50 AE C 58 8A 89 61 40 A6 70 83 43 E8 F7 91 6A 50 AE C 58 8A 89 61 40 A6 70 83 43 E8 F7 91 -----------------------------------------------encrypt_cl Time taken: 0.01s
+cl Fill data Time taken: 0.00s
+cl memory copy Time taken: 0.00s
+cl set Argument Time taken: 0.00s
+cl Execute kernel time taken: 0.01s
+cl read memory taken: 0.00s
+Computed '128/128' correct values!
+start of encrypt_cl
+data, keydata, results
+initFns
+Loaded library name:/system/lib/libllvm-a3xx.so
+Connect to a compute device
+has 2 devices
+Device name is QUALCOMM Adreno(TM)
+Device name is QUALCOMM Krait(TM)
+Create a compute context
+Create a command commands
+Create the compute program from the source buffer
+file len is: 34
+full path is: /data/local/tmp/eng_opencl_aes.cl
+file opened, fd is 4
+file size is 20236 byte
+read in size is: 20236
+Build the program executable
+Create the compute kernel in the program we wish to run
+Create the input and output arrays in device memory for our calculation
+Get the maximum work group size for executing the kernel on the device
+local is 128
+encrypt_cl: count = 128
+rd_key 3"global is 128
+profile time: 1.252000 msinput data is
+0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 encrypted data is
+6A 50 AE C 58 8A 89 61 40 A6 70 83 43 E8 F7 91 6A 50 AE C 58 8A 89 61 40 A6 70 83 43 E8 F7 91 6A 50 AE C 58 8A 89 61 40 A6 70 83 43 E8 F7 91 6A 50 AE C 58 8A 89 61 40 A6 70 83 43 E8 F7 91 6A 50 AE C 58 8A 89 61 40 A6 70 83 43 E8 F7 91 6A 50 AE C 58 8A 89 61 40 A6 70 83 43 E8 F7 91 6A 50 AE C 58 8A 89 61 40 A6 70 83 43 E8 F7 91 6A 50 AE C 58 8A 89 61 40 A6 70 83 43 E8 F7 91 -----------------------------------------------encrypt_cl Time taken: 0.01s
+cl Fill data Time taken: 0.00s
+cl memory copy Time taken: 0.00s
+cl set Argument Time taken: 0.00s
+cl Execute kernel time taken: 0.01s
+cl read memory taken: 0.00s
+Computed '128/128' correct values!
+start of encrypt_cl
+data, keydata, results
+initFns
+Loaded library name:/system/lib/libllvm-a3xx.so
+Connect to a compute device
+has 2 devices
+Device name is QUALCOMM Adreno(TM)
+Device name is QUALCOMM Krait(TM)
+Create a compute context
+Create a command commands
+Create the compute program from the source buffer
+file len is: 34
+full path is: /data/local/tmp/eng_opencl_aes.cl
+file opened, fd is 4
+file size is 20236 byte
+read in size is: 20236
+Build the program executable
+Create the compute kernel in the program we wish to run
+Create the input and output arrays in device memory for our calculation
+Get the maximum work group size for executing the kernel on the device
+local is 128
+encrypt_cl: count = 128
+rd_key 3"global is 128
+profile time: 1.221000 msinput data is
+0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 encrypted data is
+6A 50 AE C 58 8A 89 61 40 A6 70 83 43 E8 F7 91 6A 50 AE C 58 8A 89 61 40 A6 70 83 43 E8 F7 91 6A 50 AE C 58 8A 89 61 40 A6 70 83 43 E8 F7 91 6A 50 AE C 58 8A 89 61 40 A6 70 83 43 E8 F7 91 6A 50 AE C 58 8A 89 61 40 A6 70 83 43 E8 F7 91 6A 50 AE C 58 8A 89 61 40 A6 70 83 43 E8 F7 91 6A 50 AE C 58 8A 89 61 40 A6 70 83 43 E8 F7 91 6A 50 AE C 58 8A 89 61 40 A6 70 83 43 E8 F7 91 -----------------------------------------------encrypt_cl Time taken: 0.01s
+cl Fill data Time taken: 0.00s
+cl memory copy Time taken: 0.00s
+cl set Argument Time taken: 0.00s
+cl Execute kernel time taken: 0.01s
+cl read memory taken: 0.00s
+Computed '128/128' correct values!
+start of encrypt_cl
+data, keydata, results
+initFns
+Loaded library name:/system/lib/libllvm-a3xx.so
+Connect to a compute device
+has 2 devices
+Device name is QUALCOMM Adreno(TM)
+Device name is QUALCOMM Krait(TM)
+Create a compute context
+Create a command commands
+Create the compute program from the source buffer
+file len is: 34
+full path is: /data/local/tmp/eng_opencl_aes.cl
+file opened, fd is 4
+file size is 20236 byte
+read in size is: 20236
+Build the program executable
+Create the compute kernel in the program we wish to run
+Create the input and output arrays in device memory for our calculation
+Get the maximum work group size for executing the kernel on the device
+local is 128
+encrypt_cl: count = 128
+rd_key 3"global is 128
+profile time: 1.252000 msinput data is
+0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 encrypted data is
+6A 50 AE C 58 8A 89 61 40 A6 70 83 43 E8 F7 91 6A 50 AE C 58 8A 89 61 40 A6 70 83 43 E8 F7 91 6A 50 AE C 58 8A 89 61 40 A6 70 83 43 E8 F7 91 6A 50 AE C 58 8A 89 61 40 A6 70 83 43 E8 F7 91 6A 50 AE C 58 8A 89 61 40 A6 70 83 43 E8 F7 91 6A 50 AE C 58 8A 89 61 40 A6 70 83 43 E8 F7 91 6A 50 AE C 58 8A 89 61 40 A6 70 83 43 E8 F7 91 6A 50 AE C 58 8A 89 61 40 A6 70 83 43 E8 F7 91 -----------------------------------------------encrypt_cl Time taken: 0.01s
+cl Fill data Time taken: 0.00s
+cl memory copy Time taken: 0.00s
+cl set Argument Time taken: 0.00s
+cl Execute kernel time taken: 0.01s
+cl read memory taken: 0.00s
+Computed '128/128' correct values!
+start of encrypt_cl
+data, keydata, results
+initFns
+Loaded library name:/system/lib/libllvm-a3xx.so
+Connect to a compute device
+has 2 devices
+Device name is QUALCOMM Adreno(TM)
+Device name is QUALCOMM Krait(TM)
+Create a compute context
+Create a command commands
+Create the compute program from the source buffer
+file len is: 34
+full path is: /data/local/tmp/eng_opencl_aes.cl
+file opened, fd is 4
+file size is 20236 byte
+read in size is: 20236
+Build the program executable
+Create the compute kernel in the program we wish to run
+Create the input and output arrays in device memory for our calculation
+Get the maximum work group size for executing the kernel on the device
+local is 128
+encrypt_cl: count = 128
+rd_key 3"global is 128
+profile time: 0.183000 msinput data is
+0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 encrypted data is
+6A 50 AE C 58 8A 89 61 40 A6 70 83 43 E8 F7 91 6A 50 AE C 58 8A 89 61 40 A6 70 83 43 E8 F7 91 6A 50 AE C 58 8A 89 61 40 A6 70 83 43 E8 F7 91 6A 50 AE C 58 8A 89 61 40 A6 70 83 43 E8 F7 91 6A 50 AE C 58 8A 89 61 40 A6 70 83 43 E8 F7 91 6A 50 AE C 58 8A 89 61 40 A6 70 83 43 E8 F7 91 6A 50 AE C 58 8A 89 61 40 A6 70 83 43 E8 F7 91 6A 50 AE C 58 8A 89 61 40 A6 70 83 43 E8 F7 91 -----------------------------------------------encrypt_cl Time taken: 0.01s
+cl Fill data Time taken: 0.00s
+cl memory copy Time taken: 0.00s
+cl set Argument Time taken: 0.00s
+cl Execute kernel time taken: 0.01s
+cl read memory taken: 0.00s
+Computed '128/128' correct values!
+start of encrypt_cl
+data, keydata, results
+initFns
+Loaded library name:/system/lib/libllvm-a3xx.so
+Connect to a compute device
+has 2 devices
+Device name is QUALCOMM Adreno(TM)
+Device name is QUALCOMM Krait(TM)
+Create a compute context
+Create a command commands
+Create the compute program from the source buffer
+file len is: 34
+full path is: /data/local/tmp/eng_opencl_aes.cl
+file opened, fd is 4
+file size is 20236 byte
+read in size is: 20236
+Build the program executable
+Create the compute kernel in the program we wish to run
+Create the input and output arrays in device memory for our calculation
+Get the maximum work group size for executing the kernel on the device
+local is 128
+encrypt_cl: count = 128
+rd_key 3"global is 128
+profile time: 0.183000 msinput data is
+0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 encrypted data is
+6A 50 AE C 58 8A 89 61 40 A6 70 83 43 E8 F7 91 6A 50 AE C 58 8A 89 61 40 A6 70 83 43 E8 F7 91 6A 50 AE C 58 8A 89 61 40 A6 70 83 43 E8 F7 91 6A 50 AE C 58 8A 89 61 40 A6 70 83 43 E8 F7 91 6A 50 AE C 58 8A 89 61 40 A6 70 83 43 E8 F7 91 6A 50 AE C 58 8A 89 61 40 A6 70 83 43 E8 F7 91 6A 50 AE C 58 8A 89 61 40 A6 70 83 43 E8 F7 91 6A 50 AE C 58 8A 89 61 40 A6 70 83 43 E8 F7 91 -----------------------------------------------encrypt_cl Time taken: 0.01s
+cl Fill data Time taken: 0.00s
+cl memory copy Time taken: 0.00s
+cl set Argument Time taken: 0.00s
+cl Execute kernel time taken: 0.01s
+cl read memory taken: 0.00s
+Computed '128/128' correct values!
+start of encrypt_cl
+data, keydata, results
+initFns
+Loaded library name:/system/lib/libllvm-a3xx.so
+Connect to a compute device
+has 2 devices
+Device name is QUALCOMM Adreno(TM)
+Device name is QUALCOMM Krait(TM)
+Create a compute context
+Create a command commands
+Create the compute program from the source buffer
+file len is: 34
+full path is: /data/local/tmp/eng_opencl_aes.cl
+file opened, fd is 4
+file size is 20236 byte
+read in size is: 20236
+Build the program executable
+Create the compute kernel in the program we wish to run
+Create the input and output arrays in device memory for our calculation
+Get the maximum work group size for executing the kernel on the device
+local is 128
+encrypt_cl: count = 128
+rd_key 3"global is 128
+profile time: 0.184000 msinput data is
+0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 encrypted data is
+6A 50 AE C 58 8A 89 61 40 A6 70 83 43 E8 F7 91 6A 50 AE C 58 8A 89 61 40 A6 70 83 43 E8 F7 91 6A 50 AE C 58 8A 89 61 40 A6 70 83 43 E8 F7 91 6A 50 AE C 58 8A 89 61 40 A6 70 83 43 E8 F7 91 6A 50 AE C 58 8A 89 61 40 A6 70 83 43 E8 F7 91 6A 50 AE C 58 8A 89 61 40 A6 70 83 43 E8 F7 91 6A 50 AE C 58 8A 89 61 40 A6 70 83 43 E8 F7 91 6A 50 AE C 58 8A 89 61 40 A6 70 83 43 E8 F7 91 -----------------------------------------------encrypt_cl Time taken: 0.01s
+cl Fill data Time taken: 0.00s
+cl memory copy Time taken: 0.00s
+cl set Argument Time taken: 0.00s
+cl Execute kernel time taken: 0.01s
+cl read memory taken: 0.00s
+Computed '128/128' correct values!
+start of encrypt_cl
+data, keydata, results
+initFns
+Loaded library name:/system/lib/libllvm-a3xx.so
+Connect to a compute device
+has 2 devices
+Device name is QUALCOMM Adreno(TM)
+Device name is QUALCOMM Krait(TM)
+Create a compute context
+Create a command commands
+Create the compute program from the source buffer
+file len is: 34
+full path is: /data/local/tmp/eng_opencl_aes.cl
+file opened, fd is 4
+file size is 20236 byte
+read in size is: 20236
+Build the program executable
+Create the compute kernel in the program we wish to run
+Create the input and output arrays in device memory for our calculation
+Get the maximum work group size for executing the kernel on the device
+local is 128
+encrypt_cl: count = 128
+rd_key 3"global is 128
+profile time: 1.251000 msinput data is
+0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 encrypted data is
+6A 50 AE C 58 8A 89 61 40 A6 70 83 43 E8 F7 91 6A 50 AE C 58 8A 89 61 40 A6 70 83 43 E8 F7 91 6A 50 AE C 58 8A 89 61 40 A6 70 83 43 E8 F7 91 6A 50 AE C 58 8A 89 61 40 A6 70 83 43 E8 F7 91 6A 50 AE C 58 8A 89 61 40 A6 70 83 43 E8 F7 91 6A 50 AE C 58 8A 89 61 40 A6 70 83 43 E8 F7 91 6A 50 AE C 58 8A 89 61 40 A6 70 83 43 E8 F7 91 6A 50 AE C 58 8A 89 61 40 A6 70 83 43 E8 F7 91 -----------------------------------------------encrypt_cl Time taken: 0.01s
+cl Fill data Time taken: 0.00s
+cl memory copy Time taken: 0.00s
+cl set Argument Time taken: 0.00s
+cl Execute kernel time taken: 0.01s
+cl read memory taken: 0.00s
+Computed '128/128' correct values!
+start of encrypt_cl
+data, keydata, results
+initFns
+Loaded library name:/system/lib/libllvm-a3xx.so
+Connect to a compute device
+has 2 devices
+Device name is QUALCOMM Adreno(TM)
+Device name is QUALCOMM Krait(TM)
+Create a compute context
+Create a command commands
+Create the compute program from the source buffer
+file len is: 34
+full path is: /data/local/tmp/eng_opencl_aes.cl
+file opened, fd is 4
+file size is 20236 byte
+read in size is: 20236
+Build the program executable
+Create the compute kernel in the program we wish to run
+Create the input and output arrays in device memory for our calculation
+Get the maximum work group size for executing the kernel on the device
+local is 128
+encrypt_cl: count = 128
+rd_key 3"global is 128
+profile time: 0.153000 msinput data is
+0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 encrypted data is
+6A 50 AE C 58 8A 89 61 40 A6 70 83 43 E8 F7 91 6A 50 AE C 58 8A 89 61 40 A6 70 83 43 E8 F7 91 6A 50 AE C 58 8A 89 61 40 A6 70 83 43 E8 F7 91 6A 50 AE C 58 8A 89 61 40 A6 70 83 43 E8 F7 91 6A 50 AE C 58 8A 89 61 40 A6 70 83 43 E8 F7 91 6A 50 AE C 58 8A 89 61 40 A6 70 83 43 E8 F7 91 6A 50 AE C 58 8A 89 61 40 A6 70 83 43 E8 F7 91 6A 50 AE C 58 8A 89 61 40 A6 70 83 43 E8 F7 91 -----------------------------------------------encrypt_cl Time taken: 0.01s
+cl Fill data Time taken: 0.00s
+cl memory copy Time taken: 0.00s
+cl set Argument Time taken: 0.00s
+cl Execute kernel time taken: 0.00s
+cl read memory taken: 0.00s
+Computed '128/128' correct values!
+start of encrypt_cl
+data, keydata, results
+initFns
+Loaded library name:/system/lib/libllvm-a3xx.so
+Connect to a compute device
+has 2 devices
+Device name is QUALCOMM Adreno(TM)
+Device name is QUALCOMM Krait(TM)
+Create a compute context
+Create a command commands
+Create the compute program from the source buffer
+file len is: 34
+full path is: /data/local/tmp/eng_opencl_aes.cl
+file opened, fd is 4
+file size is 20236 byte
+read in size is: 20236
+Build the program executable
+Create the compute kernel in the program we wish to run
+Create the input and output arrays in device memory for our calculation
+Get the maximum work group size for executing the kernel on the device
+local is 128
+encrypt_cl: count = 128
+rd_key 3"global is 128
+profile time: 0.153000 msinput data is
+0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 encrypted data is
+6A 50 AE C 58 8A 89 61 40 A6 70 83 43 E8 F7 91 6A 50 AE C 58 8A 89 61 40 A6 70 83 43 E8 F7 91 6A 50 AE C 58 8A 89 61 40 A6 70 83 43 E8 F7 91 6A 50 AE C 58 8A 89 61 40 A6 70 83 43 E8 F7 91 6A 50 AE C 58 8A 89 61 40 A6 70 83 43 E8 F7 91 6A 50 AE C 58 8A 89 61 40 A6 70 83 43 E8 F7 91 6A 50 AE C 58 8A 89 61 40 A6 70 83 43 E8 F7 91 6A 50 AE C 58 8A 89 61 40 A6 70 83 43 E8 F7 91 -----------------------------------------------encrypt_cl Time taken: 0.01s
+cl Fill data Time taken: 0.00s
+cl memory copy Time taken: 0.00s
+cl set Argument Time taken: 0.00s
+cl Execute kernel time taken: 0.00s
+cl read memory taken: 0.00s
+Computed '128/128' correct values!
+start of encrypt_cl
+data, keydata, results
+initFns
+Loaded library name:/system/lib/libllvm-a3xx.so
+Connect to a compute device
+has 2 devices
+Device name is QUALCOMM Adreno(TM)
+Device name is QUALCOMM Krait(TM)
+Create a compute context
+Create a command commands
+Create the compute program from the source buffer
+file len is: 34
+full path is: /data/local/tmp/eng_opencl_aes.cl
+file opened, fd is 4
+file size is 20236 byte
+read in size is: 20236
+Build the program executable
+Create the compute kernel in the program we wish to run
+Create the input and output arrays in device memory for our calculation
+Get the maximum work group size for executing the kernel on the device
+local is 128
+encrypt_cl: count = 128
+rd_key 3"global is 128
+profile time: 0.183000 msinput data is
+0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 encrypted data is
+6A 50 AE C 58 8A 89 61 40 A6 70 83 43 E8 F7 91 6A 50 AE C 58 8A 89 61 40 A6 70 83 43 E8 F7 91 6A 50 AE C 58 8A 89 61 40 A6 70 83 43 E8 F7 91 6A 50 AE C 58 8A 89 61 40 A6 70 83 43 E8 F7 91 6A 50 AE C 58 8A 89 61 40 A6 70 83 43 E8 F7 91 6A 50 AE C 58 8A 89 61 40 A6 70 83 43 E8 F7 91 6A 50 AE C 58 8A 89 61 40 A6 70 83 43 E8 F7 91 6A 50 AE C 58 8A 89 61 40 A6 70 83 43 E8 F7 91 -----------------------------------------------encrypt_cl Time taken: 0.01s
+cl Fill data Time taken: 0.00s
+cl memory copy Time taken: 0.00s
+cl set Argument Time taken: 0.00s
+cl Execute kernel time taken: 0.01s
+cl read memory taken: 0.00s
+Computed '128/128' correct values!
+start of encrypt_cl
+data, keydata, results
+initFns
+Loaded library name:/system/lib/libllvm-a3xx.so
+Connect to a compute device
+has 2 devices
+Device name is QUALCOMM Adreno(TM)
+Device name is QUALCOMM Krait(TM)
+Create a compute context
+Create a command commands
+Create the compute program from the source buffer
+file len is: 34
+full path is: /data/local/tmp/eng_opencl_aes.cl
+file opened, fd is 4
+file size is 20236 byte
+read in size is: 20236
+Build the program executable
+Create the compute kernel in the program we wish to run
+Create the input and output arrays in device memory for our calculation
+Get the maximum work group size for executing the kernel on the device
+local is 128
+encrypt_cl: count = 128
+rd_key 3"global is 128
+profile time: 0.183000 msinput data is
+0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 encrypted data is
+6A 50 AE C 58 8A 89 61 40 A6 70 83 43 E8 F7 91 6A 50 AE C 58 8A 89 61 40 A6 70 83 43 E8 F7 91 6A 50 AE C 58 8A 89 61 40 A6 70 83 43 E8 F7 91 6A 50 AE C 58 8A 89 61 40 A6 70 83 43 E8 F7 91 6A 50 AE C 58 8A 89 61 40 A6 70 83 43 E8 F7 91 6A 50 AE C 58 8A 89 61 40 A6 70 83 43 E8 F7 91 6A 50 AE C 58 8A 89 61 40 A6 70 83 43 E8 F7 91 6A 50 AE C 58 8A 89 61 40 A6 70 83 43 E8 F7 91 -----------------------------------------------encrypt_cl Time taken: 0.01s
+cl Fill data Time taken: 0.00s
+cl memory copy Time taken: 0.00s
+cl set Argument Time taken: 0.00s
+cl Execute kernel time taken: 0.01s
+cl read memory taken: 0.00s
+Computed '128/128' correct values!
+start of encrypt_cl
+data, keydata, results
+initFns
+Loaded library name:/system/lib/libllvm-a3xx.so
+Connect to a compute device
+has 2 devices
+Device name is QUALCOMM Adreno(TM)
+Device name is QUALCOMM Krait(TM)
+Create a compute context
+Create a command commands
+Create the compute program from the source buffer
+file len is: 34
+full path is: /data/local/tmp/eng_opencl_aes.cl
+file opened, fd is 4
+file size is 20236 byte
+read in size is: 20236
+Build the program executable
+Create the compute kernel in the program we wish to run
+Create the input and output arrays in device memory for our calculation
+Get the maximum work group size for executing the kernel on the device
+local is 128
+encrypt_cl: count = 128
+rd_key 3"global is 128
+profile time: 1.221000 msinput data is
+0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 encrypted data is
+6A 50 AE C 58 8A 89 61 40 A6 70 83 43 E8 F7 91 6A 50 AE C 58 8A 89 61 40 A6 70 83 43 E8 F7 91 6A 50 AE C 58 8A 89 61 40 A6 70 83 43 E8 F7 91 6A 50 AE C 58 8A 89 61 40 A6 70 83 43 E8 F7 91 6A 50 AE C 58 8A 89 61 40 A6 70 83 43 E8 F7 91 6A 50 AE C 58 8A 89 61 40 A6 70 83 43 E8 F7 91 6A 50 AE C 58 8A 89 61 40 A6 70 83 43 E8 F7 91 6A 50 AE C 58 8A 89 61 40 A6 70 83 43 E8 F7 91 -----------------------------------------------encrypt_cl Time taken: 0.01s
+cl Fill data Time taken: 0.00s
+cl memory copy Time taken: 0.00s
+cl set Argument Time taken: 0.00s
+cl Execute kernel time taken: 0.01s
+cl read memory taken: 0.00s
+Computed '128/128' correct values!
+start of encrypt_cl
+data, keydata, results
+initFns
+Loaded library name:/system/lib/libllvm-a3xx.so
+Connect to a compute device
+has 2 devices
+Device name is QUALCOMM Adreno(TM)
+Device name is QUALCOMM Krait(TM)
+Create a compute context
+Create a command commands
+Create the compute program from the source buffer
+file len is: 34
+full path is: /data/local/tmp/eng_opencl_aes.cl
+file opened, fd is 4
+file size is 20236 byte
+read in size is: 20236
+Build the program executable
+Create the compute kernel in the program we wish to run
+Create the input and output arrays in device memory for our calculation
+Get the maximum work group size for executing the kernel on the device
+local is 128
+encrypt_cl: count = 128
+rd_key 3"global is 128
+profile time: 1.252000 msinput data is
+0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 encrypted data is
+6A 50 AE C 58 8A 89 61 40 A6 70 83 43 E8 F7 91 6A 50 AE C 58 8A 89 61 40 A6 70 83 43 E8 F7 91 6A 50 AE C 58 8A 89 61 40 A6 70 83 43 E8 F7 91 6A 50 AE C 58 8A 89 61 40 A6 70 83 43 E8 F7 91 6A 50 AE C 58 8A 89 61 40 A6 70 83 43 E8 F7 91 6A 50 AE C 58 8A 89 61 40 A6 70 83 43 E8 F7 91 6A 50 AE C 58 8A 89 61 40 A6 70 83 43 E8 F7 91 6A 50 AE C 58 8A 89 61 40 A6 70 83 43 E8 F7 91 -----------------------------------------------encrypt_cl Time taken: 0.01s
+cl Fill data Time taken: 0.00s
+cl memory copy Time taken: 0.00s
+cl set Argument Time taken: 0.00s
+cl Execute kernel time taken: 0.01s
+cl read memory taken: 0.00s
+Computed '128/128' correct values!
+start of encrypt_cl
+data, keydata, results
+initFns
+Loaded library name:/system/lib/libllvm-a3xx.so
+Connect to a compute device
+has 2 devices
+Device name is QUALCOMM Adreno(TM)
+Device name is QUALCOMM Krait(TM)
+Create a compute context
+Create a command commands
+Create the compute program from the source buffer
+file len is: 34
+full path is: /data/local/tmp/eng_opencl_aes.cl
+file opened, fd is 4
+file size is 20236 byte
+read in size is: 20236
+Build the program executable
+Create the compute kernel in the program we wish to run
+Create the input and output arrays in device memory for our calculation
+Get the maximum work group size for executing the kernel on the device
+local is 128
+encrypt_cl: count = 128
+rd_key 3"global is 128
+profile time: 1.221000 msinput data is
+0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 encrypted data is
+6A 50 AE C 58 8A 89 61 40 A6 70 83 43 E8 F7 91 6A 50 AE C 58 8A 89 61 40 A6 70 83 43 E8 F7 91 6A 50 AE C 58 8A 89 61 40 A6 70 83 43 E8 F7 91 6A 50 AE C 58 8A 89 61 40 A6 70 83 43 E8 F7 91 6A 50 AE C 58 8A 89 61 40 A6 70 83 43 E8 F7 91 6A 50 AE C 58 8A 89 61 40 A6 70 83 43 E8 F7 91 6A 50 AE C 58 8A 89 61 40 A6 70 83 43 E8 F7 91 6A 50 AE C 58 8A 89 61 40 A6 70 83 43 E8 F7 91 -----------------------------------------------encrypt_cl Time taken: 0.01s
+cl Fill data Time taken: 0.00s
+cl memory copy Time taken: 0.00s
+cl set Argument Time taken: 0.00s
+cl Execute kernel time taken: 0.01s
+cl read memory taken: 0.00s
+Computed '128/128' correct values!
+start of encrypt_cl
+data, keydata, results
+initFns
+Loaded library name:/system/lib/libllvm-a3xx.so
+Connect to a compute device
+has 2 devices
+Device name is QUALCOMM Adreno(TM)
+Device name is QUALCOMM Krait(TM)
+Create a compute context
+Create a command commands
+Create the compute program from the source buffer
+file len is: 34
+full path is: /data/local/tmp/eng_opencl_aes.cl
+file opened, fd is 4
+file size is 20236 byte
+read in size is: 20236
+Build the program executable
+Create the compute kernel in the program we wish to run
+Create the input and output arrays in device memory for our calculation
+Get the maximum work group size for executing the kernel on the device
+local is 128
+encrypt_cl: count = 128
+rd_key 3"global is 128
+profile time: 1.221000 msinput data is
+0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 encrypted data is
+6A 50 AE C 58 8A 89 61 40 A6 70 83 43 E8 F7 91 6A 50 AE C 58 8A 89 61 40 A6 70 83 43 E8 F7 91 6A 50 AE C 58 8A 89 61 40 A6 70 83 43 E8 F7 91 6A 50 AE C 58 8A 89 61 40 A6 70 83 43 E8 F7 91 6A 50 AE C 58 8A 89 61 40 A6 70 83 43 E8 F7 91 6A 50 AE C 58 8A 89 61 40 A6 70 83 43 E8 F7 91 6A 50 AE C 58 8A 89 61 40 A6 70 83 43 E8 F7 91 6A 50 AE C 58 8A 89 61 40 A6 70 83 43 E8 F7 91 -----------------------------------------------encrypt_cl Time taken: 0.01s
+cl Fill data Time taken: 0.00s
+cl memory copy Time taken: 0.00s
+cl set Argument Time taken: 0.00s
+cl Execute kernel time taken: 0.01s
+cl read memory taken: 0.00s
+Computed '128/128' correct values!
+start of encrypt_cl
+data, keydata, results
+initFns
+Loaded library name:/system/lib/libllvm-a3xx.so
+Connect to a compute device
+has 2 devices
+Device name is QUALCOMM Adreno(TM)
+Device name is QUALCOMM Krait(TM)
+Create a compute context
+Create a command commands
+Create the compute program from the source buffer
+file len is: 34
+full path is: /data/local/tmp/eng_opencl_aes.cl
+file opened, fd is 4
+file size is 20236 byte
+read in size is: 20236
+Build the program executable
+Create the compute kernel in the program we wish to run
+Create the input and output arrays in device memory for our calculation
+Get the maximum work group size for executing the kernel on the device
+local is 128
+encrypt_cl: count = 128
+rd_key 3"global is 128
+profile time: 1.252000 msinput data is
+0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 encrypted data is
+6A 50 AE C 58 8A 89 61 40 A6 70 83 43 E8 F7 91 6A 50 AE C 58 8A 89 61 40 A6 70 83 43 E8 F7 91 6A 50 AE C 58 8A 89 61 40 A6 70 83 43 E8 F7 91 6A 50 AE C 58 8A 89 61 40 A6 70 83 43 E8 F7 91 6A 50 AE C 58 8A 89 61 40 A6 70 83 43 E8 F7 91 6A 50 AE C 58 8A 89 61 40 A6 70 83 43 E8 F7 91 6A 50 AE C 58 8A 89 61 40 A6 70 83 43 E8 F7 91 6A 50 AE C 58 8A 89 61 40 A6 70 83 43 E8 F7 91 -----------------------------------------------encrypt_cl Time taken: 0.01s
+cl Fill data Time taken: 0.00s
+cl memory copy Time taken: 0.00s
+cl set Argument Time taken: 0.00s
+cl Execute kernel time taken: 0.01s
+cl read memory taken: 0.00s
+Computed '128/128' correct values!
+start of encrypt_cl
+data, keydata, results
+initFns
+Loaded library name:/system/lib/libllvm-a3xx.so
+Connect to a compute device
+has 2 devices
+Device name is QUALCOMM Adreno(TM)
+Device name is QUALCOMM Krait(TM)
+Create a compute context
+Create a command commands
+Create the compute program from the source buffer
+file len is: 34
+full path is: /data/local/tmp/eng_opencl_aes.cl
+file opened, fd is 4
+file size is 20236 byte
+read in size is: 20236
+Build the program executable
+Create the compute kernel in the program we wish to run
+Create the input and output arrays in device memory for our calculation
+Get the maximum work group size for executing the kernel on the device
+local is 128
+encrypt_cl: count = 128
+rd_key 3"global is 128
+profile time: 1.220000 msinput data is
+0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 encrypted data is
+6A 50 AE C 58 8A 89 61 40 A6 70 83 43 E8 F7 91 6A 50 AE C 58 8A 89 61 40 A6 70 83 43 E8 F7 91 6A 50 AE C 58 8A 89 61 40 A6 70 83 43 E8 F7 91 6A 50 AE C 58 8A 89 61 40 A6 70 83 43 E8 F7 91 6A 50 AE C 58 8A 89 61 40 A6 70 83 43 E8 F7 91 6A 50 AE C 58 8A 89 61 40 A6 70 83 43 E8 F7 91 6A 50 AE C 58 8A 89 61 40 A6 70 83 43 E8 F7 91 6A 50 AE C 58 8A 89 61 40 A6 70 83 43 E8 F7 91 -----------------------------------------------encrypt_cl Time taken: 0.01s
+cl Fill data Time taken: 0.00s
+cl memory copy Time taken: 0.00s
+cl set Argument Time taken: 0.00s
+cl Execute kernel time taken: 0.01s
+cl read memory taken: 0.00s
+Computed '128/128' correct values!
+start of encrypt_cl
+data, keydata, results
+initFns
+Loaded library name:/system/lib/libllvm-a3xx.so
+Connect to a compute device
+has 2 devices
+Device name is QUALCOMM Adreno(TM)
+Device name is QUALCOMM Krait(TM)
+Create a compute context
+Create a command commands
+Create the compute program from the source buffer
+file len is: 34
+full path is: /data/local/tmp/eng_opencl_aes.cl
+file opened, fd is 4
+file size is 20236 byte
+read in size is: 20236
+Build the program executable
+Create the compute kernel in the program we wish to run
+Create the input and output arrays in device memory for our calculation
+Get the maximum work group size for executing the kernel on the device
+local is 128
+encrypt_cl: count = 128
+rd_key 3"global is 128
+profile time: 1.221000 msinput data is
+0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 encrypted data is
+6A 50 AE C 58 8A 89 61 40 A6 70 83 43 E8 F7 91 6A 50 AE C 58 8A 89 61 40 A6 70 83 43 E8 F7 91 6A 50 AE C 58 8A 89 61 40 A6 70 83 43 E8 F7 91 6A 50 AE C 58 8A 89 61 40 A6 70 83 43 E8 F7 91 6A 50 AE C 58 8A 89 61 40 A6 70 83 43 E8 F7 91 6A 50 AE C 58 8A 89 61 40 A6 70 83 43 E8 F7 91 6A 50 AE C 58 8A 89 61 40 A6 70 83 43 E8 F7 91 6A 50 AE C 58 8A 89 61 40 A6 70 83 43 E8 F7 91 -----------------------------------------------encrypt_cl Time taken: 0.01s
+cl Fill data Time taken: 0.00s
+cl memory copy Time taken: 0.00s
+cl set Argument Time taken: 0.00s
+cl Execute kernel time taken: 0.01s
+cl read memory taken: 0.00s
+Computed '128/128' correct values!
+start of encrypt_cl
+data, keydata, results
+initFns
+Loaded library name:/system/lib/libllvm-a3xx.so
+Connect to a compute device
+has 2 devices
+Device name is QUALCOMM Adreno(TM)
+Device name is QUALCOMM Krait(TM)
+Create a compute context
+Create a command commands
+Create the compute program from the source buffer
+file len is: 34
+full path is: /data/local/tmp/eng_opencl_aes.cl
+file opened, fd is 4
+file size is 20236 byte
+read in size is: 20236
+Build the program executable
+Create the compute kernel in the program we wish to run
+Create the input and output arrays in device memory for our calculation
+Get the maximum work group size for executing the kernel on the device
+local is 128
+encrypt_cl: count = 128
+rd_key 3"global is 128
+profile time: 8366.792969 msinput data is
+0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 encrypted data is
+0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 -----------------------------------------------encrypt_cl Time taken: 8.37s
+cl Fill data Time taken: 0.00s
+cl memory copy Time taken: 0.00s
+cl set Argument Time taken: 0.00s
+cl Execute kernel time taken: 8.37s
+cl read memory taken: 0.00s
+Computed '128/128' correct values!
+start of encrypt_cl
+data, keydata, results
+initFns
+Loaded library name:/system/lib/libllvm-a3xx.so
+Connect to a compute device
+has 2 devices
+Device name is QUALCOMM Adreno(TM)
+Device name is QUALCOMM Krait(TM)
+Create a compute context
+Create a command commands
+Create the compute program from the source buffer
+file len is: 34
+full path is: /data/local/tmp/eng_opencl_aes.cl
+file opened, fd is 4
+file size is 20236 byte
+read in size is: 20236
+Build the program executable
+Create the compute kernel in the program we wish to run
+Create the input and output arrays in device memory for our calculation
+Get the maximum work group size for executing the kernel on the device
+local is 128
+encrypt_cl: count = 128
+rd_key 3"global is 128
+profile time: 0.122000 msinput data is
+0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 encrypted data is
+6A 50 AE C 58 8A 89 61 40 A6 70 83 43 E8 F7 91 6A 50 AE C 58 8A 89 61 40 A6 70 83 43 E8 F7 91 6A 50 AE C 58 8A 89 61 40 A6 70 83 43 E8 F7 91 6A 50 AE C 58 8A 89 61 40 A6 70 83 43 E8 F7 91 6A 50 AE C 58 8A 89 61 40 A6 70 83 43 E8 F7 91 6A 50 AE C 58 8A 89 61 40 A6 70 83 43 E8 F7 91 6A 50 AE C 58 8A 89 61 40 A6 70 83 43 E8 F7 91 6A 50 AE C 58 8A 89 61 40 A6 70 83 43 E8 F7 91 -----------------------------------------------encrypt_cl Time taken: 0.00s
+cl Fill data Time taken: 0.00s
+cl memory copy Time taken: 0.00s
+cl set Argument Time taken: 0.00s
+cl Execute kernel time taken: 0.00s
+cl read memory taken: 0.00s
+Computed '128/128' correct values!
+start of encrypt_cl
+data, keydata, results
+initFns
+Loaded library name:/system/lib/libllvm-a3xx.so
+Connect to a compute device
+has 2 devices
+Device name is QUALCOMM Adreno(TM)
+Device name is QUALCOMM Krait(TM)
+Create a compute context
+Create a command commands
+Create the compute program from the source buffer
+file len is: 34
+full path is: /data/local/tmp/eng_opencl_aes.cl
+file opened, fd is 4
+file size is 20236 byte
+read in size is: 20236
+Build the program executable
+Create the compute kernel in the program we wish to run
+Create the input and output arrays in device memory for our calculation
+Get the maximum work group size for executing the kernel on the device
+local is 128
+encrypt_cl: count = 128
+rd_key 3"global is 128
+profile time: 0.153000 msinput data is
+0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 encrypted data is
+6A 50 AE C 58 8A 89 61 40 A6 70 83 43 E8 F7 91 6A 50 AE C 58 8A 89 61 40 A6 70 83 43 E8 F7 91 6A 50 AE C 58 8A 89 61 40 A6 70 83 43 E8 F7 91 6A 50 AE C 58 8A 89 61 40 A6 70 83 43 E8 F7 91 6A 50 AE C 58 8A 89 61 40 A6 70 83 43 E8 F7 91 6A 50 AE C 58 8A 89 61 40 A6 70 83 43 E8 F7 91 6A 50 AE C 58 8A 89 61 40 A6 70 83 43 E8 F7 91 6A 50 AE C 58 8A 89 61 40 A6 70 83 43 E8 F7 91 -----------------------------------------------encrypt_cl Time taken: 0.00s
+cl Fill data Time taken: 0.00s
+cl memory copy Time taken: 0.00s
+cl set Argument Time taken: 0.00s
+cl Execute kernel time taken: 0.00s
+cl read memory taken: 0.00s
+Computed '128/128' correct values!
+start of encrypt_cl
+data, keydata, results
+initFns
+Loaded library name:/system/lib/libllvm-a3xx.so
+Connect to a compute device
+has 2 devices
+Device name is QUALCOMM Adreno(TM)
+Device name is QUALCOMM Krait(TM)
+Create a compute context
+Create a command commands
+Create the compute program from the source buffer
+file len is: 34
+full path is: /data/local/tmp/eng_opencl_aes.cl
+file opened, fd is 4
+file size is 20236 byte
+read in size is: 20236
+Build the program executable
+Create the compute kernel in the program we wish to run
+Create the input and output arrays in device memory for our calculation
+Get the maximum work group size for executing the kernel on the device
+local is 128
+encrypt_cl: count = 128
+rd_key 3"global is 128
+profile time: 0.214000 msinput data is
+0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 encrypted data is
+6A 50 AE C 58 8A 89 61 40 A6 70 83 43 E8 F7 91 6A 50 AE C 58 8A 89 61 40 A6 70 83 43 E8 F7 91 6A 50 AE C 58 8A 89 61 40 A6 70 83 43 E8 F7 91 6A 50 AE C 58 8A 89 61 40 A6 70 83 43 E8 F7 91 6A 50 AE C 58 8A 89 61 40 A6 70 83 43 E8 F7 91 6A 50 AE C 58 8A 89 61 40 A6 70 83 43 E8 F7 91 6A 50 AE C 58 8A 89 61 40 A6 70 83 43 E8 F7 91 6A 50 AE C 58 8A 89 61 40 A6 70 83 43 E8 F7 91 -----------------------------------------------encrypt_cl Time taken: 0.00s
+cl Fill data Time taken: 0.00s
+cl memory copy Time taken: 0.00s
+cl set Argument Time taken: 0.00s
+cl Execute kernel time taken: 0.00s
+cl read memory taken: 0.00s
+Computed '128/128' correct values!
+start of encrypt_cl
+data, keydata, results
+initFns
+Loaded library name:/system/lib/libllvm-a3xx.so
+Connect to a compute device
+has 2 devices
+Device name is QUALCOMM Adreno(TM)
+Device name is QUALCOMM Krait(TM)
+Create a compute context
+Create a command commands
+Create the compute program from the source buffer
+file len is: 34
+full path is: /data/local/tmp/eng_opencl_aes.cl
+file opened, fd is 4
+file size is 20236 byte
+read in size is: 20236
+Build the program executable
+Create the compute kernel in the program we wish to run
+Create the input and output arrays in device memory for our calculation
+Get the maximum work group size for executing the kernel on the device
+local is 128
+encrypt_cl: count = 128
+rd_key 3"global is 128
+profile time: 0.152000 msinput data is
+0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 encrypted data is
+6A 50 AE C 58 8A 89 61 40 A6 70 83 43 E8 F7 91 6A 50 AE C 58 8A 89 61 40 A6 70 83 43 E8 F7 91 6A 50 AE C 58 8A 89 61 40 A6 70 83 43 E8 F7 91 6A 50 AE C 58 8A 89 61 40 A6 70 83 43 E8 F7 91 6A 50 AE C 58 8A 89 61 40 A6 70 83 43 E8 F7 91 6A 50 AE C 58 8A 89 61 40 A6 70 83 43 E8 F7 91 6A 50 AE C 58 8A 89 61 40 A6 70 83 43 E8 F7 91 6A 50 AE C 58 8A 89 61 40 A6 70 83 43 E8 F7 91 -----------------------------------------------encrypt_cl Time taken: 0.00s
+cl Fill data Time taken: 0.00s
+cl memory copy Time taken: 0.00s
+cl set Argument Time taken: 0.00s
+cl Execute kernel time taken: 0.00s
+cl read memory taken: 0.00s
+Computed '128/128' correct values!
+start of encrypt_cl
+data, keydata, results
+initFns
+Loaded library name:/system/lib/libllvm-a3xx.so
+Connect to a compute device
+has 2 devices
+Device name is QUALCOMM Adreno(TM)
+Device name is QUALCOMM Krait(TM)
+Create a compute context
+Create a command commands
+Create the compute program from the source buffer
+file len is: 34
+full path is: /data/local/tmp/eng_opencl_aes.cl
+file opened, fd is 4
+file size is 20236 byte
+read in size is: 20236
+Build the program executable
+Create the compute kernel in the program we wish to run
+Create the input and output arrays in device memory for our calculation
+Get the maximum work group size for executing the kernel on the device
+local is 128
+encrypt_cl: count = 128
+rd_key 3"global is 128
+profile time: 0.153000 msinput data is
+0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 encrypted data is
+6A 50 AE C 58 8A 89 61 40 A6 70 83 43 E8 F7 91 6A 50 AE C 58 8A 89 61 40 A6 70 83 43 E8 F7 91 6A 50 AE C 58 8A 89 61 40 A6 70 83 43 E8 F7 91 6A 50 AE C 58 8A 89 61 40 A6 70 83 43 E8 F7 91 6A 50 AE C 58 8A 89 61 40 A6 70 83 43 E8 F7 91 6A 50 AE C 58 8A 89 61 40 A6 70 83 43 E8 F7 91 6A 50 AE C 58 8A 89 61 40 A6 70 83 43 E8 F7 91 6A 50 AE C 58 8A 89 61 40 A6 70 83 43 E8 F7 91 -----------------------------------------------encrypt_cl Time taken: 0.00s
+cl Fill data Time taken: 0.00s
+cl memory copy Time taken: 0.00s
+cl set Argument Time taken: 0.00s
+cl Execute kernel time taken: 0.00s
+cl read memory taken: 0.00s
+Computed '128/128' correct values!
+start of encrypt_cl
+data, keydata, results
+initFns
+Loaded library name:/system/lib/libllvm-a3xx.so
+Connect to a compute device
+has 2 devices
+Device name is QUALCOMM Adreno(TM)
+Device name is QUALCOMM Krait(TM)
+Create a compute context
+Create a command commands
+Create the compute program from the source buffer
+file len is: 34
+full path is: /data/local/tmp/eng_opencl_aes.cl
+file opened, fd is 4
+file size is 20236 byte
+read in size is: 20236
+Build the program executable
+Create the compute kernel in the program we wish to run
+Create the input and output arrays in device memory for our calculation
+Get the maximum work group size for executing the kernel on the device
+local is 128
+encrypt_cl: count = 128
+rd_key 3"global is 128
+profile time: 0.305000 msinput data is
+0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 encrypted data is
+6A 50 AE C 58 8A 89 61 40 A6 70 83 43 E8 F7 91 6A 50 AE C 58 8A 89 61 40 A6 70 83 43 E8 F7 91 6A 50 AE C 58 8A 89 61 40 A6 70 83 43 E8 F7 91 6A 50 AE C 58 8A 89 61 40 A6 70 83 43 E8 F7 91 6A 50 AE C 58 8A 89 61 40 A6 70 83 43 E8 F7 91 6A 50 AE C 58 8A 89 61 40 A6 70 83 43 E8 F7 91 6A 50 AE C 58 8A 89 61 40 A6 70 83 43 E8 F7 91 6A 50 AE C 58 8A 89 61 40 A6 70 83 43 E8 F7 91 -----------------------------------------------encrypt_cl Time taken: 0.00s
+cl Fill data Time taken: 0.00s
+cl memory copy Time taken: 0.00s
+cl set Argument Time taken: 0.00s
+cl Execute kernel time taken: 0.00s
+cl read memory taken: 0.00s
+Computed '128/128' correct values!
+start of encrypt_cl
+data, keydata, results
+initFns
+Loaded library name:/system/lib/libllvm-a3xx.so
+Connect to a compute device
+has 2 devices
+Device name is QUALCOMM Adreno(TM)
+Device name is QUALCOMM Krait(TM)
+Create a compute context
+Create a command commands
+Create the compute program from the source buffer
+file len is: 34
+full path is: /data/local/tmp/eng_opencl_aes.cl
+file opened, fd is 4
+file size is 20236 byte
+read in size is: 20236
+Build the program executable
+Create the compute kernel in the program we wish to run
+Create the input and output arrays in device memory for our calculation
+Get the maximum work group size for executing the kernel on the device
+local is 128
+encrypt_cl: count = 128
+rd_key 3"global is 128
+profile time: 0.153000 msinput data is
+0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 encrypted data is
+6A 50 AE C 58 8A 89 61 40 A6 70 83 43 E8 F7 91 6A 50 AE C 58 8A 89 61 40 A6 70 83 43 E8 F7 91 6A 50 AE C 58 8A 89 61 40 A6 70 83 43 E8 F7 91 6A 50 AE C 58 8A 89 61 40 A6 70 83 43 E8 F7 91 6A 50 AE C 58 8A 89 61 40 A6 70 83 43 E8 F7 91 6A 50 AE C 58 8A 89 61 40 A6 70 83 43 E8 F7 91 6A 50 AE C 58 8A 89 61 40 A6 70 83 43 E8 F7 91 6A 50 AE C 58 8A 89 61 40 A6 70 83 43 E8 F7 91 -----------------------------------------------encrypt_cl Time taken: 0.00s
+cl Fill data Time taken: 0.00s
+cl memory copy Time taken: 0.00s
+cl set Argument Time taken: 0.00s
+cl Execute kernel time taken: 0.00s
+cl read memory taken: 0.00s
+Computed '128/128' correct values!
+start of encrypt_cl
+data, keydata, results
+initFns
+Loaded library name:/system/lib/libllvm-a3xx.so
+Connect to a compute device
+has 2 devices
+Device name is QUALCOMM Adreno(TM)
+Device name is QUALCOMM Krait(TM)
+Create a compute context
+Create a command commands
+Create the compute program from the source buffer
+file len is: 34
+full path is: /data/local/tmp/eng_opencl_aes.cl
+file opened, fd is 4
+file size is 20236 byte
+read in size is: 20236
+Build the program executable
+Create the compute kernel in the program we wish to run
+Create the input and output arrays in device memory for our calculation
+Get the maximum work group size for executing the kernel on the device
+local is 128
+encrypt_cl: count = 128
+rd_key 3"global is 128
+profile time: 0.153000 msinput data is
+0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 encrypted data is
+6A 50 AE C 58 8A 89 61 40 A6 70 83 43 E8 F7 91 6A 50 AE C 58 8A 89 61 40 A6 70 83 43 E8 F7 91 6A 50 AE C 58 8A 89 61 40 A6 70 83 43 E8 F7 91 6A 50 AE C 58 8A 89 61 40 A6 70 83 43 E8 F7 91 6A 50 AE C 58 8A 89 61 40 A6 70 83 43 E8 F7 91 6A 50 AE C 58 8A 89 61 40 A6 70 83 43 E8 F7 91 6A 50 AE C 58 8A 89 61 40 A6 70 83 43 E8 F7 91 6A 50 AE C 58 8A 89 61 40 A6 70 83 43 E8 F7 91 -----------------------------------------------encrypt_cl Time taken: 0.00s
+cl Fill data Time taken: 0.00s
+cl memory copy Time taken: 0.00s
+cl set Argument Time taken: 0.00s
+cl Execute kernel time taken: 0.00s
+cl read memory taken: 0.00s
+Computed '128/128' correct values!
+start of encrypt_cl
+data, keydata, results
+initFns
+Loaded library name:/system/lib/libllvm-a3xx.so
+Connect to a compute device
+has 2 devices
+Device name is QUALCOMM Adreno(TM)
+Device name is QUALCOMM Krait(TM)
+Create a compute context
+Create a command commands
+Create the compute program from the source buffer
+file len is: 34
+full path is: /data/local/tmp/eng_opencl_aes.cl
+file opened, fd is 4
+file size is 20236 byte
+read in size is: 20236
+Build the program executable
+Create the compute kernel in the program we wish to run
+Create the input and output arrays in device memory for our calculation
+Get the maximum work group size for executing the kernel on the device
+local is 128
+encrypt_cl: count = 128
+rd_key 3"global is 128
+profile time: 0.000000 msinput data is
+0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 encrypted data is
+6A 50 AE C 58 8A 89 61 40 A6 70 83 43 E8 F7 91 6A 50 AE C 58 8A 89 61 40 A6 70 83 43 E8 F7 91 6A 50 AE C 58 8A 89 61 40 A6 70 83 43 E8 F7 91 6A 50 AE C 58 8A 89 61 40 A6 70 83 43 E8 F7 91 6A 50 AE C 58 8A 89 61 40 A6 70 83 43 E8 F7 91 6A 50 AE C 58 8A 89 61 40 A6 70 83 43 E8 F7 91 6A 50 AE C 58 8A 89 61 40 A6 70 83 43 E8 F7 91 6A 50 AE C 58 8A 89 61 40 A6 70 83 43 E8 F7 91 -----------------------------------------------encrypt_cl Time taken: 0.00s
+cl Fill data Time taken: 0.00s
+cl memory copy Time taken: 0.00s
+cl set Argument Time taken: 0.00s
+cl Execute kernel time taken: 0.00s
+cl read memory taken: 0.00s
+Computed '128/128' correct values!
+start of encrypt_cl
+data, keydata, results
+initFns
+Loaded library name:/system/lib/libllvm-a3xx.so
+Connect to a compute device
+has 2 devices
+Device name is QUALCOMM Adreno(TM)
+Device name is QUALCOMM Krait(TM)
+Create a compute context
+Create a command commands
+Create the compute program from the source buffer
+file len is: 34
+full path is: /data/local/tmp/eng_opencl_aes.cl
+file opened, fd is 4
+file size is 20236 byte
+read in size is: 20236
+Build the program executable
+Create the compute kernel in the program we wish to run
+Create the input and output arrays in device memory for our calculation
+Get the maximum work group size for executing the kernel on the device
+local is 128
+encrypt_cl: count = 128
+rd_key 3"global is 128
+profile time: 0.031000 msinput data is
+0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 encrypted data is
+6A 50 AE C 58 8A 89 61 40 A6 70 83 43 E8 F7 91 6A 50 AE C 58 8A 89 61 40 A6 70 83 43 E8 F7 91 6A 50 AE C 58 8A 89 61 40 A6 70 83 43 E8 F7 91 6A 50 AE C 58 8A 89 61 40 A6 70 83 43 E8 F7 91 6A 50 AE C 58 8A 89 61 40 A6 70 83 43 E8 F7 91 6A 50 AE C 58 8A 89 61 40 A6 70 83 43 E8 F7 91 6A 50 AE C 58 8A 89 61 40 A6 70 83 43 E8 F7 91 6A 50 AE C 58 8A 89 61 40 A6 70 83 43 E8 F7 91 -----------------------------------------------encrypt_cl Time taken: 0.00s
+cl Fill data Time taken: 0.00s
+cl memory copy Time taken: 0.00s
+cl set Argument Time taken: 0.00s
+cl Execute kernel time taken: 0.00s
+cl read memory taken: 0.00s
+Computed '128/128' correct values!
+start of encrypt_cl
+data, keydata, results
+initFns
+Loaded library name:/system/lib/libllvm-a3xx.so
+Connect to a compute device
+has 2 devices
+Device name is QUALCOMM Adreno(TM)
+Device name is QUALCOMM Krait(TM)
+Create a compute context
+Create a command commands
+Create the compute program from the source buffer
+file len is: 34
+full path is: /data/local/tmp/eng_opencl_aes.cl
+file opened, fd is 4
+file size is 20236 byte
+read in size is: 20236
+Build the program executable
+Create the compute kernel in the program we wish to run
+Create the input and output arrays in device memory for our calculation
+Get the maximum work group size for executing the kernel on the device
+local is 128
+encrypt_cl: count = 128
+rd_key 3"global is 128
+profile time: 17.792999 msinput data is
+0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 encrypted data is
+0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 -----------------------------------------------encrypt_cl Time taken: 0.03s
+cl Fill data Time taken: 0.00s
+cl memory copy Time taken: 0.00s
+cl set Argument Time taken: 0.00s
+cl Execute kernel time taken: 0.02s
+cl read memory taken: 0.01s
+Computed '128/128' correct values!
+start of encrypt_cl
+data, keydata, results
+initFns
+Loaded library name:/system/lib/libllvm-a3xx.so
+Connect to a compute device
+has 2 devices
+Device name is QUALCOMM Adreno(TM)
+Device name is QUALCOMM Krait(TM)
+Create a compute context
+Create a command commands
+Create the compute program from the source buffer
+file len is: 34
+full path is: /data/local/tmp/eng_opencl_aes.cl
+file opened, fd is 4
+file size is 20236 byte
+read in size is: 20236
+Build the program executable
+Create the compute kernel in the program we wish to run
+Create the input and output arrays in device memory for our calculation
+Get the maximum work group size for executing the kernel on the device
+local is 128
+encrypt_cl: count = 128
+rd_key 3"global is 128
+profile time: 8129.467773 msinput data is
+0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 encrypted data is
+0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 -----------------------------------------------encrypt_cl Time taken: 8.14s
+cl Fill data Time taken: 0.00s
+cl memory copy Time taken: 0.00s
+cl set Argument Time taken: 0.00s
+cl Execute kernel time taken: 8.13s
+cl read memory taken: 0.00s
+Computed '128/128' correct values!
+start of encrypt_cl
+data, keydata, results
+initFns
+Loaded library name:/system/lib/libllvm-a3xx.so
+Connect to a compute device
+has 2 devices
+Device name is QUALCOMM Adreno(TM)
+Device name is QUALCOMM Krait(TM)
+Create a compute context
+Create a command commands
+Create the compute program from the source buffer
+file len is: 34
+full path is: /data/local/tmp/eng_opencl_aes.cl
+file opened, fd is 4
+file size is 20236 byte
+read in size is: 20236
+Build the program executable
+Create the compute kernel in the program we wish to run
+Create the input and output arrays in device memory for our calculation
+Get the maximum work group size for executing the kernel on the device
+local is 128
+encrypt_cl: count = 128
+rd_key 3"global is 128
+profile time: 4283.717285 msinput data is
+0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 encrypted data is
+0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 -----------------------------------------------encrypt_cl Time taken: 4.28s
+cl Fill data Time taken: 0.00s
+cl memory copy Time taken: 0.00s
+cl set Argument Time taken: 0.00s
+cl Execute kernel time taken: 4.28s
+cl read memory taken: 0.00s
+Computed '128/128' correct values!
+start of encrypt_cl
+data, keydata, results
+initFns
+Loaded library name:/system/lib/libllvm-a3xx.so
+Connect to a compute device
+has 2 devices
+Device name is QUALCOMM Adreno(TM)
+Device name is QUALCOMM Krait(TM)
+Create a compute context
+Create a command commands
+Create the compute program from the source buffer
+file len is: 34
+full path is: /data/local/tmp/eng_opencl_aes.cl
+file opened, fd is 4
+file size is 20236 byte
+read in size is: 20236
+Build the program executable
+Create the compute kernel in the program we wish to run
+Create the input and output arrays in device memory for our calculation
+Get the maximum work group size for executing the kernel on the device
+local is 128
+encrypt_cl: count = 128
+rd_key 3"global is 128
+profile time: 4138.653809 msinput data is
+0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 encrypted data is
+0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 -----------------------------------------------encrypt_cl Time taken: 4.14s
+cl Fill data Time taken: 0.00s
+cl memory copy Time taken: 0.00s
+cl set Argument Time taken: 0.00s
+cl Execute kernel time taken: 4.14s
+cl read memory taken: 0.00s
+Computed '128/128' correct values!
+start of encrypt_cl
+data, keydata, results
+initFns
+Loaded library name:/system/lib/libllvm-a3xx.so
+Connect to a compute device
+has 2 devices
+Device name is QUALCOMM Adreno(TM)
+Device name is QUALCOMM Krait(TM)
+Create a compute context
+Create a command commands
+Create the compute program from the source buffer
+file len is: 34
+full path is: /data/local/tmp/eng_opencl_aes.cl
+file opened, fd is 4
+file size is 20236 byte
+read in size is: 20236
+Build the program executable
+Create the compute kernel in the program we wish to run
+Create the input and output arrays in device memory for our calculation
+Get the maximum work group size for executing the kernel on the device
+local is 128
+encrypt_cl: count = 128
+rd_key 3"global is 128
+profile time: 10738.592773 msinput data is
+0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 encrypted data is
+0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 -----------------------------------------------encrypt_cl Time taken: 10.74s
+cl Fill data Time taken: 0.00s
+cl memory copy Time taken: 0.00s
+cl set Argument Time taken: 0.00s
+cl Execute kernel time taken: 10.74s
+cl read memory taken: 0.00s
+Computed '128/128' correct values!
+start of encrypt_cl
+data, keydata, results
+initFns
+Loaded library name:/system/lib/libllvm-a3xx.so
+Connect to a compute device
+has 2 devices
+Device name is QUALCOMM Adreno(TM)
+Device name is QUALCOMM Krait(TM)
+Create a compute context
+Create a command commands
+Create the compute program from the source buffer
+file len is: 34
+full path is: /data/local/tmp/eng_opencl_aes.cl
+file opened, fd is 4
+file size is 20236 byte
+read in size is: 20236
+Build the program executable
+Create the compute kernel in the program we wish to run
+Create the input and output arrays in device memory for our calculation
+Get the maximum work group size for executing the kernel on the device
+local is 128
+encrypt_cl: count = 128
+rd_key 3"global is 128
+profile time: 4133.099121 msinput data is
+0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 encrypted data is
+0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 -----------------------------------------------encrypt_cl Time taken: 4.13s
+cl Fill data Time taken: 0.00s
+cl memory copy Time taken: 0.00s
+cl set Argument Time taken: 0.00s
+cl Execute kernel time taken: 4.13s
+cl read memory taken: 0.00s
+Computed '128/128' correct values!
+start of encrypt_cl
+data, keydata, results
+initFns
+Loaded library name:/system/lib/libllvm-a3xx.so
+Connect to a compute device
+has 2 devices
+Device name is QUALCOMM Adreno(TM)
+Device name is QUALCOMM Krait(TM)
+Create a compute context
+Create a command commands
+Create the compute program from the source buffer
+file len is: 34
+full path is: /data/local/tmp/eng_opencl_aes.cl
+file opened, fd is 4
+file size is 20236 byte
+read in size is: 20236
+Build the program executable
+Create the compute kernel in the program we wish to run
+Create the input and output arrays in device memory for our calculation
+Get the maximum work group size for executing the kernel on the device
+local is 128
+encrypt_cl: count = 128
+rd_key 3"global is 128
+profile time: 4371.554688 msinput data is
+0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 encrypted data is
+0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 -----------------------------------------------encrypt_cl Time taken: 4.37s
+cl Fill data Time taken: 0.00s
+cl memory copy Time taken: 0.00s
+cl set Argument Time taken: 0.00s
+cl Execute kernel time taken: 4.37s
+cl read memory taken: 0.00s
+Computed '128/128' correct values!
+start of encrypt_cl
+data, keydata, results
+initFns
+Loaded library name:/system/lib/libllvm-a3xx.so
+Connect to a compute device
+has 2 devices
+Device name is QUALCOMM Adreno(TM)
+Device name is QUALCOMM Krait(TM)
+Create a compute context
+Create a command commands
+Create the compute program from the source buffer
+file len is: 34
+full path is: /data/local/tmp/eng_opencl_aes.cl
+file opened, fd is 4
+file size is 20236 byte
+read in size is: 20236
+Build the program executable
+Create the compute kernel in the program we wish to run
+Create the input and output arrays in device memory for our calculation
+Get the maximum work group size for executing the kernel on the device
+local is 128
+encrypt_cl: count = 128
+rd_key 3"global is 128
+profile time: 4128.704102 msinput data is
+0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 encrypted data is
+0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 -----------------------------------------------encrypt_cl Time taken: 4.13s
+cl Fill data Time taken: 0.00s
+cl memory copy Time taken: 0.00s
+cl set Argument Time taken: 0.00s
+cl Execute kernel time taken: 4.13s
+cl read memory taken: 0.00s
+Computed '128/128' correct values!
+start of encrypt_cl
+data, keydata, results
+initFns
+Loaded library name:/system/lib/libllvm-a3xx.so
+Connect to a compute device
+has 2 devices
+Device name is QUALCOMM Adreno(TM)
+Device name is QUALCOMM Krait(TM)
+Create a compute context
+Create a command commands
+Create the compute program from the source buffer
+file len is: 34
+full path is: /data/local/tmp/eng_opencl_aes.cl
+file opened, fd is 4
+file size is 20236 byte
+read in size is: 20236
+Build the program executable
+Create the compute kernel in the program we wish to run
+Create the input and output arrays in device memory for our calculation
+Get the maximum work group size for executing the kernel on the device
+local is 128
+encrypt_cl: count = 128
+rd_key 3"global is 128
+profile time: 12096.382812 msinput data is
+0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 encrypted data is
+0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 -----------------------------------------------encrypt_cl Time taken: 16.36s
+cl Fill data Time taken: 0.00s
+cl memory copy Time taken: 0.00s
+cl set Argument Time taken: 0.00s
+cl Execute kernel time taken: 16.36s
+cl read memory taken: 0.00s
+Computed '128/128' correct values!
+start of encrypt_cl
+data, keydata, results
+initFns
+Loaded library name:/system/lib/libllvm-a3xx.so
+Connect to a compute device
+has 2 devices
+Device name is QUALCOMM Adreno(TM)
+Device name is QUALCOMM Krait(TM)
+Create a compute context
+Create a command commands
+Create the compute program from the source buffer
+file len is: 34
+full path is: /data/local/tmp/eng_opencl_aes.cl
+file opened, fd is 4
+file size is 20236 byte
+read in size is: 20236
+Build the program executable
+Create the compute kernel in the program we wish to run
+Create the input and output arrays in device memory for our calculation
+Get the maximum work group size for executing the kernel on the device
+local is 128
+encrypt_cl: count = 128
+rd_key 3"global is 128
+profile time: 4361.971191 msinput data is
+0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 encrypted data is
+0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 -----------------------------------------------encrypt_cl Time taken: 4.36s
+cl Fill data Time taken: 0.00s
+cl memory copy Time taken: 0.00s
+cl set Argument Time taken: 0.00s
+cl Execute kernel time taken: 4.36s
+cl read memory taken: 0.00s
+Computed '128/128' correct values!
+start of encrypt_cl
+data, keydata, results
+initFns
+Loaded library name:/system/lib/libllvm-a3xx.so
+Connect to a compute device
+has 2 devices
+Device name is QUALCOMM Adreno(TM)
+Device name is QUALCOMM Krait(TM)
+Create a compute context
+Create a command commands
+Create the compute program from the source buffer
+file len is: 34
+full path is: /data/local/tmp/eng_opencl_aes.cl
+file opened, fd is 4
+file size is 20236 byte
+read in size is: 20236
+Build the program executable
+Create the compute kernel in the program we wish to run
+Create the input and output arrays in device memory for our calculation
+Get the maximum work group size for executing the kernel on the device
+local is 128
+encrypt_cl: count = 128
+rd_key 3"global is 128
+profile time: 4144.147949 msinput data is
+0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 encrypted data is
+0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 -----------------------------------------------encrypt_cl Time taken: 4.15s
+cl Fill data Time taken: 0.00s
+cl memory copy Time taken: 0.00s
+cl set Argument Time taken: 0.00s
+cl Execute kernel time taken: 4.14s
+cl read memory taken: 0.00s
+Computed '128/128' correct values!
+start of encrypt_cl
+data, keydata, results
+initFns
+Loaded library name:/system/lib/libllvm-a3xx.so
+Connect to a compute device
+has 2 devices
+Device name is QUALCOMM Adreno(TM)
+Device name is QUALCOMM Krait(TM)
+Create a compute context
+Create a command commands
+Create the compute program from the source buffer
+file len is: 34
+full path is: /data/local/tmp/eng_opencl_aes.cl
+file opened, fd is 4
+file size is 20236 byte
+read in size is: 20236
+Build the program executable
+Create the compute kernel in the program we wish to run
+Create the input and output arrays in device memory for our calculation
+Get the maximum work group size for executing the kernel on the device
+local is 128
+encrypt_cl: count = 128
+rd_key 3"global is 128
+profile time: 10686.525391 msinput data is
+0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 encrypted data is
+0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 -----------------------------------------------encrypt_cl Time taken: 10.69s
+cl Fill data Time taken: 0.00s
+cl memory copy Time taken: 0.00s
+cl set Argument Time taken: 0.00s
+cl Execute kernel time taken: 10.69s
+cl read memory taken: 0.00s
+Computed '128/128' correct values!
+start of encrypt_cl
+data, keydata, results
+initFns
+Loaded library name:/system/lib/libllvm-a3xx.so
+Connect to a compute device
+has 2 devices
+Device name is QUALCOMM Adreno(TM)
+Device name is QUALCOMM Krait(TM)
+Create a compute context
+Create a command commands
+Create the compute program from the source buffer
+file len is: 34
+full path is: /data/local/tmp/eng_opencl_aes.cl
+file opened, fd is 4
+file size is 20236 byte
+read in size is: 20236
+Build the program executable
+Create the compute kernel in the program we wish to run
+Create the input and output arrays in device memory for our calculation
+Get the maximum work group size for executing the kernel on the device
+local is 128
+encrypt_cl: count = 128
+rd_key 3"global is 128
+profile time: 4129.163086 msinput data is
+0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 encrypted data is
+0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 -----------------------------------------------encrypt_cl Time taken: 4.13s
+cl Fill data Time taken: 0.00s
+cl memory copy Time taken: 0.00s
+cl set Argument Time taken: 0.00s
+cl Execute kernel time taken: 4.13s
+cl read memory taken: 0.00s
+Computed '128/128' correct values!
+start of encrypt_cl
+data, keydata, results
+initFns
+Loaded library name:/system/lib/libllvm-a3xx.so
+Connect to a compute device
+has 2 devices
+Device name is QUALCOMM Adreno(TM)
+Device name is QUALCOMM Krait(TM)
+Create a compute context
+Create a command commands
+Create the compute program from the source buffer
+file len is: 34
+full path is: /data/local/tmp/eng_opencl_aes.cl
+file opened, fd is 4
+file size is 20236 byte
+read in size is: 20236
+Build the program executable
+Create the compute kernel in the program we wish to run
+Create the input and output arrays in device memory for our calculation
+Get the maximum work group size for executing the kernel on the device
+local is 128
+encrypt_cl: count = 128
+rd_key 3"global is 128
+profile time: 4430.581543 msinput data is
+0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 encrypted data is
+0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 -----------------------------------------------encrypt_cl Time taken: 4.43s
+cl Fill data Time taken: 0.00s
+cl memory copy Time taken: 0.00s
+cl set Argument Time taken: 0.00s
+cl Execute kernel time taken: 4.43s
+cl read memory taken: 0.00s
+Computed '128/128' correct values!
+start of encrypt_cl
+data, keydata, results
+initFns
+Loaded library name:/system/lib/libllvm-a3xx.so
+Connect to a compute device
+has 2 devices
+Device name is QUALCOMM Adreno(TM)
+Device name is QUALCOMM Krait(TM)
+Create a compute context
+Create a command commands
+Create the compute program from the source buffer
+file len is: 34
+full path is: /data/local/tmp/eng_opencl_aes.cl
+file opened, fd is 4
+file size is 20236 byte
+read in size is: 20236
+Build the program executable
+Create the compute kernel in the program we wish to run
+Create the input and output arrays in device memory for our calculation
+Get the maximum work group size for executing the kernel on the device
+local is 128
+encrypt_cl: count = 128
+rd_key 3"global is 128
+profile time: 4136.060059 msinput data is
+0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 encrypted data is
+0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 -----------------------------------------------encrypt_cl Time taken: 4.14s
+cl Fill data Time taken: 0.00s
+cl memory copy Time taken: 0.00s
+cl set Argument Time taken: 0.00s
+cl Execute kernel time taken: 4.14s
+cl read memory taken: 0.00s
+Computed '128/128' correct values!
+start of encrypt_cl
+data, keydata, results
+initFns
+Loaded library name:/system/lib/libllvm-a3xx.so
+Connect to a compute device
+has 2 devices
+Device name is QUALCOMM Adreno(TM)
+Device name is QUALCOMM Krait(TM)
+Create a compute context
+Create a command commands
+Create the compute program from the source buffer
+file len is: 34
+full path is: /data/local/tmp/eng_opencl_aes.cl
+file opened, fd is 4
+file size is 20236 byte
+read in size is: 20236
+Build the program executable
+Create the compute kernel in the program we wish to run
+Create the input and output arrays in device memory for our calculation
+Get the maximum work group size for executing the kernel on the device
+local is 128
+encrypt_cl: count = 128
+rd_key 3"global is 128
+profile time: 10751.411133 msinput data is
+0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 encrypted data is
+0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 -----------------------------------------------encrypt_cl Time taken: 10.75s
+cl Fill data Time taken: 0.00s
+cl memory copy Time taken: 0.00s
+cl set Argument Time taken: 0.00s
+cl Execute kernel time taken: 10.75s
+cl read memory taken: 0.00s
+Computed '128/128' correct values!
+start of encrypt_cl
+data, keydata, results
+initFns
+Loaded library name:/system/lib/libllvm-a3xx.so
+Connect to a compute device
+has 2 devices
+Device name is QUALCOMM Adreno(TM)
+Device name is QUALCOMM Krait(TM)
+Create a compute context
+Create a command commands
+Create the compute program from the source buffer
+file len is: 34
+full path is: /data/local/tmp/eng_opencl_aes.cl
+file opened, fd is 4
+file size is 20236 byte
+read in size is: 20236
+Build the program executable
+Create the compute kernel in the program we wish to run
+Create the input and output arrays in device memory for our calculation
+Get the maximum work group size for executing the kernel on the device
+local is 128
+encrypt_cl: count = 128
+rd_key 3"global is 128
+profile time: 8061.895020 msinput data is
+0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 encrypted data is
+0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 -----------------------------------------------encrypt_cl Time taken: 8.07s
+cl Fill data Time taken: 0.00s
+cl memory copy Time taken: 0.00s
+cl set Argument Time taken: 0.00s
+cl Execute kernel time taken: 8.07s
+cl read memory taken: 0.00s
+Computed '128/128' correct values!
+start of encrypt_cl
+data, keydata, results
+initFns
+Loaded library name:/system/lib/libllvm-a3xx.so
+Connect to a compute device
+has 2 devices
+Device name is QUALCOMM Adreno(TM)
+Device name is QUALCOMM Krait(TM)
+Create a compute context
+Create a command commands
+Create the compute program from the source buffer
+file len is: 34
+full path is: /data/local/tmp/eng_opencl_aes.cl
+file opened, fd is 4
+file size is 20236 byte
+read in size is: 20236
+Build the program executable
+Create the compute kernel in the program we wish to run
+Create the input and output arrays in device memory for our calculation
+Get the maximum work group size for executing the kernel on the device
+local is 128
+encrypt_cl: count = 128
+rd_key 3"global is 128
+profile time: 4135.479980 msinput data is
+0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 encrypted data is
+0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 -----------------------------------------------encrypt_cl Time taken: 4.14s
+cl Fill data Time taken: 0.00s
+cl memory copy Time taken: 0.00s
+cl set Argument Time taken: 0.00s
+cl Execute kernel time taken: 4.14s
+cl read memory taken: 0.00s
+Computed '128/128' correct values!
+start of encrypt_cl
+data, keydata, results
+initFns
+Loaded library name:/system/lib/libllvm-a3xx.so
+Connect to a compute device
+has 2 devices
+Device name is QUALCOMM Adreno(TM)
+Device name is QUALCOMM Krait(TM)
+Create a compute context
+Create a command commands
+Create the compute program from the source buffer
+file len is: 34
+full path is: /data/local/tmp/eng_opencl_aes.cl
+file opened, fd is 4
+file size is 20236 byte
+read in size is: 20236
+Build the program executable
+Create the compute kernel in the program we wish to run
+Create the input and output arrays in device memory for our calculation
+Get the maximum work group size for executing the kernel on the device
+local is 128
+encrypt_cl: count = 128
+rd_key 3"global is 128
+profile time: 4410.225098 msinput data is
+0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 encrypted data is
+0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 -----------------------------------------------encrypt_cl Time taken: 4.41s
+cl Fill data Time taken: 0.00s
+cl memory copy Time taken: 0.00s
+cl set Argument Time taken: 0.00s
+cl Execute kernel time taken: 4.41s
+cl read memory taken: 0.00s
+Computed '128/128' correct values!
+start of encrypt_cl
+data, keydata, results
+initFns
+Loaded library name:/system/lib/libllvm-a3xx.so
+Connect to a compute device
+has 2 devices
+Device name is QUALCOMM Adreno(TM)
+Device name is QUALCOMM Krait(TM)
+Create a compute context
+Create a command commands
+Create the compute program from the source buffer
+file len is: 34
+full path is: /data/local/tmp/eng_opencl_aes.cl
+file opened, fd is 4
+file size is 20236 byte
+read in size is: 20236
+Build the program executable
+Create the compute kernel in the program we wish to run
+Create the input and output arrays in device memory for our calculation
+Get the maximum work group size for executing the kernel on the device
+local is 128
+encrypt_cl: count = 128
+rd_key 3"global is 128
+profile time: 4130.443848 msinput data is
+0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 encrypted data is
+0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 -----------------------------------------------encrypt_cl Time taken: 4.14s
+cl Fill data Time taken: 0.00s
+cl memory copy Time taken: 0.00s
+cl set Argument Time taken: 0.00s
+cl Execute kernel time taken: 4.13s
+cl read memory taken: 0.00s
+Computed '128/128' correct values!
+start of encrypt_cl
+data, keydata, results
+initFns
+Loaded library name:/system/lib/libllvm-a3xx.so
+Connect to a compute device
+has 2 devices
+Device name is QUALCOMM Adreno(TM)
+Device name is QUALCOMM Krait(TM)
+Create a compute context
+Create a command commands
+Create the compute program from the source buffer
+file len is: 34
+full path is: /data/local/tmp/eng_opencl_aes.cl
+file opened, fd is 4
+file size is 20236 byte
+read in size is: 20236
+Build the program executable
+Create the compute kernel in the program we wish to run
+Create the input and output arrays in device memory for our calculation
+Get the maximum work group size for executing the kernel on the device
+local is 128
+encrypt_cl: count = 128
+rd_key 3"global is 128
+profile time: 10753.700195 msinput data is
+0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 encrypted data is
+0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 -----------------------------------------------encrypt_cl Time taken: 10.75s
+cl Fill data Time taken: 0.00s
+cl memory copy Time taken: 0.00s
+cl set Argument Time taken: 0.00s
+cl Execute kernel time taken: 10.75s
+cl read memory taken: 0.00s
+Computed '128/128' correct values!
+start of encrypt_cl
+data, keydata, results
+initFns
+Loaded library name:/system/lib/libllvm-a3xx.so
+Connect to a compute device
+has 2 devices
+Device name is QUALCOMM Adreno(TM)
+Device name is QUALCOMM Krait(TM)
+Create a compute context
+Create a command commands
+Create the compute program from the source buffer
+file len is: 34
+full path is: /data/local/tmp/eng_opencl_aes.cl
+file opened, fd is 4
+file size is 20236 byte
+read in size is: 20236
+Build the program executable
+Create the compute kernel in the program we wish to run
+Create the input and output arrays in device memory for our calculation
+Get the maximum work group size for executing the kernel on the device
+local is 128
+encrypt_cl: count = 128
+rd_key 3"global is 128
+profile time: 4137.495117 msinput data is
+0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 encrypted data is
+0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 -----------------------------------------------encrypt_cl Time taken: 4.14s
+cl Fill data Time taken: 0.00s
+cl memory copy Time taken: 0.00s
+cl set Argument Time taken: 0.00s
+cl Execute kernel time taken: 4.14s
+cl read memory taken: 0.00s
+Computed '128/128' correct values!
+start of encrypt_cl
+data, keydata, results
+initFns
+Loaded library name:/system/lib/libllvm-a3xx.so
+Connect to a compute device
+has 2 devices
+Device name is QUALCOMM Adreno(TM)
+Device name is QUALCOMM Krait(TM)
+Create a compute context
+Create a command commands
+Create the compute program from the source buffer
+file len is: 34
+full path is: /data/local/tmp/eng_opencl_aes.cl
+file opened, fd is 4
+file size is 20236 byte
+read in size is: 20236
+Build the program executable
+Create the compute kernel in the program we wish to run
+Create the input and output arrays in device memory for our calculation
+Get the maximum work group size for executing the kernel on the device
+local is 128
+encrypt_cl: count = 128
+rd_key 3"global is 128
+profile time: 4386.997559 msinput data is
+0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 encrypted data is
+0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 -----------------------------------------------encrypt_cl Time taken: 4.39s
+cl Fill data Time taken: 0.00s
+cl memory copy Time taken: 0.00s
+cl set Argument Time taken: 0.00s
+cl Execute kernel time taken: 4.39s
+cl read memory taken: 0.00s
+Computed '128/128' correct values!
+start of encrypt_cl
+data, keydata, results
+initFns
+Loaded library name:/system/lib/libllvm-a3xx.so
+Connect to a compute device
+has 2 devices
+Device name is QUALCOMM Adreno(TM)
+Device name is QUALCOMM Krait(TM)
+Create a compute context
+Create a command commands
+Create the compute program from the source buffer
+file len is: 34
+full path is: /data/local/tmp/eng_opencl_aes.cl
+file opened, fd is 4
+file size is 20236 byte
+read in size is: 20236
+Build the program executable
+Create the compute kernel in the program we wish to run
+Create the input and output arrays in device memory for our calculation
+Get the maximum work group size for executing the kernel on the device
+local is 128
+encrypt_cl: count = 128
+rd_key 3"global is 128
+profile time: 4129.071289 msinput data is
+0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 encrypted data is
+0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 -----------------------------------------------encrypt_cl Time taken: 4.13s
+cl Fill data Time taken: 0.00s
+cl memory copy Time taken: 0.00s
+cl set Argument Time taken: 0.00s
+cl Execute kernel time taken: 4.13s
+cl read memory taken: 0.00s
+Computed '128/128' correct values!
+start of encrypt_cl
+data, keydata, results
+initFns
+Loaded library name:/system/lib/libllvm-a3xx.so
+Connect to a compute device
+has 2 devices
+Device name is QUALCOMM Adreno(TM)
+Device name is QUALCOMM Krait(TM)
+Create a compute context
+Create a command commands
+Create the compute program from the source buffer
+file len is: 34
+full path is: /data/local/tmp/eng_opencl_aes.cl
+file opened, fd is 4
+file size is 20236 byte
+read in size is: 20236
+Build the program executable
+Create the compute kernel in the program we wish to run
+Create the input and output arrays in device memory for our calculation
+Get the maximum work group size for executing the kernel on the device
+local is 128
+encrypt_cl: count = 128
+rd_key 3"global is 128
+profile time: 10752.541016 msinput data is
+0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 encrypted data is
+0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 -----------------------------------------------encrypt_cl Time taken: 10.75s
+cl Fill data Time taken: 0.00s
+cl memory copy Time taken: 0.00s
+cl set Argument Time taken: 0.00s
+cl Execute kernel time taken: 10.75s
+cl read memory taken: 0.00s
+Computed '128/128' correct values!
+start of encrypt_cl
+data, keydata, results
+initFns
+Loaded library name:/system/lib/libllvm-a3xx.so
+Connect to a compute device
+has 2 devices
+Device name is QUALCOMM Adreno(TM)
+Device name is QUALCOMM Krait(TM)
+Create a compute context
+Create a command commands
+Create the compute program from the source buffer
+file len is: 34
+full path is: /data/local/tmp/eng_opencl_aes.cl
+file opened, fd is 4
+file size is 20236 byte
+read in size is: 20236
+Build the program executable
+Create the compute kernel in the program we wish to run
+Create the input and output arrays in device memory for our calculation
+Get the maximum work group size for executing the kernel on the device
+local is 128
+encrypt_cl: count = 128
+rd_key 3"global is 128
+profile time: 8064.550781 msinput data is
+0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 encrypted data is
+0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 -----------------------------------------------encrypt_cl Time taken: 8.07s
+cl Fill data Time taken: 0.00s
+cl memory copy Time taken: 0.00s
+cl set Argument Time taken: 0.00s
+cl Execute kernel time taken: 8.07s
+cl read memory taken: 0.00s
+Computed '128/128' correct values!
+start of encrypt_cl
+data, keydata, results
+initFns
+Loaded library name:/system/lib/libllvm-a3xx.so
+Connect to a compute device
+has 2 devices
+Device name is QUALCOMM Adreno(TM)
+Device name is QUALCOMM Krait(TM)
+Create a compute context
+Create a command commands
+Create the compute program from the source buffer
+file len is: 34
+full path is: /data/local/tmp/eng_opencl_aes.cl
+file opened, fd is 4
+file size is 20236 byte
+read in size is: 20236
+Build the program executable
+Create the compute kernel in the program we wish to run
+Create the input and output arrays in device memory for our calculation
+Get the maximum work group size for executing the kernel on the device
+local is 128
+encrypt_cl: count = 128
+rd_key 3"global is 128
+profile time: 4118.296875 msinput data is
+0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 encrypted data is
+0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 -----------------------------------------------encrypt_cl Time taken: 4.12s
+cl Fill data Time taken: 0.00s
+cl memory copy Time taken: 0.00s
+cl set Argument Time taken: 0.00s
+cl Execute kernel time taken: 4.12s
+cl read memory taken: 0.00s
+Computed '128/128' correct values!
+start of encrypt_cl
+data, keydata, results
+initFns
+Loaded library name:/system/lib/libllvm-a3xx.so
+Connect to a compute device
+has 2 devices
+Device name is QUALCOMM Adreno(TM)
+Device name is QUALCOMM Krait(TM)
+Create a compute context
+Create a command commands
+Create the compute program from the source buffer
+file len is: 34
+full path is: /data/local/tmp/eng_opencl_aes.cl
+file opened, fd is 4
+file size is 20236 byte
+read in size is: 20236
+Build the program executable
+Create the compute kernel in the program we wish to run
+Create the input and output arrays in device memory for our calculation
+Get the maximum work group size for executing the kernel on the device
+local is 128
+encrypt_cl: count = 128
+rd_key 3"global is 128
+profile time: 4299.466309 msinput data is
+0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 encrypted data is
+0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 -----------------------------------------------encrypt_cl Time taken: 4.30s
+cl Fill data Time taken: 0.00s
+cl memory copy Time taken: 0.00s
+cl set Argument Time taken: 0.00s
+cl Execute kernel time taken: 4.30s
+cl read memory taken: 0.00s
+Computed '128/128' correct values!
+start of encrypt_cl
+data, keydata, results
+initFns
+Loaded library name:/system/lib/libllvm-a3xx.so
+Connect to a compute device
+has 2 devices
+Device name is QUALCOMM Adreno(TM)
+Device name is QUALCOMM Krait(TM)
+Create a compute context
+Create a command commands
+Create the compute program from the source buffer
+file len is: 34
+full path is: /data/local/tmp/eng_opencl_aes.cl
+file opened, fd is 4
+file size is 20236 byte
+read in size is: 20236
+Build the program executable
+Create the compute kernel in the program we wish to run
+Create the input and output arrays in device memory for our calculation
+Get the maximum work group size for executing the kernel on the device
+local is 128
+encrypt_cl: count = 128
+rd_key 3"global is 128
+profile time: 4131.909180 msinput data is
+0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 encrypted data is
+0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 -----------------------------------------------encrypt_cl Time taken: 4.13s
+cl Fill data Time taken: 0.00s
+cl memory copy Time taken: 0.00s
+cl set Argument Time taken: 0.00s
+cl Execute kernel time taken: 4.13s
+cl read memory taken: 0.00s
+Computed '128/128' correct values!
+start of encrypt_cl
+data, keydata, results
+initFns
+Loaded library name:/system/lib/libllvm-a3xx.so
+Connect to a compute device
+has 2 devices
+Device name is QUALCOMM Adreno(TM)
+Device name is QUALCOMM Krait(TM)
+Create a compute context
+Create a command commands
+Create the compute program from the source buffer
+file len is: 34
+full path is: /data/local/tmp/eng_opencl_aes.cl
+file opened, fd is 4
+file size is 20236 byte
+read in size is: 20236
+Build the program executable
+Create the compute kernel in the program we wish to run
+Create the input and output arrays in device memory for our calculation
+Get the maximum work group size for executing the kernel on the device
+local is 128
+encrypt_cl: count = 128
+rd_key 3"global is 128
+profile time: 8570.243164 msinput data is
+0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 encrypted data is
+0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 -----------------------------------------------encrypt_cl Time taken: 8.57s
+cl Fill data Time taken: 0.00s
+cl memory copy Time taken: 0.00s
+cl set Argument Time taken: 0.00s
+cl Execute kernel time taken: 8.57s
+cl read memory taken: 0.00s
+Computed '128/128' correct values!
+start of encrypt_cl
+data, keydata, results
+initFns
+Loaded library name:/system/lib/libllvm-a3xx.so
+Connect to a compute device
+has 2 devices
+Device name is QUALCOMM Adreno(TM)
+Device name is QUALCOMM Krait(TM)
+Create a compute context
+Create a command commands
+Create the compute program from the source buffer
+file len is: 34
+full path is: /data/local/tmp/eng_opencl_aes.cl
+file opened, fd is 4
+file size is 20236 byte
+read in size is: 20236
+Build the program executable
+Create the compute kernel in the program we wish to run
+Create the input and output arrays in device memory for our calculation
+Get the maximum work group size for executing the kernel on the device
+local is 128
+encrypt_cl: count = 128
+rd_key 3"global is 128
+profile time: 4133.251953 msinput data is
+0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 encrypted data is
+0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 -----------------------------------------------encrypt_cl Time taken: 4.14s
+cl Fill data Time taken: 0.00s
+cl memory copy Time taken: 0.00s
+cl set Argument Time taken: 0.00s
+cl Execute kernel time taken: 4.13s
+cl read memory taken: 0.00s
+Computed '128/128' correct values!
+start of encrypt_cl
+data, keydata, results
+initFns
+Loaded library name:/system/lib/libllvm-a3xx.so
+Connect to a compute device
+has 2 devices
+Device name is QUALCOMM Adreno(TM)
+Device name is QUALCOMM Krait(TM)
+Create a compute context
+Create a command commands
+Create the compute program from the source buffer
+file len is: 34
+full path is: /data/local/tmp/eng_opencl_aes.cl
+file opened, fd is 4
+file size is 20236 byte
+read in size is: 20236
+Build the program executable
+Create the compute kernel in the program we wish to run
+Create the input and output arrays in device memory for our calculation
+Get the maximum work group size for executing the kernel on the device
+local is 128
+encrypt_cl: count = 128
+rd_key 3"global is 128

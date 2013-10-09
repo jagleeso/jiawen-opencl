@@ -1,0 +1,159 @@
+
+
+
+User 1%, System 1%, IOW 0%, IRQ 0%
+User 4 + Nice 0 + Sys 5 + Idle 296 + IOW 0 + IRQ 0 + SIRQ 0 = 305
+
+  PID PR CPU% S  #THR     VSS     RSS PCY UID      Name
+14752  0   2% R     1   1196K    496K     shell    top
+    4  0   0% S     1      0K      0K     root     kworker/0:0
+ 4552  0   0% S     1      0K      0K     root     kworker/u:4
+  170  0   0% S     6   6264K    476K     root     /system/bin/mpdecision
+   16  1   0% S     1      0K      0K     root     khelper
+   17  1   0% S     1      0K      0K     root     suspend_sys_syn
+   18  1   0% S     1      0K      0K     root     suspend
+   20  1   0% S     1      0K      0K     root     irq/203-msmdata
+   21  0   0% S     1      0K      0K     root     sync_supers
+   22  0   0% S     1      0K      0K     root     bdi-default
+   23  1   0% S     1      0K      0K     root     kblockd
+   24  0   0% S     1      0K      0K     root     msm_slim_ctrl_r
+   25  0   0% S     1      0K      0K     root     khubd
+   26  1   0% S     1      0K      0K     root     irq/84-msm_iomm
+   27  1   0% S     1      0K      0K     root     irq/84-msm_iomm
+   28  1   0% S     1      0K      0K     root     irq/96-msm_iomm
+   29  1   0% S     1      0K      0K     root     irq/96-msm_iomm
+   30  1   0% S     1      0K      0K     root     irq/94-msm_iomm
+   31  1   0% S     1      0K      0K     root     irq/94-msm_iomm
+   32  1   0% S     1      0K      0K     root     irq/92-msm_iomm
+   33  1   0% S     1      0K      0K     root     irq/92-msm_iomm
+   34  1   0% S     1      0K      0K     root     irq/100-msm_iom
+   35  1   0% S     1      0K      0K     root     irq/100-msm_iom
+   36  1   0% S     1      0K      0K     root     irq/86-msm_iomm
+   37  1   0% S     1      0K      0K     root     irq/86-msm_iomm
+   38  1   0% S     1      0K      0K     root     irq/90-msm_iomm
+   39  1   0% S     1      0K      0K     root     irq/90-msm_iomm
+   40  1   0% S     1      0K      0K     root     irq/88-msm_iomm
+   41  2   0% S     1      0K      0K     root     irq/102-msm_iom
+   42  0   0% S     1      0K      0K     root     irq/102-msm_iom
+   43  1   0% S     1      0K      0K     root     irq/98-msm_iomm
+   44  1   0% S     1      0K      0K     root     irq/98-msm_iomm
+   45  3   0% S     1      0K      0K     root     irq/243-msm_iom
+   46  1   0% S     1      0K      0K     root     irq/243-msm_iom
+   47  1   0% S     1      0K      0K     root     irq/269-msm_iom
+   48  1   0% S     1      0K      0K     root     irq/269-msm_iom
+   49  1   0% S     1      0K      0K     root     l2cap
+   50  1   0% S     1      0K      0K     root     a2mp
+   51  1   0% S     1      0K      0K     root     cfg80211
+   52  1   0% S     1      0K      0K     root     irq/644-earjack
+   53  1   0% S     1      0K      0K     root     modem_notifier
+   54  1   0% S     1      0K      0K     root     smd_channel_clo
+   55  1   0% S     1      0K      0K     root     smsm_cb_wq
+   58  1   0% S     1      0K      0K     root     qmi
+   59  1   0% S     1      0K      0K     root     nmea
+   60  1   0% S     1      0K      0K     root     msm_ipc_router
+   61  1   0% S     1      0K      0K     root     apr_driver
+   62  1   0% S     1      0K      0K     root     mdm_queue
+   63  0   0% S     1      0K      0K     root     irq/337-mdm sta
+    1  0   0% S     1    376K    244K     root     /init
+   65  1   0% S     1      0K      0K     root     kswapd0
+   66  1   0% S     1      0K      0K     root     fsnotify_mark
+   67  1   0% S     1      0K      0K     root     cifsiod
+   68  1   0% S     1      0K      0K     root     crypto
+   82  1   0% S     1      0K      0K     root     mdp_dma_wq
+   83  1   0% S     1      0K      0K     root     mdp_vsync_wq
+   84  1   0% S     1      0K      0K     root     mdp_pipe_ctrl_w
+   85  1   0% S     1      0K      0K     root     mdp_cursor_ctrl
+   86  1   0% S     1      0K      0K     root     hdmi_hdcp
+   87  1   0% S     1      0K      0K     root     irq/111-hdmi_ms
+   88  1   0% S     1      0K      0K     root     vidc_worker_que
+   89  1   0% S     1      0K      0K     root     vidc_timer_wq
+   90  1   0% S     1      0K      0K     root     smux_notify_wq
+   91  1   0% S     1      0K      0K     root     smux_tx_wq
+   92  1   0% S     1      0K      0K     root     smux_rx_wq
+   93  1   0% S     1      0K      0K     root     smux_loopback_w
+   94  1   0% S     1      0K      0K     root     diag_wq
+   95  1   0% S     1      0K      0K     root     diag_cntl_wq
+   96  1   0% S     1      0K      0K     root     diag_dci_wq
+   97  1   0% S     1      0K      0K     root     diag_bridge_wq
+   98  1   0% S     1      0K      0K     root     kgsl-3d0
+   99  1   0% S     1      0K      0K     root     anx7808_work
+  100  1   0% S     1      0K      0K     root     irq/645-anx7808
+  101  0   0% S     1      0K      0K     root     irq/330-wcd9xxx
+  104  1   0% S     1      0K      0K     root     usbnet
+  107  1   0% S     1      0K      0K     root     mdm_bridge
+  108  1   0% S     1      0K      0K     root     k_rmnet_mux_wor
+  109  1   0% S     1      0K      0K     root     f_mtp
+  110  1   0% S     1      0K      0K     root     file-storage
+  111  1   0% S     1      0K      0K     root     uether
+  112  1   0% S     1      0K      0K     root     touch_wq
+  115  3   0% S     1      0K      0K     root     iewq
+  116  1   0% D     1      0K      0K     root     kinteractiveup
+  117  1   0% S     1      0K      0K     root     binder
+  118  0   0% S     1      0K      0K     root     mmcqd/0
+  120  1   0% S     1      0K      0K     root     krfcommd
+  121  1   0% S     1      0K      0K     root     msm-cpufreq
+  124  1   0% S     1      0K      0K     root     rq_stats
+  125  1   0% S     1      0K      0K     root     deferwq
+  128  1   0% S     1      0K      0K     root     vibrator
+  129  1   0% S     1      0K      0K     root     fsa8008
+  130  1   0% S     1      0K      0K     root     irq/369-fsa8008
+  131  1   0% S     1      0K      0K     root     irq/371-fsa8008
+  132  0   0% S     1    352K    188K     root     /sbin/ueventd
+  134  1   0% S     1      0K      0K     root     jbd2/mmcblk0p21
+  135  1   0% S     1      0K      0K     root     ext4-dio-unwrit
+  138  0   0% S     1      0K      0K     root     flush-179:0
+  140  0   0% S     1      0K      0K     root     jbd2/mmcblk0p22
+  141  1   0% S     1      0K      0K     root     ext4-dio-unwrit
+  145  0   0% S     1      0K      0K     root     jbd2/mmcblk0p23
+  146  1   0% S     1      0K      0K     root     ext4-dio-unwrit
+  147  0   0% S     1      0K      0K     root     jbd2/mmcblk0p20
+  148  1   0% S     1      0K      0K     root     ext4-dio-unwrit
+  153  1   0% S     1    888K    184K     system   /system/bin/servicemanager
+  154  0   0% S     3   4056K    744K     root     /system/bin/vold
+  157  0   0% S     1   1588K   1108K     root     /system/bin/debuggerd
+  158  1   0% S     8  13944K   2592K     radio    /system/bin/rild
+  161  1   0% S     3  12744K   4484K  fg drm      /system/bin/drmserver
+  163  0   0% S     1    900K    200K     install  /system/bin/installd
+  164  0   0% S     1   2068K    852K     keystore /system/bin/keystore
+  165  0   0% S     2   2208K    572K     nobody   /system/bin/rmt_storage
+  166  0   0% S     5   6096K    508K     radio    /system/bin/bridgemgrd
+  167  0   0% S     6   7088K    508K     radio    /system/bin/qmuxd
+  168  1   0% S     6   7236K    740K     radio    /system/bin/netmgrd
+  169  0   0% S    19  20540K    864K     root     /system/bin/thermald
+  180  1   0% S     9  10144K    740K     nobody   /system/bin/sensors.qcom
+  181  3   0% S     2   2312K    164K     media_rw /system/bin/sdcard
+  182  0   0% S     2   3792K    700K     camera   /system/bin/mm-qcamera-daemon
+  184  0   0% S     1   1836K    544K     system   /system/bin/qseecomd
+  185  0   0% S     7   6588K    240K     shell    /sbin/adbd
+  216  0   0% S     3   3940K    468K     system   /system/bin/qseecomd
+  263  1   0% S     1   1148K    480K     system   /system/bin/qcks
+  544  1   0% S     1   1096K    476K     system   /system/bin/efsks
+  592  1   0% S     1      0K      0K     root     ehci_wq
+  593  1   0% S     1      0K      0K     root     irq/337-hsic_pe
+  604  1   0% S     1    772K    324K     system   sh
+  605  0   0% S     1   2164K   1532K     system   /system/bin/ks
+ 1665  1   0% S     1      0K      0K     root     msm_sat0
+ 1765  0   0% S     1    820K    476K     shell    /system/bin/sh
+ 1779  0   0% S     1    828K    488K     root     sh
+ 2851  0   0% S     1      0K      0K     root     kworker/u:2
+ 4236  0   0% S     1      0K      0K     root     kworker/0:1
+ 8150  0   0% S     1      0K      0K     root     kworker/0:3
+13804  1   0% S    10  25560K   7776K  fg media    /system/bin/mediaserver
+13805  1   0% S     8   9844K    960K     root     /system/bin/netd
+14141  1   0% S     1      0K      0K     root     WD_Thread
+14142  0   0% S     1      0K      0K     root     MC_Thread
+14143  0   0% S     1      0K      0K     root     TX_Thread
+14144  0   0% S     1      0K      0K     root     RX_Thread
+14217  3   0% S     1    744K    168K     log      /system/bin/logwrapper
+14218  0   0% S     1   2716K   1472K     wifi     /system/bin/wpa_supplicant
+14651  0   0% S     4 817464K  40488K     root     zygote
+14652  1   0% S     8  36080K  14788K  fg system   /system/bin/surfaceflinger
+14662  2   0% S     5  31972K  12448K  fg graphics /system/bin/bootanimation
+14673  1   0% S    23 839456K  31456K  fg system   system_server
+14710  0   0% S     1    820K    480K     shell    /system/bin/sh
+14732  0   0% S     1      0K      0K     root     kworker/0:2
+14750  0   0% S     1    804K    328K     shell    /system/bin/sh
+   64  1   0% S     1      0K      0K     root     irq/334-mdm pbl
+    2  0   0% S     1      0K      0K     root     kthreadd
+    3  0   0% S     1      0K      0K     root     ksoftirqd/0
+    6  0   0% S     1      0K      0K     root     migration/0

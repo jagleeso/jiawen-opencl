@@ -1,0 +1,6 @@
+kworker/u:4
+msm_sat0
+sh
+/system/bin/bootanimation
+/system/bin/sh
+/system/bin/sh

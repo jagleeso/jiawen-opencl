@@ -1,0 +1,21 @@
+This project create typical helloworld for a Nexus-4 (possibly Nexus 10) phone.
+Here are steps to create android app (ensure java-1.6, ant, gcc > 4.6, android-ndk >= r8 , android-sdk )are present):
+ * hg clone https://sgorti@code.google.com/p/aopencl/
+ * cd aopencl/helloworld
+ * create a shell script env1.sh that look like:
+cat env1.sh 
+P1=/opt/android/android-sdk-linux/platform-tools/:/opt/android/android-sdk-linux/tools/:/opt/android-ndk-r8d
+export NDK=/opt/android-ndk-r8d/
+export PATH=$P1:$PATH
+
+ * ndk-build   #OR ndk-build NDK_DEBUG=1 V=1 
+  * Above command will create stripped ARM binary at libs/armeabi-v7a/helloworld and non-stripped binary at: ./obj/local/armeabi-v7a/helloworld
+ * Connect phone via USB-cable to computer (Enable 'USB Debugging' in settings)
+  * Ensure 'adb devices' shows your phone device
+ * adb push  ./obj/local/armeabi-v7a/helloworld /data/local/tmp/helloworld
+ * adb push  ./libs/armeabi-v7a/helloworld /data/local/tmp/helloworld
+
+ * adb shell
+  *  /data/local/tmp/helloworld
+
+

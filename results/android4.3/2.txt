@@ -1,0 +1,500 @@
+start of encrypt_cl
+data, keydata, results
+initFns
+Loaded library name:/system/lib/libllvm-a3xx.so
+Segmentation fault 
+start of encrypt_cl
+data, keydata, results
+initFns
+Loaded library name:/system/lib/libllvm-a3xx.so
+Segmentation fault 
+start of encrypt_cl
+data, keydata, results
+initFns
+Loaded library name:/system/lib/libllvm-a3xx.so
+Segmentation fault 
+start of encrypt_cl
+data, keydata, results
+initFns
+Loaded library name:/system/lib/libllvm-a3xx.so
+Segmentation fault 
+start of encrypt_cl
+data, keydata, results
+initFns
+Loaded library name:/system/lib/libllvm-a3xx.so
+Segmentation fault 
+start of encrypt_cl
+data, keydata, results
+initFns
+Loaded library name:/system/lib/libllvm-a3xx.so
+Segmentation fault 
+start of encrypt_cl
+data, keydata, results
+initFns
+Loaded library name:/system/lib/libllvm-a3xx.so
+Segmentation fault 
+start of encrypt_cl
+data, keydata, results
+initFns
+Loaded library name:/system/lib/libllvm-a3xx.so
+Segmentation fault 
+start of encrypt_cl
+data, keydata, results
+initFns
+Loaded library name:/system/lib/libllvm-a3xx.so
+Segmentation fault 
+start of encrypt_cl
+data, keydata, results
+initFns
+Loaded library name:/system/lib/libllvm-a3xx.so
+Segmentation fault 
+start of encrypt_cl
+data, keydata, results
+initFns
+Loaded library name:/system/lib/libllvm-a3xx.so
+Segmentation fault 
+start of encrypt_cl
+data, keydata, results
+initFns
+Loaded library name:/system/lib/libllvm-a3xx.so
+Segmentation fault 
+start of encrypt_cl
+data, keydata, results
+initFns
+Loaded library name:/system/lib/libllvm-a3xx.so
+Segmentation fault 
+start of encrypt_cl
+data, keydata, results
+initFns
+Loaded library name:/system/lib/libllvm-a3xx.so
+Segmentation fault 
+start of encrypt_cl
+data, keydata, results
+initFns
+Loaded library name:/system/lib/libllvm-a3xx.so
+Segmentation fault 
+start of encrypt_cl
+data, keydata, results
+initFns
+Loaded library name:/system/lib/libllvm-a3xx.so
+Segmentation fault 
+start of encrypt_cl
+data, keydata, results
+initFns
+Loaded library name:/system/lib/libllvm-a3xx.so
+Segmentation fault 
+start of encrypt_cl
+data, keydata, results
+initFns
+Loaded library name:/system/lib/libllvm-a3xx.so
+Segmentation fault 
+start of encrypt_cl
+data, keydata, results
+initFns
+Loaded library name:/system/lib/libllvm-a3xx.so
+Segmentation fault 
+start of encrypt_cl
+data, keydata, results
+initFns
+Loaded library name:/system/lib/libllvm-a3xx.so
+Segmentation fault 
+start of encrypt_cl
+data, keydata, results
+initFns
+Loaded library name:/system/lib/libllvm-a3xx.so
+Segmentation fault 
+start of encrypt_cl
+data, keydata, results
+initFns
+Loaded library name:/system/lib/libllvm-a3xx.so
+Segmentation fault 
+start of encrypt_cl
+data, keydata, results
+initFns
+Loaded library name:/system/lib/libllvm-a3xx.so
+Segmentation fault 
+start of encrypt_cl
+data, keydata, results
+initFns
+Loaded library name:/system/lib/libllvm-a3xx.so
+Segmentation fault 
+start of encrypt_cl
+data, keydata, results
+initFns
+Loaded library name:/system/lib/libllvm-a3xx.so
+Segmentation fault 
+start of encrypt_cl
+data, keydata, results
+initFns
+Loaded library name:/system/lib/libllvm-a3xx.so
+Segmentation fault 
+start of encrypt_cl
+data, keydata, results
+initFns
+Loaded library name:/system/lib/libllvm-a3xx.so
+Segmentation fault 
+start of encrypt_cl
+data, keydata, results
+initFns
+Loaded library name:/system/lib/libllvm-a3xx.so
+Segmentation fault 
+start of encrypt_cl
+data, keydata, results
+initFns
+Loaded library name:/system/lib/libllvm-a3xx.so
+Segmentation fault 
+start of encrypt_cl
+data, keydata, results
+initFns
+Loaded library name:/system/lib/libllvm-a3xx.so
+Segmentation fault 
+start of encrypt_cl
+data, keydata, results
+initFns
+Loaded library name:/system/lib/libllvm-a3xx.so
+Segmentation fault 
+start of encrypt_cl
+data, keydata, results
+initFns
+Loaded library name:/system/lib/libllvm-a3xx.so
+Segmentation fault 
+start of encrypt_cl
+data, keydata, results
+initFns
+Loaded library name:/system/lib/libllvm-a3xx.so
+Segmentation fault 
+start of encrypt_cl
+data, keydata, results
+initFns
+Loaded library name:/system/lib/libllvm-a3xx.so
+Segmentation fault 
+start of encrypt_cl
+data, keydata, results
+initFns
+Loaded library name:/system/lib/libllvm-a3xx.so
+Segmentation fault 
+start of encrypt_cl
+data, keydata, results
+initFns
+Loaded library name:/system/lib/libllvm-a3xx.so
+Segmentation fault 
+start of encrypt_cl
+data, keydata, results
+initFns
+Loaded library name:/system/lib/libllvm-a3xx.so
+Segmentation fault 
+start of encrypt_cl
+data, keydata, results
+initFns
+Loaded library name:/system/lib/libllvm-a3xx.so
+Segmentation fault 
+start of encrypt_cl
+data, keydata, results
+initFns
+Loaded library name:/system/lib/libllvm-a3xx.so
+Segmentation fault 
+start of encrypt_cl
+data, keydata, results
+initFns
+Loaded library name:/system/lib/libllvm-a3xx.so
+Segmentation fault 
+start of encrypt_cl
+data, keydata, results
+initFns
+Loaded library name:/system/lib/libllvm-a3xx.so
+Segmentation fault 
+start of encrypt_cl
+data, keydata, results
+initFns
+Loaded library name:/system/lib/libllvm-a3xx.so
+Segmentation fault 
+start of encrypt_cl
+data, keydata, results
+initFns
+Loaded library name:/system/lib/libllvm-a3xx.so
+Segmentation fault 
+start of encrypt_cl
+data, keydata, results
+initFns
+Loaded library name:/system/lib/libllvm-a3xx.so
+Segmentation fault 
+start of encrypt_cl
+data, keydata, results
+initFns
+Loaded library name:/system/lib/libllvm-a3xx.so
+Segmentation fault 
+start of encrypt_cl
+data, keydata, results
+initFns
+Loaded library name:/system/lib/libllvm-a3xx.so
+Segmentation fault 
+start of encrypt_cl
+data, keydata, results
+initFns
+Loaded library name:/system/lib/libllvm-a3xx.so
+Segmentation fault 
+start of encrypt_cl
+data, keydata, results
+initFns
+Loaded library name:/system/lib/libllvm-a3xx.so
+Segmentation fault 
+start of encrypt_cl
+data, keydata, results
+initFns
+Loaded library name:/system/lib/libllvm-a3xx.so
+Segmentation fault 
+start of encrypt_cl
+data, keydata, results
+initFns
+Loaded library name:/system/lib/libllvm-a3xx.so
+Segmentation fault 
+start of encrypt_cl
+data, keydata, results
+initFns
+Loaded library name:/system/lib/libllvm-a3xx.so
+Segmentation fault 
+start of encrypt_cl
+data, keydata, results
+initFns
+Loaded library name:/system/lib/libllvm-a3xx.so
+Segmentation fault 
+start of encrypt_cl
+data, keydata, results
+initFns
+Loaded library name:/system/lib/libllvm-a3xx.so
+Segmentation fault 
+start of encrypt_cl
+data, keydata, results
+initFns
+Loaded library name:/system/lib/libllvm-a3xx.so
+Segmentation fault 
+start of encrypt_cl
+data, keydata, results
+initFns
+Loaded library name:/system/lib/libllvm-a3xx.so
+Segmentation fault 
+start of encrypt_cl
+data, keydata, results
+initFns
+Loaded library name:/system/lib/libllvm-a3xx.so
+Segmentation fault 
+start of encrypt_cl
+data, keydata, results
+initFns
+Loaded library name:/system/lib/libllvm-a3xx.so
+Segmentation fault 
+start of encrypt_cl
+data, keydata, results
+initFns
+Loaded library name:/system/lib/libllvm-a3xx.so
+Segmentation fault 
+start of encrypt_cl
+data, keydata, results
+initFns
+Loaded library name:/system/lib/libllvm-a3xx.so
+Segmentation fault 
+start of encrypt_cl
+data, keydata, results
+initFns
+Loaded library name:/system/lib/libllvm-a3xx.so
+Segmentation fault 
+start of encrypt_cl
+data, keydata, results
+initFns
+Loaded library name:/system/lib/libllvm-a3xx.so
+Segmentation fault 
+start of encrypt_cl
+data, keydata, results
+initFns
+Loaded library name:/system/lib/libllvm-a3xx.so
+Segmentation fault 
+start of encrypt_cl
+data, keydata, results
+initFns
+Loaded library name:/system/lib/libllvm-a3xx.so
+Segmentation fault 
+start of encrypt_cl
+data, keydata, results
+initFns
+Loaded library name:/system/lib/libllvm-a3xx.so
+Segmentation fault 
+start of encrypt_cl
+data, keydata, results
+initFns
+Loaded library name:/system/lib/libllvm-a3xx.so
+Segmentation fault 
+start of encrypt_cl
+data, keydata, results
+initFns
+Loaded library name:/system/lib/libllvm-a3xx.so
+Segmentation fault 
+start of encrypt_cl
+data, keydata, results
+initFns
+Loaded library name:/system/lib/libllvm-a3xx.so
+Segmentation fault 
+start of encrypt_cl
+data, keydata, results
+initFns
+Loaded library name:/system/lib/libllvm-a3xx.so
+Segmentation fault 
+start of encrypt_cl
+data, keydata, results
+initFns
+Loaded library name:/system/lib/libllvm-a3xx.so
+Segmentation fault 
+start of encrypt_cl
+data, keydata, results
+initFns
+Loaded library name:/system/lib/libllvm-a3xx.so
+Segmentation fault 
+start of encrypt_cl
+data, keydata, results
+initFns
+Loaded library name:/system/lib/libllvm-a3xx.so
+Segmentation fault 
+start of encrypt_cl
+data, keydata, results
+initFns
+Loaded library name:/system/lib/libllvm-a3xx.so
+Segmentation fault 
+start of encrypt_cl
+data, keydata, results
+initFns
+Loaded library name:/system/lib/libllvm-a3xx.so
+Segmentation fault 
+start of encrypt_cl
+data, keydata, results
+initFns
+Loaded library name:/system/lib/libllvm-a3xx.so
+Segmentation fault 
+start of encrypt_cl
+data, keydata, results
+initFns
+Loaded library name:/system/lib/libllvm-a3xx.so
+Segmentation fault 
+start of encrypt_cl
+data, keydata, results
+initFns
+Loaded library name:/system/lib/libllvm-a3xx.so
+Segmentation fault 
+start of encrypt_cl
+data, keydata, results
+initFns
+Loaded library name:/system/lib/libllvm-a3xx.so
+Segmentation fault 
+start of encrypt_cl
+data, keydata, results
+initFns
+Loaded library name:/system/lib/libllvm-a3xx.so
+Segmentation fault 
+start of encrypt_cl
+data, keydata, results
+initFns
+Loaded library name:/system/lib/libllvm-a3xx.so
+Segmentation fault 
+start of encrypt_cl
+data, keydata, results
+initFns
+Loaded library name:/system/lib/libllvm-a3xx.so
+Segmentation fault 
+start of encrypt_cl
+data, keydata, results
+initFns
+Loaded library name:/system/lib/libllvm-a3xx.so
+Segmentation fault 
+start of encrypt_cl
+data, keydata, results
+initFns
+Loaded library name:/system/lib/libllvm-a3xx.so
+Segmentation fault 
+start of encrypt_cl
+data, keydata, results
+initFns
+Loaded library name:/system/lib/libllvm-a3xx.so
+Segmentation fault 
+start of encrypt_cl
+data, keydata, results
+initFns
+Loaded library name:/system/lib/libllvm-a3xx.so
+Segmentation fault 
+start of encrypt_cl
+data, keydata, results
+initFns
+Loaded library name:/system/lib/libllvm-a3xx.so
+Segmentation fault 
+start of encrypt_cl
+data, keydata, results
+initFns
+Loaded library name:/system/lib/libllvm-a3xx.so
+Segmentation fault 
+start of encrypt_cl
+data, keydata, results
+initFns
+Loaded library name:/system/lib/libllvm-a3xx.so
+Segmentation fault 
+start of encrypt_cl
+data, keydata, results
+initFns
+Loaded library name:/system/lib/libllvm-a3xx.so
+Segmentation fault 
+start of encrypt_cl
+data, keydata, results
+initFns
+Loaded library name:/system/lib/libllvm-a3xx.so
+Segmentation fault 
+start of encrypt_cl
+data, keydata, results
+initFns
+Loaded library name:/system/lib/libllvm-a3xx.so
+Segmentation fault 
+start of encrypt_cl
+data, keydata, results
+initFns
+Loaded library name:/system/lib/libllvm-a3xx.so
+Segmentation fault 
+start of encrypt_cl
+data, keydata, results
+initFns
+Loaded library name:/system/lib/libllvm-a3xx.so
+Segmentation fault 
+start of encrypt_cl
+data, keydata, results
+initFns
+Loaded library name:/system/lib/libllvm-a3xx.so
+Segmentation fault 
+start of encrypt_cl
+data, keydata, results
+initFns
+Loaded library name:/system/lib/libllvm-a3xx.so
+Segmentation fault 
+start of encrypt_cl
+data, keydata, results
+initFns
+Loaded library name:/system/lib/libllvm-a3xx.so
+Segmentation fault 
+start of encrypt_cl
+data, keydata, results
+initFns
+Loaded library name:/system/lib/libllvm-a3xx.so
+Segmentation fault 
+start of encrypt_cl
+data, keydata, results
+initFns
+Loaded library name:/system/lib/libllvm-a3xx.so
+Segmentation fault 
+start of encrypt_cl
+data, keydata, results
+initFns
+Loaded library name:/system/lib/libllvm-a3xx.so
+Segmentation fault 
+start of encrypt_cl
+data, keydata, results
+initFns
+Loaded library name:/system/lib/libllvm-a3xx.so
+Segmentation fault 
+start of encrypt_cl
+data, keydata, results
+initFns
+Loaded library name:/system/lib/libllvm-a3xx.so
+Segmentation fault 
