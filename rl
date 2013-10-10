@@ -1,3 +1,4 @@
+# ./rl result/file.txt
 ndk-build
 adb push libs/armeabi-v7a/opencl_aes /data/local/tmp
 adb push jni/eng_opencl_aes.cl /data/local/tmp

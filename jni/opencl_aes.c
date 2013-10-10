@@ -100,6 +100,14 @@ int main(int argc, char* argv[])
 	return 0;
 }
 
+#define CHECK_CL_SUCCESS(task_todo, errvar) \
+if (errvar != CL_SUCCESS) \
+{ \
+    printf("Error: Failed to " task_todo ": errcode_ret=%i\n", errvar); \
+    return EXIT_FAILURE; \
+} \
+
+
 int encrypt_cl() {
 #ifdef DEBUG 
 	printf("start of encrypt_cl\n");
@@ -139,6 +147,7 @@ int encrypt_cl() {
 	initFns();
 	cl_platform_id platform = NULL;//the chosen platform
 	err = clGetPlatformIDs(1, &platform, NULL);
+    CHECK_CL_SUCCESS("clGetPlatformIDs", err);
 
 	// Connect to a compute device
 #ifdef DEBUG 
@@ -187,12 +196,19 @@ int encrypt_cl() {
 		return EXIT_FAILURE;
 	}
 
+	if (err != CL_SUCCESS)
+	{
+		printf("Error: Failed to create a compute context: errcode_ret=%i\n", err);
+		return EXIT_FAILURE;
+	}
+
 	// Create a command commands
 #ifdef DEBUG 
 	printf("Create a command commands\n");
 #endif
 	//
 	commands = clCreateCommandQueue(context, device_id[DEVICE], CL_QUEUE_PROFILING_ENABLE, &err);
+    CHECK_CL_SUCCESS("clCreateCommandQueue", err);
 	if (!commands)
 	{
 		printf("Error: Failed to create a command commands!\n");
@@ -223,7 +239,8 @@ int encrypt_cl() {
 		char b[2048];
 
 		printf("Error: Failed to build program executable!\n");
-		clGetProgramBuildInfo(program, device_id[DEVICE], CL_PROGRAM_BUILD_LOG, sizeof(b), b, &len);
+		err = clGetProgramBuildInfo(program, device_id[DEVICE], CL_PROGRAM_BUILD_LOG, sizeof(b), b, &len);
+        CHECK_CL_SUCCESS("clGetProgramBuildInfo", err);
 		printf("%s\n", b);
 		exit(1);
 	}
@@ -237,7 +254,8 @@ int encrypt_cl() {
 		printf("Error: Failed to create compute kernel! err = %d\n", err);
 		size_t len;
 		char b[2048];
-		clGetProgramBuildInfo(program, device_id[DEVICE], CL_PROGRAM_BUILD_LOG, sizeof(b), b, &len);
+		err = clGetProgramBuildInfo(program, device_id[DEVICE], CL_PROGRAM_BUILD_LOG, sizeof(b), b, &len);
+        CHECK_CL_SUCCESS("clGetProgramBuildInfo", err);
 		printf("%s\n", b);
 		exit(1);
 	}
@@ -249,7 +267,9 @@ int encrypt_cl() {
 	int max_buffer_size = MAX_BUFFER_SIZE;
 	// dynamic buffer size please
 	buffer_state = clCreateBuffer(context, CL_MEM_READ_WRITE | CL_MEM_ALLOC_HOST_PTR, max_buffer_size, NULL, &err);
+    CHECK_CL_SUCCESS("clCreateBuffer", err);
 	buffer_roundkeys = clCreateBuffer(context, CL_MEM_READ_ONLY, 16 * 15, NULL, &err);
+    CHECK_CL_SUCCESS("clCreateBuffer", err);
 	if (!buffer_state || !buffer_roundkeys)
 	{
 		printf("Error: Failed to allocate device memory!\n");
@@ -303,7 +323,9 @@ int encrypt_cl() {
 
 		clock_t tStartM = clock();
 		err = clEnqueueWriteBuffer(commands, buffer_state, CL_TRUE, 0, DATA_SIZE, in, 0, NULL, NULL);
+        CHECK_CL_SUCCESS("clEnqueueWriteBuffer", err);
 		err = clEnqueueWriteBuffer(commands, buffer_roundkeys, CL_TRUE, 0, 16 * 15, &ks.rd_key, 0, NULL, NULL);
+        CHECK_CL_SUCCESS("clEnqueueWriteBuffer", err);
 		printf("rd_key %s", ks.rd_key);
 		//err = clEnqueueWriteBuffer(commands, input, CL_TRUE, 0, sizeof(float) * count, data, 0, NULL, NULL);
 		//err = clEnqueueWriteBuffer(commands, key, CL_TRUE, 0, sizeof(float) * count, keyData, 0, NULL, NULL);
@@ -312,7 +334,8 @@ int encrypt_cl() {
 			printf("Error: Failed to write to source array!\n");
 			exit(1);
 		}
-		clFinish(commands);
+		err = clFinish(commands);
+        CHECK_CL_SUCCESS("clFinish", err);
 		tMemory += (double)(clock() - tStartM)/CLOCKS_PER_SEC;
 
 		// Set the arguments to our compute kernel
@@ -322,8 +345,11 @@ int encrypt_cl() {
 
 		err = 0;
 		err  = clSetKernelArg(encrypt_kernel, 0, sizeof(cl_mem), &buffer_state);
+        CHECK_CL_SUCCESS("clSetKernelArg", err);
 		err |= clSetKernelArg(encrypt_kernel, 1, sizeof(cl_mem), &buffer_roundkeys);
+        CHECK_CL_SUCCESS("clSetKernelArg", err);
 		err |= clSetKernelArg(encrypt_kernel, 2, sizeof(ks.rounds), &ks.rounds);
+        CHECK_CL_SUCCESS("clSetKernelArg", err);
 		if (err != CL_SUCCESS)
 		{
 			printf("Error: Failed to set kernel arguments! %d\n", err);
@@ -345,21 +371,26 @@ int encrypt_cl() {
 		cl_ulong start = 0, end = 0;
 		//for (i = 0; i<LOOP; i++) {
 			err = clEnqueueNDRangeKernel(commands, encrypt_kernel, 1, NULL, &global, &local, 0, NULL, &event);
+            CHECK_CL_SUCCESS("clEnqueueNDRangeKernel", err);
 			//err = clEnqueueNDRangeKernel(commands, kernel, 1, NULL, &global, NULL, 0, NULL, NULL);
 			if (err)
 			{
 				printf("Error: Failed to execute kernel!\n");
 				return EXIT_FAILURE;
 			}
-			clWaitForEvents(1, &event);
-			clGetEventProfilingInfo(event, CL_PROFILING_COMMAND_START, sizeof(cl_ulong), &start, NULL);
-			clGetEventProfilingInfo(event, CL_PROFILING_COMMAND_END, sizeof(cl_ulong), &end, NULL);
+			err = clWaitForEvents(1, &event);
+            CHECK_CL_SUCCESS("clWaitForEvents", err);
+			err = clGetEventProfilingInfo(event, CL_PROFILING_COMMAND_START, sizeof(cl_ulong), &start, NULL);
+            CHECK_CL_SUCCESS("clGetEventProfilingInfo", err);
+			err = clGetEventProfilingInfo(event, CL_PROFILING_COMMAND_END, sizeof(cl_ulong), &end, NULL);
+            CHECK_CL_SUCCESS("clGetEventProfilingInfo", err);
 			//END-START gives you hints on kind of “pure HW execution time”
 			//the resolution of the events is 1e-09 sec
 			t += (cl_float)(end - start)*(cl_float)(1e-06);
 		//}
 		printf("profile time: %f ms",t);
-		clFinish(commands);
+		err = clFinish(commands);
+        CHECK_CL_SUCCESS("clFinish", err);
 		// Wait for the command commands to get serviced before reading back results
 		//
 		tExecute += (double)(clock() - tStartE)/CLOCKS_PER_SEC;
@@ -413,10 +444,16 @@ int encrypt_cl() {
 	// Shutdown and cleanup
 	//
 	clReleaseMemObject(buffer_state);
+    CHECK_CL_SUCCESS("clReleaseMemObject", err);
 	clReleaseMemObject(buffer_roundkeys);
+    CHECK_CL_SUCCESS("clReleaseMemObject", err);
 	clReleaseProgram(program);
+    CHECK_CL_SUCCESS("clReleaseProgram", err);
 	clReleaseKernel(encrypt_kernel);
+    CHECK_CL_SUCCESS("clReleaseKernel", err);
 	clReleaseCommandQueue(commands);
+    CHECK_CL_SUCCESS("clReleaseCommandQueue", err);
 	clReleaseContext(context);
+    CHECK_CL_SUCCESS("clReleaseContext", err);
 }
 
