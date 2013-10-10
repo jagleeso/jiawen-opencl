@@ -175,6 +175,17 @@ int encrypt_cl() {
 	//cl_device_info device_info;
 	char buffer[1024];
 	clGetDeviceInfo(device_id[0], CL_DEVICE_NAME, sizeof(buffer), buffer, NULL);
+
+    /* James: Check if the device is available
+     */
+    cl_bool device_available = CL_FALSE;
+	clGetDeviceInfo(device_id[0], CL_DEVICE_AVAILABLE, sizeof(cl_bool), &device_available, NULL);
+    if (device_available != CL_TRUE) 
+    {
+		printf("Error: Device %i is not available\n", 0);
+		return EXIT_FAILURE;
+    }
+
 #ifdef DEBUG 
 	printf("Device name is %s\n", buffer);
 #endif

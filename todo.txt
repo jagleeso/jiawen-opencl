@@ -1,0 +1,7 @@
+- try out CL_DEVICE_AVAILABLE, and figure out what it means
+  - doesn't work
+- determine if clEnqueueAcquireGLObjects only matters for a single application, or if it 
+  matters across programs
+  - try it for 
+	static cl_mem buffer_state;
+	static cl_mem buffer_roundkeys;
