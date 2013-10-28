@@ -19,6 +19,7 @@ Copyright ©2012 Advanced Micro Devices, Inc. All rights reserved.
 #include <assert.h>
 #include <errno.h>
 #include "aes.h"
+#include <inttypes.h>
 
 //128 bit key
 static const unsigned char key[] = {
@@ -96,23 +97,39 @@ static const char *load_kernel_source(const char *filename) {
 
 int main(int argc, char* argv[])
 {
-	encrypt_cl();
+
+    unsigned int array_size;
+    if (argc < 2) {
+        /* fprintf(stderr, "Error: expected the size in bytes of the input/output arrays\n"); */
+        /* exit(EXIT_FAILURE); */
+        array_size = DATA_SIZE;
+    } else {
+        int result;
+        result = sscanf(argv[1], "%d", &array_size);
+        if (result != 1) {
+            printf("result == %d\n", result);
+            fprintf(stderr, "Error: expected the size in bytes of the input/output arrays, but saw \"%s\"\n", argv[1]);
+            exit(EXIT_FAILURE);
+        }
+    }
+
+	encrypt_cl(array_size);
 	return 0;
 }
 
 #define CHECK_CL_SUCCESS(task_todo, errvar) \
 if (errvar != CL_SUCCESS) \
 { \
-    printf("Error: Failed to " task_todo ": errcode_ret=%i\n", errvar); \
-    return EXIT_FAILURE; \
+    printf("Error: %s line %d, Failed to " task_todo ": errcode_ret=%i\n", __FILE__, __LINE__, errvar); \
+    exit(EXIT_FAILURE); \
 } \
 
-
-int encrypt_cl() {
+int encrypt_cl(unsigned int array_size) {
 #ifdef DEBUG 
 	printf("start of encrypt_cl\n");
 #endif
 	
+	unsigned int count = array_size;
 
 	int err;                            // error code returned from api calls
 	unsigned int correct;               // number of correct results returned
@@ -134,10 +151,10 @@ int encrypt_cl() {
 #ifdef DEBUG 
 	printf("data, keydata, results\n");
 #endif
-	float results[DATA_SIZE];           // results returned from device
+	float results[count];           // results returned from device
 	
-	unsigned char in[DATA_SIZE];              //plain text
-	unsigned char out[DATA_SIZE];              // encryped text
+	unsigned char in[count];              //plain text
+	unsigned char out[count];              // encryped text
 
 
 #ifdef DEBUG 
@@ -275,9 +292,8 @@ int encrypt_cl() {
 #ifdef DEBUG 
 	printf("Create the input and output arrays in device memory for our calculation\n");
 #endif
-	int max_buffer_size = MAX_BUFFER_SIZE;
 	// dynamic buffer size please
-	buffer_state = clCreateBuffer(context, CL_MEM_READ_WRITE | CL_MEM_ALLOC_HOST_PTR, max_buffer_size, NULL, &err);
+	buffer_state = clCreateBuffer(context, CL_MEM_READ_WRITE | CL_MEM_ALLOC_HOST_PTR, count, NULL, &err);
     CHECK_CL_SUCCESS("clCreateBuffer", err);
 	buffer_roundkeys = clCreateBuffer(context, CL_MEM_READ_ONLY, 16 * 15, NULL, &err);
     CHECK_CL_SUCCESS("clCreateBuffer", err);
@@ -302,7 +318,6 @@ int encrypt_cl() {
 
 
 	unsigned int i = 0;
-	unsigned int count = DATA_SIZE;
 
 	clock_t tStartF = clock();
 	// Fill our data set with random float values
@@ -333,7 +348,7 @@ int encrypt_cl() {
 		//
 
 		clock_t tStartM = clock();
-		err = clEnqueueWriteBuffer(commands, buffer_state, CL_TRUE, 0, DATA_SIZE, in, 0, NULL, NULL);
+		err = clEnqueueWriteBuffer(commands, buffer_state, CL_TRUE, 0, count * sizeof(*in), in, 0, NULL, NULL);
         CHECK_CL_SUCCESS("clEnqueueWriteBuffer", err);
 		err = clEnqueueWriteBuffer(commands, buffer_roundkeys, CL_TRUE, 0, 16 * 15, &ks.rd_key, 0, NULL, NULL);
         CHECK_CL_SUCCESS("clEnqueueWriteBuffer", err);
@@ -410,18 +425,18 @@ int encrypt_cl() {
 		//
 		clock_t tStartR = clock();
 		//err = clEnqueueReadBuffer( commands, input, CL_TRUE, 0, sizeof(float) * count, data, 0, NULL, NULL );  
-		err = clEnqueueReadBuffer(commands, buffer_state, CL_FALSE, 0, DATA_SIZE, out, 0, NULL, NULL);
+		err = clEnqueueReadBuffer(commands, buffer_state, CL_FALSE, 0, count, out, 0, NULL, NULL);
 		if (err != CL_SUCCESS)
 		{
 			printf("Error: Failed to read output array! %d\n", err);
 			exit(1);
 		}
 		printf("input data is\n");
-		for (i=0; i<DATA_SIZE; i++) {
+		for (i=0; i<count; i++) {
 			printf("%X ", in[i]);
 		}
 		printf("encrypted data is\n");
-		for (i=0; i<DATA_SIZE; i++) {
+		for (i=0; i<count; i++) {
 			printf("%X ", out[i]);
 		}
 		tRead += (double)(clock() - tStartR)/CLOCKS_PER_SEC;
