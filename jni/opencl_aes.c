@@ -87,7 +87,7 @@ static const char *load_kernel_source(const char *filename) {
 	char *buf = (char *) malloc(fsize + 1);
 	readSize = read(fd, buf, fsize);
 	printf("read in size is: %d\n", readSize);
-	assert(fsize == read(fd, buf, fsize));
+	/* assert(fsize == read(fd, buf, fsize)); */
 	
 	buf[fsize] = '\0';
 //	printf("source buff is: %s\n", buf);
@@ -130,6 +130,7 @@ int encrypt_cl(unsigned int array_size) {
 #endif
 	
 	unsigned int count = array_size;
+	/* unsigned int count = 1048576; */
 
 	int err;                            // error code returned from api calls
 	unsigned int correct;               // number of correct results returned
@@ -151,11 +152,13 @@ int encrypt_cl(unsigned int array_size) {
 #ifdef DEBUG 
 	printf("data, keydata, results\n");
 #endif
-	float results[count];           // results returned from device
+	/* float results[count];           // results returned from device */
 	
-	unsigned char in[count];              //plain text
-	unsigned char out[count];              // encryped text
+	/* unsigned char in[count];              //plain text */
+	/* unsigned char out[count];              // encryped text */
 
+	unsigned char* in = malloc(sizeof(unsigned char)*count);              //plain text
+	unsigned char* out = malloc(sizeof(unsigned char)*count);              // encryped text
 
 #ifdef DEBUG 
 	printf("initFns\n");
@@ -314,6 +317,8 @@ int encrypt_cl(unsigned int array_size) {
 		printf("Error: Failed to retrieve kernel work group info! %d\n", err);
 		exit(1);
 	}
+	printf("local can be %d\n", local);
+    local = 1;
 	printf("local is %d\n", local);
 
 
@@ -352,7 +357,7 @@ int encrypt_cl(unsigned int array_size) {
         CHECK_CL_SUCCESS("clEnqueueWriteBuffer", err);
 		err = clEnqueueWriteBuffer(commands, buffer_roundkeys, CL_TRUE, 0, 16 * 15, &ks.rd_key, 0, NULL, NULL);
         CHECK_CL_SUCCESS("clEnqueueWriteBuffer", err);
-		printf("rd_key %s", ks.rd_key);
+		printf("rd_key %s\n", ks.rd_key);
 		//err = clEnqueueWriteBuffer(commands, input, CL_TRUE, 0, sizeof(float) * count, data, 0, NULL, NULL);
 		//err = clEnqueueWriteBuffer(commands, key, CL_TRUE, 0, sizeof(float) * count, keyData, 0, NULL, NULL);
 		if (err != CL_SUCCESS)
@@ -386,8 +391,17 @@ int encrypt_cl(unsigned int array_size) {
 
 		// Execute the kernel over the entire range of our 1d input data set
 		// using the maximum number of work group items for this device
-		//
-		global = count;
+
+        /* 1 thread operates on 4 (uint4 vector type has 4 uints, (x, y, w, z)) consecutive 32 bit 
+         * (uint) fields at a time.  
+         *
+         * That is, 1 thread operates on 4*4 == 16 bytes (chars) of the input array.
+         *
+         * An input of N bytes needs N / 16 threads.
+         */
+        assert(global % 16 == 0);
+		global = array_size / 16;
+		/* global = 1024; */
 #ifdef DEBUG 
 		printf("global is %d\n", global);
 #endif
@@ -414,7 +428,7 @@ int encrypt_cl(unsigned int array_size) {
 			//the resolution of the events is 1e-09 sec
 			t += (cl_float)(end - start)*(cl_float)(1e-06);
 		//}
-		printf("profile time: %f ms",t);
+		printf("profile time: %f ms\n",t);
 		err = clFinish(commands);
         CHECK_CL_SUCCESS("clFinish", err);
 		// Wait for the command commands to get serviced before reading back results
@@ -433,19 +447,38 @@ int encrypt_cl(unsigned int array_size) {
 		}
 		printf("input data is\n");
 		for (i=0; i<count; i++) {
-			printf("%X ", in[i]);
+            if (in[i] != '\0') {
+                printf("Error: input array wasn't all '\\0's\n");
+                exit(EXIT_FAILURE);
+            }
+			/* printf("%02X", in[i]); */
 		}
+        /* printf("\n"); */
 		printf("encrypted data is\n");
+        size_t max_num_consec = 4;
+        size_t num_consec = 1;
+        unsigned char last;
 		for (i=0; i<count; i++) {
-			printf("%X ", out[i]);
+            if (i != 0 && out[i] == last) {
+                num_consec += 1;
+                if (num_consec > max_num_consec) {
+                    printf("Error: encrypted output had more than the maximum number of consecutive repeated bytes %zd. in particular, we saw a repeated sequence of %zd.\n", max_num_consec, num_consec);
+                    exit(EXIT_FAILURE);
+                }
+            } else {
+                num_consec = 1;
+            }
+            last = out[i];
+			/* printf("%02X", out[i]); */
 		}
+        /* printf("\n"); */
 		tRead += (double)(clock() - tStartR)/CLOCKS_PER_SEC;
 	//}
 
 
 
 
-	printf("-----------------------------------------------");
+	printf("-----------------------------------------------\n");
 	printf("encrypt_cl Time taken: %.2fs\n", (double)(clock() - tStart)/CLOCKS_PER_SEC);
 	printf("cl Fill data Time taken: %.2fs\n", tFill); 
 	printf("cl memory copy Time taken: %.2fs\n", tMemory); 

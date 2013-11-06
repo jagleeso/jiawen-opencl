@@ -15,7 +15,7 @@ copy_program_over() {
 device_is_on() {
     adb devices | \
         grep -v "List of devices attached" | \
-        grep "device" --quiet
+        grep "device" "$@"
 }
 
 wait_for_device_reboot() {
