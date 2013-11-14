@@ -323,7 +323,56 @@ __constant uint Te3[256] = {
 	0x7bcbb0b0U, 0xa8fc5454U, 0x6dd6bbbbU, 0x2c3a1616U, 
 };
 
+/* void print_vector(uint4 vector) { */
+/*     printf("integer == 0x%x\n", vector.x); */
+/* } */
+
+uint4 some_func(void) {
+    uint4 vector = (uint4)(0x11111111, 0x22222222, 0x33333333, 0x44444444);
+    return vector;
+}
+#define print_vector(name, vector) \
+    printf("%s\n", name); \
+    printf("x = 0x%08x\n", vector.x); \
+    printf("y = 0x%08x\n", vector.y); \
+    printf("z = 0x%08x\n", vector.z); \
+    printf("w = 0x%08x\n", vector.w); \
+    printf("\n"); \
+
+
 __kernel void AES_encrypt(__global uint4 *state, __constant uint4 *rk, uint rounds) {
+
+    /* uint4 vector = (uint4)(0x11111111, 0x22222222, 0x33333333, 0x44444444); */
+    /* uint4 vector = (uint4)(0x11111111, 0x22222222, 0x33333333, 0x44444444); */
+    uint4 vector = some_func();
+    /* printf("vector = %#v4hlx\n", vector); */
+
+    printf("-------------------------\n");
+
+    uint4 m = (uint4)(0x11111111, 0x22222222, 0x33333333, 0x44444444);
+	uint4 v0;
+    uint4 v1;
+    uint4 v2;
+    uint4 v3;
+    uint4 shift;
+    uint4 T = (uint4)(Te0[v0.x], Te0[v0.y], Te0[v0.z], Te0[v0.w])
+    v0 = m & 0xff;
+    shift = (m.yzwx >> 8);
+    v1 = (m.yzwx >> 8) & 0xff;
+    v2 = (m.zwxy >> 16) & 0xff;
+    v3 = (m.wxyz >> 24);
+
+    /* print_vector("", v0); */
+    print_vector("shift", shift);
+    print_vector("v0", v0);
+    print_vector("T", T);
+    print_vector("v1", v1);
+    print_vector("v2", v2);
+    print_vector("v3", v3);
+
+    printf("=========================\n");
+
+
 	uint global_id = get_global_id(0);
 	uint4 s, t;
 	
@@ -371,6 +420,56 @@ __kernel void AES_encrypt(__global uint4 *state, __constant uint4 *rk, uint roun
 	
 	state[global_id] = s;
 }
+
+/* __kernel void AES_encrypt(__global uint4 *state, __constant uint4 *rk, uint rounds) { */
+/*     printf("HELLO WORLD\n"); */
+/* 	uint global_id = get_global_id(0); */
+/* 	uint4 s, t; */
+/* 	 */
+/* 	s = state[global_id] ^ rk[0]; */
+/* 	 */
+/*     uint r = rounds >> 1; */
+/* 	uint4 offset0, offset1, offset2, offset3; */
+/*     for (;;) {		 */
+/* 		offset0 = s & 0xff; */
+/* 		offset1 = (s.yzwx >> 8) & 0xff; */
+/* 		offset2 = (s.zwxy >> 16) & 0xff; */
+/* 		offset3 = (s.wxyz >> 24); */
+/* 		t = (uint4)(Te0[offset0.x], Te0[offset0.y], Te0[offset0.z], Te0[offset0.w]) ^ */
+/* 			(uint4)(Te1[offset1.x], Te1[offset1.y], Te1[offset1.z], Te1[offset1.w]) ^ */
+/* 			(uint4)(Te2[offset2.x], Te2[offset2.y], Te2[offset2.z], Te2[offset2.w]) ^ */
+/* 			(uint4)(Te3[offset3.x], Te3[offset3.y], Te3[offset3.z], Te3[offset3.w]) ^ */
+/* 			rk[1]; */
+/* 		 */
+/*         rk += 2; */
+/*         if (--r == 0) { */
+/*             break; */
+/*         } */
+/* 		 */
+/* 		offset0 = t & 0xff; */
+/* 		offset1 = (t.yzwx >> 8) & 0xff; */
+/* 		offset2 = (t.zwxy >> 16) & 0xff; */
+/* 		offset3 = (t.wxyz >> 24); */
+/* 		s = (uint4)(Te0[offset0.x], Te0[offset0.y], Te0[offset0.z], Te0[offset0.w]) ^ */
+/* 			(uint4)(Te1[offset1.x], Te1[offset1.y], Te1[offset1.z], Te1[offset1.w]) ^ */
+/* 			(uint4)(Te2[offset2.x], Te2[offset2.y], Te2[offset2.z], Te2[offset2.w]) ^ */
+/* 			(uint4)(Te3[offset3.x], Te3[offset3.y], Te3[offset3.z], Te3[offset3.w]) ^ */
+/* 			rk[0]; */
+/*     } */
+/* 	 */
+/* 	offset0 = (t.zwxy >> 16) & 0xff; */
+/* 	offset1 = (t.wxyz >> 24); */
+/* 	offset2 = t & 0xff; */
+/* 	offset3 = (t.yzwx >> 8) & 0xff; */
+/* 	 */
+/* 	s = ((uint4)(Te2[offset2.x], Te2[offset2.y], Te2[offset2.z], Te2[offset2.w]) & 0x000000ff) ^ */
+/* 		((uint4)(Te3[offset3.x], Te3[offset3.y], Te3[offset3.z], Te3[offset3.w]) & 0x0000ff00) ^ */
+/* 		((uint4)(Te0[offset0.x], Te0[offset0.y], Te0[offset0.z], Te0[offset0.w]) & 0x00ff0000) ^ */
+/* 		((uint4)(Te1[offset1.x], Te1[offset1.y], Te1[offset1.z], Te1[offset1.w]) & 0xff000000) ^ */
+/* 		rk[0]; */
+/* 	 */
+/* 	state[global_id] = s; */
+/* } */
 
 __kernel void AES_encrypt_local(__global uint4 *state, __constant uint4 *rk, uint rounds) {
 	uint global_id = get_global_id(0);
