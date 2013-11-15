@@ -1,4 +1,5 @@
 #!/usr/bin/env bash
+# Usage: ./sample_opencl_aes_sizes.sh $global_worksize
 
 cd "$(dirname "$0")"
 source ./common.sh
@@ -6,6 +7,8 @@ cd $ROOT
 # set -x
 set -e
 executable=opencl_aes
+global_worksize="$1"
+shift 1
 
 # Guess the maximum input/output array size by starting with an initial value then 
 # incrementing by constant value.  Error is at most the constant value.
@@ -19,7 +22,7 @@ guess_max_array_size_const_inc() {
     local i=0;
     while true; do
         echo "> Trying size == $size"
-        if adb shell ./data/local/tmp/$executable $size 2>&1 | grep "Segmentation fault"; then
+        if adb shell ./data/local/tmp/$executable $size $global_worksize 2>&1 | grep "Segmentation fault"; then
             if [ "$i" -eq "0" ]; then
                 echo "ERROR: starting size ($size) is already too large and caused an error already" 
                 exit 1
@@ -49,7 +52,7 @@ guess_max_array_size_bin_exp() {
         echo "SIZE == $size"
         # adb shell ./data/local/tmp/$executable $size 2>&1
         # echo "...."
-        if adb shell ./data/local/tmp/$executable $size 2>&1 | grep "Segmentation fault\|^Error:" || ! device_is_on; then
+        if adb shell ./data/local/tmp/$executable $size $global_worksize 2>&1 | grep "Segmentation fault\|^Error:" || ! device_is_on; then
             if [ "$i" -eq "0" ]; then
                 echo -n "ERROR: starting size ($size) is already too large and caused an error:" 
                 if device_is_on --quiet; then
@@ -124,7 +127,7 @@ sample_using_constant_increment_guess() {
     copy_program_over $executable
 
     for array_size in $(seq $INCREMENT $INCREMENT $ROUNDED_MAX_ARRAY_SIZE); do 
-        adb shell ./data/local/tmp/$executable $array_size
+        adb shell ./data/local/tmp/$executable $array_size $global_worksize
         echo
     done
 }
@@ -152,7 +155,7 @@ sample_using_binary_exponentiation_guess() {
 
     array_size=$start_size
     while [ "$array_size" -le "$max_array_size" ]; do 
-        adb shell ./data/local/tmp/$executable $array_size
+        adb shell ./data/local/tmp/$executable $array_size $global_worksize
         array_size=$((array_size * 2))
         echo
     done
