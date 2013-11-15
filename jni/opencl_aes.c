@@ -21,6 +21,8 @@ Copyright ©2012 Advanced Micro Devices, Inc. All rights reserved.
 #include "aes.h"
 #include <inttypes.h>
 
+#define CEILING_DIVIDE(value, divisor) (((value) + (divisor) - 1)/(divisor))
+
 //128 bit key
 static const unsigned char key[] = {
 	0x00, 0x11, 0x22, 0x33, 
@@ -99,21 +101,31 @@ int main(int argc, char* argv[])
 {
 
     unsigned int array_size;
-    if (argc < 2) {
+    unsigned int global;
+    if (argc < 3) {
         /* fprintf(stderr, "Error: expected the size in bytes of the input/output arrays\n"); */
         /* exit(EXIT_FAILURE); */
         array_size = DATA_SIZE;
+        global = 1;
     } else {
         int result;
+
         result = sscanf(argv[1], "%d", &array_size);
         if (result != 1) {
             printf("result == %d\n", result);
             fprintf(stderr, "Error: expected the size in bytes of the input/output arrays, but saw \"%s\"\n", argv[1]);
             exit(EXIT_FAILURE);
         }
+
+        result = sscanf(argv[2], "%d", &global);
+        if (result != 1) {
+            printf("result == %d\n", result);
+            fprintf(stderr, "Error: expected the \"global work size\" (the number of OpenCL AES instances to split the encryption of the input array between), but saw \"%s\"\n", argv[2]);
+            exit(EXIT_FAILURE);
+        }
     }
 
-	encrypt_cl(array_size);
+	encrypt_cl(array_size, global);
 	return 0;
 }
 
@@ -124,7 +136,10 @@ if (errvar != CL_SUCCESS) \
     exit(EXIT_FAILURE); \
 } \
 
-int encrypt_cl(unsigned int array_size) {
+/* entries: the number of "entries" (i.e. groups of size 16) that each OpenCL kernel instance should handle
+ * global: the "global work size" (the number of OpenCL AES instances to split the encryption of the input array between).
+ */
+int encrypt_cl(unsigned int array_size, unsigned int global) {
 #ifdef DEBUG 
 	printf("start of encrypt_cl\n");
 #endif
@@ -134,7 +149,7 @@ int encrypt_cl(unsigned int array_size) {
 
 	int err;                            // error code returned from api calls
 	unsigned int correct;               // number of correct results returned
-	size_t global;                      // global domain size for our calculation
+	/* size_t global;                      // global domain size for our calculation */
 	size_t local;                       // local domain size for our calculation
 
 	cl_device_id *device_id;             // compute device id 
@@ -281,6 +296,7 @@ int encrypt_cl(unsigned int array_size) {
 	printf("Create the compute kernel in the program we wish to run\n");
 #endif
 	encrypt_kernel = clCreateKernel(program, "AES_encrypt", &err);
+	/* encrypt_kernel = clCreateKernel(program, "AES_encrypt_old", &err); */
 	if (!encrypt_kernel || err != CL_SUCCESS) {
 		printf("Error: Failed to create compute kernel! err = %d\n", err);
 		size_t len;
@@ -373,6 +389,26 @@ int encrypt_cl(unsigned int array_size) {
 		//printf("Set the arguments to our compute kernel\n");
 		//
 		clock_t tStartA = clock();
+        size_t N;
+
+
+        /* 1 thread operates on 4 (uint4 vector type has 4 uints, (x, y, w, z)) consecutive 32 bit 
+         * (uint) fields at a time.  
+         *
+         * That is, 1 thread operates on 4*4 == 16 bytes (chars) of the input array.
+         *
+         * An input of N bytes needs N / 16 threads.
+         */
+        assert(array_size % 16 == 0);
+        /* unsigned int entries = 2; */
+        /* unsigned int entries = ((array_size / 16) + global - 1) / global; */
+        size_t entries_to_encrypt = array_size / 16;
+        unsigned int entries = CEILING_DIVIDE(entries_to_encrypt, global);
+		/* global = (entries_to_encrypt + entries - 1)/entries; */
+		/* global = 1024; */
+
+        printf("entries == %lu\n", entries);
+        printf("entries_to_encrypt == %lu\n", entries_to_encrypt);
 
 		err = 0;
 		err  = clSetKernelArg(encrypt_kernel, 0, sizeof(cl_mem), &buffer_state);
@@ -380,7 +416,13 @@ int encrypt_cl(unsigned int array_size) {
 		err |= clSetKernelArg(encrypt_kernel, 1, sizeof(cl_mem), &buffer_roundkeys);
         CHECK_CL_SUCCESS("clSetKernelArg", err);
 		err |= clSetKernelArg(encrypt_kernel, 2, sizeof(ks.rounds), &ks.rounds);
+
         CHECK_CL_SUCCESS("clSetKernelArg", err);
+		err |= clSetKernelArg(encrypt_kernel, 3, sizeof(cl_uint), &entries);
+        CHECK_CL_SUCCESS("clSetKernelArg", err);
+		err |= clSetKernelArg(encrypt_kernel, 4, sizeof(cl_uint), &entries_to_encrypt);
+        CHECK_CL_SUCCESS("clSetKernelArg", err);
+
 		if (err != CL_SUCCESS)
 		{
 			printf("Error: Failed to set kernel arguments! %d\n", err);
@@ -392,16 +434,6 @@ int encrypt_cl(unsigned int array_size) {
 		// Execute the kernel over the entire range of our 1d input data set
 		// using the maximum number of work group items for this device
 
-        /* 1 thread operates on 4 (uint4 vector type has 4 uints, (x, y, w, z)) consecutive 32 bit 
-         * (uint) fields at a time.  
-         *
-         * That is, 1 thread operates on 4*4 == 16 bytes (chars) of the input array.
-         *
-         * An input of N bytes needs N / 16 threads.
-         */
-        assert(global % 16 == 0);
-		global = array_size / 16;
-		/* global = 1024; */
 #ifdef DEBUG 
 		printf("global is %d\n", global);
 #endif
@@ -445,7 +477,11 @@ int encrypt_cl(unsigned int array_size) {
 			printf("Error: Failed to read output array! %d\n", err);
 			exit(1);
 		}
-		printf("input data is\n");
+
+        /* print_data("input", count, in); */
+        /* print_data("encrypted", count, out); */
+
+		/* printf("input data is\n"); */
 		for (i=0; i<count; i++) {
             if (in[i] != '\0') {
                 printf("Error: input array wasn't all '\\0's\n");
@@ -454,7 +490,7 @@ int encrypt_cl(unsigned int array_size) {
 			/* printf("%02X", in[i]); */
 		}
         /* printf("\n"); */
-		printf("encrypted data is\n");
+		/* printf("encrypted data is\n"); */
         size_t max_num_consec = 4;
         size_t num_consec = 1;
         unsigned char last;
@@ -463,6 +499,8 @@ int encrypt_cl(unsigned int array_size) {
                 num_consec += 1;
                 if (num_consec > max_num_consec) {
                     printf("Error: encrypted output had more than the maximum number of consecutive repeated bytes %zd. in particular, we saw a repeated sequence of %zd.\n", max_num_consec, num_consec);
+                    print_data("input", count, in);
+                    print_data("encrypted", count, out);
                     exit(EXIT_FAILURE);
                 }
             } else {
@@ -516,3 +554,11 @@ int encrypt_cl(unsigned int array_size) {
     CHECK_CL_SUCCESS("clReleaseContext", err);
 }
 
+void print_data(const char* name, unsigned int count, unsigned char* data) {
+    unsigned int i;
+    printf("%s data is\n", name);
+    for (i=0; i<count; i++) {
+        printf("%02X", data[i]);
+    }
+    printf("\n");
+}

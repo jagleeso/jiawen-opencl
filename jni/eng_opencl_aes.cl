@@ -323,8 +323,75 @@ __constant uint Te3[256] = {
 	0x7bcbb0b0U, 0xa8fc5454U, 0x6dd6bbbbU, 0x2c3a1616U, 
 };
 
-__kernel void AES_encrypt(__global uint4 *state, __constant uint4 *rk, uint rounds) {
+/* entries: the number of uint4 entries each invocation of this OpenCL kernel should encrypt.
+ * entries_to_encrypt: the number of uint4 entries in state
+ */
+__kernel void AES_encrypt(__global uint4 *state, __constant uint4 *rk, uint rounds, uint entries, uint entries_to_encrypt) {
 	uint global_id = get_global_id(0);
+	uint local_id = get_local_id(0);
+    uint4 s, t;
+
+    uint start = entries * global_id;
+    uint end;
+    if (entries_to_encrypt < entries*(global_id + 1)) {
+        end = entries_to_encrypt;
+    } else {
+        end = entries*(global_id + 1);
+    }
+
+    uint i;
+    for (i = start; i < end; i++) {
+        __constant uint4 * _rk = rk;
+        s = state[i] ^ _rk[0];
+
+        uint r = rounds >> 1;
+        uint4 offset0, offset1, offset2, offset3;
+        for (;;) {		
+            offset0 = s & 0xff;
+            offset1 = (s.yzwx >> 8) & 0xff;
+            offset2 = (s.zwxy >> 16) & 0xff;
+            offset3 = (s.wxyz >> 24);
+            t = (uint4)(Te0[offset0.x], Te0[offset0.y], Te0[offset0.z], Te0[offset0.w]) ^
+                (uint4)(Te1[offset1.x], Te1[offset1.y], Te1[offset1.z], Te1[offset1.w]) ^
+                (uint4)(Te2[offset2.x], Te2[offset2.y], Te2[offset2.z], Te2[offset2.w]) ^
+                (uint4)(Te3[offset3.x], Te3[offset3.y], Te3[offset3.z], Te3[offset3.w]) ^
+                _rk[1];
+
+            _rk += 2;
+            if (--r == 0) {
+                break;
+            }
+
+            offset0 = t & 0xff;
+            offset1 = (t.yzwx >> 8) & 0xff;
+            offset2 = (t.zwxy >> 16) & 0xff;
+            offset3 = (t.wxyz >> 24);
+            s = (uint4)(Te0[offset0.x], Te0[offset0.y], Te0[offset0.z], Te0[offset0.w]) ^
+                (uint4)(Te1[offset1.x], Te1[offset1.y], Te1[offset1.z], Te1[offset1.w]) ^
+                (uint4)(Te2[offset2.x], Te2[offset2.y], Te2[offset2.z], Te2[offset2.w]) ^
+                (uint4)(Te3[offset3.x], Te3[offset3.y], Te3[offset3.z], Te3[offset3.w]) ^
+                _rk[0];
+        }
+
+        offset0 = (t.zwxy >> 16) & 0xff;
+        offset1 = (t.wxyz >> 24);
+        offset2 = t & 0xff;
+        offset3 = (t.yzwx >> 8) & 0xff;
+
+        s = ((uint4)(Te2[offset2.x], Te2[offset2.y], Te2[offset2.z], Te2[offset2.w]) & 0x000000ff) ^
+            ((uint4)(Te3[offset3.x], Te3[offset3.y], Te3[offset3.z], Te3[offset3.w]) & 0x0000ff00) ^
+            ((uint4)(Te0[offset0.x], Te0[offset0.y], Te0[offset0.z], Te0[offset0.w]) & 0x00ff0000) ^
+            ((uint4)(Te1[offset1.x], Te1[offset1.y], Te1[offset1.z], Te1[offset1.w]) & 0xff000000) ^
+            _rk[0];
+
+        state[i] = s;
+    }
+}
+
+__kernel void AES_encrypt_old(__global uint4 *state, __constant uint4 *rk, uint rounds) {
+	uint global_id = get_global_id(0);
+	/* uint local_id = get_local_id(0); */
+    /* printf("GLOBAL ID == %lu, LOCAL ID == %lu\n", global_id, local_id); */
 	uint4 s, t;
 	
 	s = state[global_id] ^ rk[0];
