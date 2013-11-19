@@ -104,12 +104,17 @@ int main(int argc, char* argv[])
 {
 
     unsigned int array_size;
-    unsigned int global;
+    /* a.k.a. G
+     */
+    unsigned int num_work_groups;
+    /* a.k.a. L, size of a work group
+     */
+    unsigned int local_work_size;
     if (argc < 3) {
         /* fprintf(stderr, "Error: expected the size in bytes of the input/output arrays\n"); */
         /* exit(EXIT_FAILURE); */
         array_size = DATA_SIZE;
-        global = 1;
+        num_work_groups = 1;
     } else {
         int result;
 
@@ -120,15 +125,22 @@ int main(int argc, char* argv[])
             exit(EXIT_FAILURE);
         }
 
-        result = sscanf(argv[2], "%d", &global);
+        result = sscanf(argv[2], "%d", &num_work_groups);
         if (result != 1) {
             printf("result == %d\n", result);
-            fprintf(stderr, "Error: expected the \"global work size\" (the number of OpenCL AES instances to split the encryption of the input array between), but saw \"%s\"\n", argv[2]);
+            fprintf(stderr, "Error: expected the number of work groups (num_work_groups), but saw \"%s\"\n", argv[2]);
+            exit(EXIT_FAILURE);
+        }
+
+        result = sscanf(argv[3], "%d", &local_work_size);
+        if (result != 1) {
+            printf("result == %d\n", result);
+            fprintf(stderr, "Error: expected the local work size (local_work_size), but saw \"%s\"\n", argv[3]);
             exit(EXIT_FAILURE);
         }
     }
 
-	encrypt_cl(array_size, global);
+	encrypt_cl(array_size, num_work_groups, local_work_size);
 	return 0;
 }
 
@@ -140,9 +152,9 @@ if (errvar != CL_SUCCESS) \
 } \
 
 /* entries: the number of "entries" (i.e. groups of size 16) that each OpenCL kernel instance should handle
- * global: the "global work size" (the number of OpenCL AES instances to split the encryption of the input array between).
+ * num_work_groups: the "global work size" (the number of OpenCL AES instances to split the encryption of the input array between).
  */
-int encrypt_cl(unsigned int array_size, unsigned int global) {
+int encrypt_cl(unsigned int array_size, unsigned int num_work_groups, unsigned int local_work_size) {
 #ifdef DEBUG 
 	printf("start of encrypt_cl\n");
 #endif
@@ -153,7 +165,7 @@ int encrypt_cl(unsigned int array_size, unsigned int global) {
 	int err;                            // error code returned from api calls
 	unsigned int correct;               // number of correct results returned
 	/* size_t global;                      // global domain size for our calculation */
-	size_t local;                       // local domain size for our calculation
+	/* size_t local;                       // local domain size for our calculation */
 
 	cl_device_id *device_id;             // compute device id 
 	cl_context context;                 // compute context
@@ -329,16 +341,15 @@ int encrypt_cl(unsigned int array_size, unsigned int global) {
 #ifdef DEBUG 
 	printf("Get the maximum work group size for executing the kernel on the device\n");
 #endif
-	//
-	err = clGetKernelWorkGroupInfo(encrypt_kernel, device_id[DEVICE], CL_KERNEL_WORK_GROUP_SIZE, sizeof(local), &local, NULL);
-	if (err != CL_SUCCESS)
-	{
-		printf("Error: Failed to retrieve kernel work group info! %d\n", err);
-		exit(1);
-	}
-	printf("local can be %d\n", local);
-    local = 1;
-	printf("local is %d\n", local);
+	/* err = clGetKernelWorkGroupInfo(encrypt_kernel, device_id[DEVICE], CL_KERNEL_WORK_GROUP_SIZE, sizeof(local), &local, NULL); */
+	/* if (err != CL_SUCCESS) */
+	/* { */
+	/* 	printf("Error: Failed to retrieve kernel work group info! %d\n", err); */
+	/* 	exit(1); */
+	/* } */
+	/* printf("local can be %d\n", local); */
+    /* local = 1; */
+	/* printf("local is %d\n", local); */
 
 
 	unsigned int i = 0;
@@ -404,14 +415,19 @@ int encrypt_cl(unsigned int array_size, unsigned int global) {
          */
         assert(array_size % 16 == 0);
         /* unsigned int entries = 2; */
-        /* unsigned int entries = ((array_size / 16) + global - 1) / global; */
+        /* unsigned int entries = ((array_size / 16) + num_work_groups - 1) / num_work_groups; */
         size_t entries_to_encrypt = array_size / 16;
-        unsigned int entries = CEILING_DIVIDE(entries_to_encrypt, global);
-		/* global = (entries_to_encrypt + entries - 1)/entries; */
-		/* global = 1024; */
+        /* A compute unit is a GPU core.
+         * A GPU core has many processing elements.
+         */
+        unsigned int num_processing_elements = num_work_groups * local_work_size;
+        unsigned int entries = CEILING_DIVIDE(entries_to_encrypt, num_processing_elements);
+		/* num_work_groups = (entries_to_encrypt + entries - 1)/entries; */
+		/* num_work_groups = 1024; */
 
         printf("entries == %lu\n", entries);
         printf("entries_to_encrypt == %lu\n", entries_to_encrypt);
+        printf("num_processing_elements == %lu\n", num_processing_elements);
 
 		err = 0;
 		err  = clSetKernelArg(encrypt_kernel, 0, sizeof(cl_mem), &buffer_state);
@@ -438,7 +454,7 @@ int encrypt_cl(unsigned int array_size, unsigned int global) {
 		// using the maximum number of work group items for this device
 
 #ifdef DEBUG 
-		printf("global is %d\n", global);
+		printf("num_work_groups is %d\n", num_work_groups);
 #endif
 
 		clock_t tStartE = clock();
@@ -465,11 +481,11 @@ int encrypt_cl(unsigned int array_size, unsigned int global) {
             /* Just one maxmimally sized work group.
              */
             /* unsigned int local_global = global_one; */
-            unsigned int global_one = global;
-            unsigned int local_global = global;
-            printf("> GLOBAL = %lu\n", global_one);
-            printf("> LOCAL = %lu\n", local_global);
-			err = clEnqueueNDRangeKernel(commands, encrypt_kernel, work_dim, NULL, &global_one, &local_global, 0, NULL, &event);
+            unsigned int global = num_processing_elements;
+            unsigned int local = local_work_size;
+            printf("> GLOBAL = %lu\n", global);
+            printf("> LOCAL = %lu\n", local);
+			err = clEnqueueNDRangeKernel(commands, encrypt_kernel, work_dim, NULL, &global, &local, 0, NULL, &event);
             // global call
 			/* err = clEnqueueNDRangeKernel(commands, encrypt_kernel, work_dim, NULL, &global, &local, 0, NULL, &event); */
             CHECK_CL_SUCCESS("clEnqueueNDRangeKernel", err);

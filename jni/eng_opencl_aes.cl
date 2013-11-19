@@ -327,15 +327,18 @@ __constant uint Te3[256] = {
  * entries_to_encrypt: the number of uint4 entries in state
  */
 __kernel void AES_encrypt(__global uint4 *state, __constant uint4 *rk, uint rounds, uint entries, uint entries_to_encrypt) {
-	uint local_id = get_local_id(0);
+	uint global_id = get_global_id(0);
+    /* NOTE: global_id is unique for all work-items, regardless of which group they're in.
+     */
+	uint id = global_id;
     uint4 s, t;
 
-    uint start = entries * local_id;
+    uint start = entries * id;
     uint end;
-    if (entries_to_encrypt < entries*(local_id + 1)) {
+    if (entries_to_encrypt < entries*(id + 1)) {
         end = entries_to_encrypt;
     } else {
-        end = entries*(local_id + 1);
+        end = entries*(id + 1);
     }
 
     uint i;
