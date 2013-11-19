@@ -3,13 +3,21 @@ ROOT=../
 
 build() {
     local executable="$1"
+    shift 1
     ndk-build PROGRAM=$executable
 }
 
 copy_program_over() {
     local executable="$1"
+    shift 1
     adb push libs/armeabi-v7a/$executable /data/local/tmp
     adb push jni/$opencl /data/local/tmp
+}
+
+run_program() {
+    local executable="$1"
+    shift 1
+    adb shell ./data/local/tmp/$executable "$@"
 }
 
 device_is_on() {

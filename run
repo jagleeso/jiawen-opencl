@@ -1,8 +1,25 @@
+#!/usr/bin/env bash
+
 # ./rl result/file.txt
+executable="$1"
+shift 1
+
 set -e
-ndk-build NDK_DEBUG=1
-adb push libs/armeabi-v7a/opencl_aes /data/local/tmp
-adb push jni/eng_opencl_aes.cl /data/local/tmp
+
+set -x 
+cd "$(dirname "$0")"/scripts
+echo $PWD
+ls -l
+source common.sh
+cd $ROOT
+
+build $executable
+copy_program_over $executable
 adb push stress_test.sh /data/local/tmp
-adb shell ./data/local/tmp/opencl_aes "$@"
-# adb shell ./data/local/tmp/stress_test.sh | tee "$1"
+run_program $executable "$@"
+
+# ndk-build NDK_DEBUG=1
+# adb push libs/armeabi-v7a/opencl_aes /data/local/tmp
+# adb push jni/eng_opencl_aes.cl /data/local/tmp
+# adb push stress_test.sh /data/local/tmp
+# adb shell ./data/local/tmp/opencl_aes "$@"

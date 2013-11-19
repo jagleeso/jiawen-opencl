@@ -21,7 +21,8 @@ Copyright ©2012 Advanced Micro Devices, Inc. All rights reserved.
 #include "aes.h"
 #include <inttypes.h>
 
-#define CEILING_DIVIDE(value, divisor) (((value) + (divisor) - 1)/(divisor))
+#include "common.h"
+
 #define MIN(a, b) (((a) < (b)) ? (a) : (b))
 
 //128 bit key
@@ -597,15 +598,6 @@ int encrypt_cl(unsigned int array_size, unsigned int num_work_groups, unsigned i
     CHECK_CL_SUCCESS("clReleaseCommandQueue", err);
 	clReleaseContext(context);
     CHECK_CL_SUCCESS("clReleaseContext", err);
-}
-
-void print_data(const char* name, unsigned int count, unsigned char* data) {
-    unsigned int i;
-    printf("%s data is\n", name);
-    for (i=0; i<count; i++) {
-        printf("%02X", data[i]);
-    }
-    printf("\n");
 }
 
 int get_max_work_items(cl_device_id device_id, cl_uint *dims, size_t *max_work_items_dim1) {

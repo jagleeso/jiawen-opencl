@@ -2,6 +2,9 @@
 #include <stdlib.h>
 #include <linux/kernel.h>
 #include "aes.h"
+#include <assert.h>
+
+#include "common.h"
 
 //128 bit key
 static const unsigned char key[] = {
@@ -11,77 +14,65 @@ static const unsigned char key[] = {
 	0xcc, 0xdd, 0xee, 0xff,
 };
 
-void encrypt_data(FILE* input_file, FILE* output_file);
+/* void encrypt_data(unsigned char* input_file, unsigned char* output_file); */
+void encrypt_data(unsigned int array_size, unsigned char* inbuf, unsigned char* outbuf, unsigned char* decbuf);
+/* void decrypt_data(unsigned char* input_file, unsigned char* output_file); */
 void decrypt_data(FILE* input_file, FILE* output_file);
+
+void print_data(const char* name, unsigned int count, unsigned char* data);
 
 int main(int argc, char* argv[])
 {
-	//Check for valid number of arguments
-	if (argc != 4)
-	{
-		printf("Invalid number of arguments. %d arguments were supplied.\n", argc);
-		printf("Usage: %s inputfile outputfile\n", argv[0]); //Usage: ./xortest inputfile outputfile
-		exit(0);
-	}
 
-	FILE* input;
-	FILE* output;
+    int NUM_ARGS = 1;
+    unsigned int array_size;
 
-	//Open input and output files
-	input = fopen(argv[1], "r");
-	output = fopen(argv[2], "w");
-
-	//Check input file
-	if (input == NULL)
-	{
-		printf("Input file cannot be read.\n");
-		exit(0);
-	}
-
-	//Check output file
-	if (output == NULL)
-	{
-		printf("Output file cannot be written to.\n");
-		exit(0);
-	}
+    if (argc < NUM_ARGS + 1) {
+        fprintf(stderr, "Error: usage is\n");
+        fprintf(stderr, "./cpu-aes array_size\n");
+        exit(EXIT_FAILURE);
+    }
+    int result;
+    result = sscanf(argv[1], "%d", &array_size);
+    if (result != 1) {
+        fprintf(stderr, "Error: expected the size in bytes of the input/output arrays, but saw \"%s\"\n", argv[1]);
+        exit(EXIT_FAILURE);
+    }
 
 	printf("Encrypting %s\n", argv[1]);
-	encrypt_data(input, output);
-	printf("Encrypted data written to %s\n", argv[2]);
+    unsigned char* inbuf = malloc(sizeof(unsigned char)*array_size);
+    unsigned char* outbuf = malloc(sizeof(unsigned char)*array_size);
+    unsigned char* decbuf = malloc(sizeof(unsigned char)*array_size);
 
-	//Close files
-	fclose(input);
-	fclose(output);
-	
-	//Open input and output files
-	input = fopen(argv[2], "r");
-	output = fopen(argv[3], "w");
+    int i;
+    for (i=0; i<array_size; i++) {
+        /* inbuf[i] = 0; */
+        inbuf[i] = (unsigned char) 0xFF;
+    }
 
-	//Check input file
-	if (input == NULL)
-	{
-		printf("Input file cannot be read.\n");
-		exit(0);
-	}
-
-	//Check output file
-	if (output == NULL)
-	{
-		printf("Output file cannot be written to.\n");
-		exit(0);
-	}
-
-	printf("Decrypting %s\n", argv[2]);
-	decrypt_data(input, output);
-	printf("Decrypted data written to %s\n", argv[3]);
-
-	//Close files
-	fclose(input);
-	fclose(output);
+    encrypt_data(array_size, inbuf, outbuf, decbuf);
+    print_data("input", array_size, inbuf);
+    print_data("encrypted", array_size, outbuf);
+    print_data("decrypted", array_size, decbuf);
+    check_encrypted_data("encrypted", array_size, outbuf);
 
 	return 0;
 }
 
+void encrypt_data(unsigned int array_size, unsigned char* inbuf, unsigned char* outbuf, unsigned char* decbuf)
+{
+    int outlen = array_size;
+
+    AES_KEY enc_key;
+    AES_KEY dec_key;
+    AES_set_encrypt_key(key, 128, &enc_key);
+    printf("rd_key %s\n", enc_key.rd_key);
+
+    AES_encrypt(inbuf, outbuf, &enc_key);  
+
+    AES_set_decrypt_key(key, 128, &dec_key);
+    AES_decrypt(outbuf, decbuf, &dec_key);  
+}
 
 int amain(int argc, char** argv) {
 
@@ -116,57 +107,8 @@ int amain(int argc, char** argv) {
 	return 0;
 }
 
-void encrypt_data(FILE* input_file, FILE* output_file)
-{
-	unsigned char inbuf[80];
-	unsigned char outbuf[80];
-	unsigned char decbuf[80];
-	int inlen, outlen;
-
-	AES_KEY enc_key;
-	AES_KEY dec_key;
-	AES_set_encrypt_key(key, 128, &enc_key);
-
-	//while(1) {
-		int i;
-		inlen = 80;
-		outlen = 80;
-//		inlen = fread(inbuf, 1, 80, input_file);
-		for (i=0; i<inlen; i++) {
-			inbuf[i]=0;
-		}
-		printf("input data is \n");
-		for (i = 0; i < inlen; i++) {
-			printf("%c ", inbuf[i]);
-		}
-		printf("\n");
-
-		AES_encrypt(inbuf, outbuf, &enc_key);  
-
-		printf("encrypted data is \n");
-		for (i = 0; i < inlen; i++) {
-			printf("%X ", outbuf[i]);
-		}
-		printf("\n");
-		
-		AES_set_decrypt_key(key, 128, &dec_key);
-		AES_decrypt(outbuf, decbuf, &dec_key);  
-
-		printf("decrypted data is \n");
-		for (i = 0; i < inlen; i++) {
-			printf("%c ", decbuf[i]);
-		}
-		printf("\n");
-
-		outlen = fwrite(outbuf, 1, inlen, output_file);
-
-//		if (outlen < AES_BLOCK_SIZE)
-//		{
-//			break;
-//		}
-	//}
-}
-
+/* void decrypt_data(unsigned int array_size, unsigned char* inbuf, unsigned char* outbuf, unsigned char* decbuf) */
+/* void decrypt_data(unsigned char* input_file, unsigned char* output_file) */
 void decrypt_data(FILE* input_file, FILE* output_file)
 {
 	unsigned char inbuf[80];
@@ -176,20 +118,14 @@ void decrypt_data(FILE* input_file, FILE* output_file)
 	AES_KEY dec_key;
 	AES_set_decrypt_key(key, 128, &dec_key);
 
-	//while(1) {
-		int i;
-		inlen = fread(inbuf, 1, 80, input_file);
-		AES_decrypt(inbuf, outbuf, &dec_key);
+    int i;
+    inlen = fread(inbuf, 1, 80, input_file);
+    AES_decrypt(inbuf, outbuf, &dec_key);
 
-		for (i = 0; i < inlen; i++) {
-			printf("%c ", outbuf[i]);
-		}
-		printf("\n");
+    for (i = 0; i < inlen; i++) {
+        printf("%c ", outbuf[i]);
+    }
+    printf("\n");
 
-		outlen = fwrite(outbuf, 1, inlen, output_file);
-	//	if (outlen < 80)
-	//	{
-	//		break;
-	//	}
-//	}
+    outlen = fwrite(outbuf, 1, inlen, output_file);
 }
