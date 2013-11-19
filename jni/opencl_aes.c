@@ -22,6 +22,7 @@ Copyright ©2012 Advanced Micro Devices, Inc. All rights reserved.
 #include <inttypes.h>
 
 #define CEILING_DIVIDE(value, divisor) (((value) + (divisor) - 1)/(divisor))
+#define MIN(a, b) (((a) < (b)) ? (a) : (b))
 
 //128 bit key
 static const unsigned char key[] = {
@@ -57,6 +58,8 @@ static const unsigned char key[] = {
 
 #define DEVICE 0  
 int encrypt_cl();
+
+int get_max_work_items(cl_device_id device_id, cl_uint *dims, size_t *max_work_items_dim1);
 
 static const char *load_kernel_source(const char *filename) {
 	size_t len = strlen(filename) + 1;
@@ -441,8 +444,34 @@ int encrypt_cl(unsigned int array_size, unsigned int global) {
 		clock_t tStartE = clock();
 		cl_float t = 0.;
 		cl_ulong start = 0, end = 0;
+        cl_uint work_dim = 1;
+
+        size_t max_kernel_work_group_size;
+        err = clGetKernelWorkGroupInfo(encrypt_kernel, device_id[DEVICE], CL_KERNEL_WORK_GROUP_SIZE,
+                sizeof(size_t), &max_kernel_work_group_size, NULL);
+
+
+        cl_uint dims;
+        size_t max_work_items_dim1;
+        err = get_max_work_items(device_id[DEVICE], &dims, &max_work_items_dim1);
+        CHECK_CL_SUCCESS("get_max_work_items", err);
+		printf("> max dimensions: %i\n", dims);
+		printf("> max_work_items_dim1: %zd\n", max_work_items_dim1);
+		printf("> max_kernel_work_group_size: %zd\n", max_kernel_work_group_size);
+
 		//for (i = 0; i<LOOP; i++) {
-			err = clEnqueueNDRangeKernel(commands, encrypt_kernel, 1, NULL, &global, &local, 0, NULL, &event);
+            // local call
+            /* unsigned int global_one = MIN(max_kernel_work_group_size, max_work_items_dim1); */
+            /* Just one maxmimally sized work group.
+             */
+            /* unsigned int local_global = global_one; */
+            unsigned int global_one = global;
+            unsigned int local_global = global;
+            printf("> GLOBAL = %lu\n", global_one);
+            printf("> LOCAL = %lu\n", local_global);
+			err = clEnqueueNDRangeKernel(commands, encrypt_kernel, work_dim, NULL, &global_one, &local_global, 0, NULL, &event);
+            // global call
+			/* err = clEnqueueNDRangeKernel(commands, encrypt_kernel, work_dim, NULL, &global, &local, 0, NULL, &event); */
             CHECK_CL_SUCCESS("clEnqueueNDRangeKernel", err);
 			//err = clEnqueueNDRangeKernel(commands, kernel, 1, NULL, &global, NULL, 0, NULL, NULL);
 			if (err)
@@ -561,4 +590,44 @@ void print_data(const char* name, unsigned int count, unsigned char* data) {
         printf("%02X", data[i]);
     }
     printf("\n");
+}
+
+int get_max_work_items(cl_device_id device_id, cl_uint *dims, size_t *max_work_items_dim1) {
+    /* cl_uint dims; */
+    int err = 0;
+    err = clGetDeviceInfo(device_id, CL_DEVICE_MAX_WORK_ITEM_DIMENSIONS, sizeof(*dims), dims, NULL);
+    CHECK_CL_SUCCESS("clGetDeviceInfo", err);
+    if(err != CL_SUCCESS){
+        /* index += sprintf(&result[index],"  Max work item dimensions ERR: %d\n", err); */
+        return err;
+    }else{
+        //checkErr(err, "clGetDeviceInfo(CL_DEVICE_MAX_WORK_ITEM_DIMENSIONS)");
+        //printf("  Max work item dimensions:\t\t\t %d\n", dims);
+
+        size_t sizes[*dims];
+        err = clGetDeviceInfo(device_id, CL_DEVICE_MAX_WORK_ITEM_SIZES, sizeof(size_t)*(*dims), sizes, NULL);
+        CHECK_CL_SUCCESS("clGetDeviceInfo", err);
+
+        if (*dims >= 1) {
+            *max_work_items_dim1 = sizes[0];
+        }
+        //checkErr(err, "clGetDeviceInfo(CL_DEVICE_MAX_WORK_ITEM_SIZES)");
+        if(err != CL_SUCCESS){
+            return err;
+            /* index += sprintf(&result[index],"  Max work item dimensions ERR: %d\n", err); */
+        }else{
+            /* index += sprintf(&result[index],"  Max work item dimensions: %d\n", *dims); */
+            /* { */
+            /*     unsigned int k; */
+            /*     index += sprintf(&result[index],"    Max work items: ("); */
+            /*     for (k=0; k<*dims; k++) { */
+            /*         index += sprintf(&result[index], "%u", (unsigned int)sizes[k]); */
+            /*         if (k != (*dims)-1) */
+            /*             index += sprintf(&result[index],","); */
+            /*     } */
+            /*     index += sprintf(&result[index],")\n"); */
+            /* } */
+        }
+    }
+    return 0;
 }

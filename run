@@ -1,4 +1,5 @@
 # ./rl result/file.txt
+set -e
 ndk-build NDK_DEBUG=1
 adb push libs/armeabi-v7a/opencl_aes /data/local/tmp
 adb push jni/eng_opencl_aes.cl /data/local/tmp
