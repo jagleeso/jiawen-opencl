@@ -31,3 +31,15 @@ void check_encrypted_data(const char* name, unsigned int count, unsigned char* d
         last = data[i];
     }
 }
+
+void check_equal(const char* name1, const char* name2, unsigned int count, unsigned char* data1, unsigned char* data2) {
+    unsigned int i;
+    for (i=0; i<count; i++) {
+        if (data1[i] != data2[i]) {
+            printf("Error: %s data doesn't match %s data at byte %u\n", name1, name2, i);
+            print_data(name1, count, data1);
+            print_data(name2, count, data2);
+            exit(EXIT_FAILURE);
+        }
+    }
+}

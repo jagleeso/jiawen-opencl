@@ -33,3 +33,35 @@ wait_for_device_reboot() {
         sleep 1
     done
 }
+
+# Sampling
+
+log2() {
+    perl -le "print log($1)/log(2)"
+}
+
+sample_powers_of_2_using_constant_start() {
+    local executable="$1"
+    local start_size="$2"
+    local max_array_size="$3"
+    shift 3
+
+    echo "> Max input/output array size (bytes): $max_array_size"
+    # echo "> Error in max input/output (bytes): $((size / 2))"
+
+    echo "> Sample input/ouput size increment (bytes): powers of two starting at $start_size, ending at $max_array_size"
+    local start_samples=$(log2 $start_size)
+    local max_samples=$(log2 $max_array_size)
+    local SAMPLES=$((max_samples - start_samples + 1))
+    echo "> Samples: $SAMPLES"
+
+    build $executable
+    copy_program_over $executable
+
+    local array_size=$start_size
+    while [ "$array_size" -le "$max_array_size" ]; do 
+        run_program $executable $array_size
+        array_size=$((array_size * 2))
+        echo
+    done
+}

@@ -5,14 +5,23 @@ cd "$(dirname "$0")"
 source ./common.sh
 cd $ROOT
 # set -x
+
 set -e
 executable=opencl_aes
-global_worksize="$1"
-shift 1
+# global_worksize="$1"
+num_work_groups="$1"
+work_group_size="$2"
+shift 2
+
+max_array_size=$((512*1024*1024))
+
+# Experimentally determined best values
+# num_work_groups=4
+# work_group_size=19
 
 # Guess the maximum input/output array size by starting with an initial value then 
 # incrementing by constant value.  Error is at most the constant value.
-max_array_size=""
+# max_array_size=""
 guess_max_array_size_const_inc() {
     build $executable
     copy_program_over $executable
@@ -132,12 +141,10 @@ sample_using_constant_increment_guess() {
     done
 }
 
-
 sample_using_binary_exponentiation_guess() {
 
     # guess_max_array_size_bin_exp
 
-    max_array_size=$((512*1024*1024))
     echo "> Max input/output array size (bytes): $max_array_size"
     # echo "> Error in max input/output (bytes): $((size / 2))"
 
@@ -155,7 +162,7 @@ sample_using_binary_exponentiation_guess() {
 
     array_size=$start_size
     while [ "$array_size" -le "$max_array_size" ]; do 
-        adb shell ./data/local/tmp/$executable $array_size $global_worksize
+        adb shell ./data/local/tmp/$executable $array_size $num_work_groups $work_group_size
         array_size=$((array_size * 2))
         echo
     done

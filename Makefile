@@ -1,6 +1,8 @@
 all:
 	ndk-build
 
+opencl_aes:
+	ndk-build PROGRAM=opencl_aes
 cpu-aes:
 	ndk-build PROGRAM=cpu-aes
 example-aes:

@@ -6,7 +6,7 @@ shift 1
 
 set -e
 
-set -x 
+# set -x 
 cd "$(dirname "$0")"/scripts
 echo $PWD
 ls -l

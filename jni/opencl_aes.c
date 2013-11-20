@@ -190,6 +190,8 @@ int encrypt_cl(unsigned int array_size, unsigned int num_work_groups, unsigned i
 
 	unsigned char* in = malloc(sizeof(unsigned char)*count);              //plain text
 	unsigned char* out = malloc(sizeof(unsigned char)*count);              // encryped text
+    assert(in != NULL);
+    assert(out != NULL);
 
 #ifdef DEBUG 
 	printf("initFns\n");
@@ -537,24 +539,24 @@ int encrypt_cl(unsigned int array_size, unsigned int num_work_groups, unsigned i
 		}
         /* printf("\n"); */
 		/* printf("encrypted data is\n"); */
-        size_t max_num_consec = 4;
-        size_t num_consec = 1;
-        unsigned char last;
-		for (i=0; i<count; i++) {
-            if (i != 0 && out[i] == last) {
-                num_consec += 1;
-                if (num_consec > max_num_consec) {
-                    printf("Error: encrypted output had more than the maximum number of consecutive repeated bytes %zd. in particular, we saw a repeated sequence of %zd.\n", max_num_consec, num_consec);
-                    print_data("input", count, in);
-                    print_data("encrypted", count, out);
-                    exit(EXIT_FAILURE);
-                }
-            } else {
-                num_consec = 1;
-            }
-            last = out[i];
+        /* size_t max_num_consec = 4; */
+        /* size_t num_consec = 1; */
+        /* unsigned char last; */
+		/* for (i=0; i<count; i++) { */
+        /*     if (i != 0 && out[i] == last) { */
+        /*         num_consec += 1; */
+        /*         if (num_consec > max_num_consec) { */
+        /*             printf("Error: encrypted output had more than the maximum number of consecutive repeated bytes %zd. in particular, we saw a repeated sequence of %zd.\n", max_num_consec, num_consec); */
+        /*             print_data("input", count, in); */
+        /*             print_data("encrypted", count, out); */
+        /*             exit(EXIT_FAILURE); */
+        /*         } */
+        /*     } else { */
+        /*         num_consec = 1; */
+        /*     } */
+        /*     last = out[i]; */
 			/* printf("%02X", out[i]); */
-		}
+		/* } */
         /* printf("\n"); */
 		tRead += (double)(clock() - tStartR)/CLOCKS_PER_SEC;
 	//}

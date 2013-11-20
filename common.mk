@@ -22,9 +22,13 @@ endif
 endif
 
 LOCAL_C_INCLUDES := $(LOCAL_PATH)/openssl
-LOCAL_LIBRARIES := -lcrypto
+LOCAL_LIBRARIES := -lcrypto 
 LOCAL_LDLIBS := -ldl -L$(LOCAL_PATH)/lib $(LOCAL_LIBRARIES)
-LOCAL_CFLAGS := -g -Wall -Werror
+ifeq ($(PROGRAM),opencl_aes)
+	LOCAL_CFLAGS := -g
+else
+	LOCAL_CFLAGS := -g -Wall -Werror
+endif
 LOCAL_EXPORT_CFLAGS += -g
 
 LOCAL_CXXFLAGS += -fno-exceptions

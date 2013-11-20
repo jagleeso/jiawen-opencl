@@ -6,6 +6,7 @@
 #include <openssl/err.h>
 #include <string.h>
 
+#include <time.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <assert.h>
@@ -21,9 +22,13 @@ static const unsigned char key[] = {
 };
 
 int encrypt(unsigned char *plaintext, int plaintext_len, unsigned char *key,
-        unsigned char *iv, unsigned char **ciphertext_ptr);
+        unsigned char *iv, unsigned char **ciphertext_ptr, struct timespec* start_of_encryption, struct timespec* end_of_encryption);
 int decrypt(unsigned char *ciphertext, int ciphertext_len, unsigned char *key,
         unsigned char *iv, unsigned char **plaintext_ptr);
+
+double milliseconds(struct timespec t) {
+    return (t.tv_sec*1e3) + (((double)t.tv_nsec)/1e6);
+}
 
 int main(int argc, char *argv[])
 {
@@ -43,8 +48,9 @@ int main(int argc, char *argv[])
         exit(EXIT_FAILURE);
     }
 
-	printf("Encrypting %s\n", argv[1]);
+	printf("> Array input size (bytes): %u\n", array_size);
     unsigned char* plaintext = malloc(sizeof(unsigned char)*array_size);
+    assert(plaintext != NULL);
 
     int i;
     for (i=0; i<array_size; i++) {
@@ -80,17 +86,20 @@ int main(int argc, char *argv[])
     OpenSSL_add_all_algorithms();
     OPENSSL_config(NULL);
 
-    print_data("data", array_size, plaintext);
+    /* print_data("data", array_size, plaintext); */
 
     /* Encrypt the plaintext */
     unsigned char* ciphertext;
+    struct timespec start_of_encryption, end_of_encryption;
     int ciphertext_len = encrypt(plaintext, array_size, key, iv,
-            &ciphertext);
+            &ciphertext, &start_of_encryption, &end_of_encryption);
+    double encrypt_time = milliseconds(end_of_encryption) - milliseconds(start_of_encryption);
+    printf("> Encryption time (ms): %f\n", encrypt_time);
 
     /* unsigned char* ciphertext = malloc(sizeof(unsigned char)*ciphertext_len); */
 
     /* Do something useful with the ciphertext here */
-    print_data("encrypted", ciphertext_len, ciphertext);
+    /* print_data("encrypted", ciphertext_len, ciphertext); */
     /* printf("Ciphertext is:\n"); */
     /* BIO_dump_fp(stdout, ciphertext, ciphertext_len); */
 
@@ -99,13 +108,19 @@ int main(int argc, char *argv[])
     int decryptedtext_len = decrypt(ciphertext, ciphertext_len, key, iv,
             &decryptedtext);
 
+    (void)decryptedtext_len;
+
     /* Add a NULL terminator. We are expecting printable text */
     /* decryptedtext[decryptedtext_len] = '\0'; */
 
     /* Show the decrypted text */
-    print_data("decrypted", decryptedtext_len, decryptedtext);
+    /* print_data("decrypted", decryptedtext_len, decryptedtext); */
     /* printf("Decrypted text is:\n"); */
     /* printf("%s\n", decryptedtext); */
+
+    /* check_encrypted_data("encrypted", array_size, ciphertext); */
+    check_equal("input", "decrypted", array_size, plaintext, decryptedtext);
+	printf("Done\n");
 
     /* Clean up */
     EVP_cleanup();
@@ -206,8 +221,14 @@ int decrypted_plaintext_length(int ciphertext_len, EVP_CIPHER_CTX *ctx) {
     );
 }
 
+/* Measure the time of encryption with:
+ * The data to encrypt possibly in the cache (since it's been intialized).
+ * The encrypted data not in the cache.
+ *
+ * So, CPU probably has the advantage over GPU (GPU may or may not have input data to encrypt cached).
+ */
 int encrypt(unsigned char *plaintext, int plaintext_len, unsigned char *key,
-        unsigned char *iv, unsigned char **ciphertext_ptr)
+        unsigned char *iv, unsigned char **ciphertext_ptr, struct timespec* start_of_encryption, struct timespec* end_of_encryption)
 {
     EVP_CIPHER_CTX *ctx;
 
@@ -224,12 +245,11 @@ int encrypt(unsigned char *plaintext, int plaintext_len, unsigned char *key,
     if(1 != EVP_EncryptInit_ex(ctx, EVP_aes_256_cbc(), NULL, key, iv))
         handleErrors();
 
-
     int ciphertext_len_seen;
     int ciphertext_len = ciphertext_length(plaintext_len, ctx);
     unsigned char* ciphertext = malloc(sizeof(unsigned char)*ciphertext_len);
+    assert(ciphertext != NULL);
     *ciphertext_ptr = ciphertext; 
-/* int EVP_EncryptUpdate(EVP_CIPHER_CTX *ctx, unsigned char *out, int *outl, unsigned char *in, int inl); */
 
     /* Provide the message to be encrypted, and obtain the encrypted output.
      * EVP_EncryptUpdate can be called multiple times if necessary
@@ -237,8 +257,16 @@ int encrypt(unsigned char *plaintext, int plaintext_len, unsigned char *key,
      * NOTE: "This function can be called multiple times to encrypt successive blocks of data".
      * http://linux.die.net/man/3/evp_encryptinit_ex
      */
+    int result = 0;
+    result = clock_gettime(CLOCK_REALTIME, start_of_encryption);
+    assert(result == 0);
+
     if(1 != EVP_EncryptUpdate(ctx, ciphertext, &len, plaintext, plaintext_len))
         handleErrors();
+
+    result = clock_gettime(CLOCK_REALTIME, end_of_encryption);
+    assert(result == 0);
+
     /* ciphertext_len = len; */
     ciphertext_len_seen = len;
     assert(ciphertext_len_seen <= ciphertext_len);
@@ -280,6 +308,7 @@ int decrypt(unsigned char *ciphertext, int ciphertext_len, unsigned char *key,
     int plaintext_len = decrypted_plaintext_length(ciphertext_len, ctx);
 
     unsigned char* plaintext = malloc(sizeof(unsigned char)*plaintext_len);
+    assert(plaintext != NULL);
     *plaintext_ptr = plaintext;
 
     /* Provide the message to be decrypted, and obtain the plaintext output.

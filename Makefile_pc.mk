@@ -11,7 +11,7 @@ include common.mk
 
 # INCLUDES := $(addprefix -I,$(LOCAL_C_INCLUDES))
 INCLUDES := $(addprefix -I,jni)
-LIBS := -ldl $(LOCAL_LIBRARIES)
+LIBS := -ldl $(LOCAL_LIBRARIES) -lrt
 CFLAGS := $(LOCAL_CFLAGS) $(LOCAL_CXXFLAGS)
 # LOCAL_EXPORT_CFLAGS += -g
 # LOCAL_CXXFLAGS += -fno-exceptions
@@ -27,12 +27,9 @@ all: $(PROGRAM)
 
 # Compile the binary 't' by calling the compiler with cflags, lflags, and any libs (if defined) and the list of objects.
 $(PROGRAM): $(OBJS)
-	echo $(LOCAL_SRC_FILES)
 	$(CC) $(CFLAGS) -o $@ $(OBJS) $(LFLAGS) $(LIBS)
 
 # Get a .o from a .cpp by calling compiler with cflags and includes (if defined)
 # .c.o:
 %.o: %.c
-	echo $(LOCAL_SRC_FILES)
-	echo $(SOURCES)
 	$(CC) $(CFLAGS) $(INCLUDES) -c $< -o $@
