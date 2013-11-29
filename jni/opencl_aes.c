@@ -101,45 +101,135 @@ static const char *load_kernel_source(const char *filename) {
 	return buf;
 }
 
+static void usage(char **argv) {
+
+	printf("usage:\n");
+
+	printf("%s [-e ENTRIES] -a ARRAY_SIZE -G NUM_WORK_GROUPS -I WORK_GROUP_SIZE\n",argv[0]);
+	printf("ENTRIES: the number of uint4 (16 byte) entries each work-item should encrypt in the OpenCL AES kernel\n");
+	printf("ARRAY_SIZE: the size in bytes of the data to encrypt\n");
+	printf("NUM_WORK_GROUPS: the number of work groups to use\n");
+	printf("WORK_GROUP_SIZE: the number of work-items per work group\n");
+
+	exit(EXIT_FAILURE);
+}
+
+static char *option_string = "e:a:G:I:";
 int main(int argc, char* argv[])
 {
+	char option;
 
+    /* e
+     */
+    size_t entries;
+    int provided_entries = 0;
+ 
+    /* a
+     */
     unsigned int array_size;
-    /* a.k.a. G
+    int provided_array_size = 0;
+
+    /* G
      */
     unsigned int num_work_groups;
-    /* a.k.a. L, size of a work group
+    int provided_num_work_groups = 0;
+
+    /* I
      */
     unsigned int local_work_size;
-    if (argc < 3) {
-        /* fprintf(stderr, "Error: expected the size in bytes of the input/output arrays\n"); */
-        /* exit(EXIT_FAILURE); */
-        array_size = DATA_SIZE;
-        num_work_groups = 1;
+    int provided_local_work_size = 0;
+
+    int result;
+	while((option = getopt(argc, argv, option_string)) != -1) {
+		switch(option) {
+		case 'e':
+            result = sscanf(optarg, "%zd", &entries);
+            if (result < 0) {
+                usage(argv);
+            }
+            provided_entries = 1;
+			break;
+        case 'a':
+            result = sscanf(optarg, "%d", &array_size);
+            if (result != 1) {
+                printf("result == %d\n", result);
+                fprintf(stderr, "Error: expected the size in bytes of the input/output arrays, but saw \"%s\"\n", optarg);
+                usage(argv);
+            }
+            break;
+        case 'G':
+            result = sscanf(optarg, "%d", &num_work_groups);
+            if (result != 1) {
+                printf("result == %d\n", result);
+                fprintf(stderr, "Error: expected the number of work groups (num_work_groups), but saw \"%s\"\n", optarg);
+                usage(argv);
+            }
+            break;
+        case 'I':
+            result = sscanf(optarg, "%d", &local_work_size);
+            if (result != 1) {
+                printf("result == %d\n", result);
+                fprintf(stderr, "Error: expected the local work size (local_work_size), but saw \"%s\"\n", optarg);
+                usage(argv);
+            }
+            break;
+		default:
+			fprintf(stderr, "invalid option %c\n", option);
+			usage(argv);
+			break;
+		}
+	}
+
+    /* 1 thread operates on 4 (uint4 vector type has 4 uints, (x, y, w, z)) consecutive 32 bit 
+     * (uint) fields at a time.  
+     *
+     * That is, 1 thread operates on 4*4 == 16 bytes (chars) of the input array.
+     *
+     * An input of N bytes needs N / 16 threads.
+     */
+    assert(array_size % 16 == 0);
+    unsigned int num_processing_elements;
+    /* The total number of entries to encrypt in the input array.
+     */
+    unsigned int entries_to_encrypt;
+
+    /* Modes of operation:
+     */
+    entries_to_encrypt = array_size / 16;
+    if (provided_array_size && provided_num_work_groups && provided_local_work_size) {
+        /* - User provides: 
+         *   - array size
+         *   - number of work groups
+         *   - work group size
+         *   We calculate:
+         *   - the number of entries each work item encrypts
+         */
+        /* A compute unit is a GPU core.
+         * A GPU core has many processing elements.
+         */
+        num_processing_elements = num_work_groups * local_work_size;
+        entries = CEILING_DIVIDE(entries_to_encrypt, num_processing_elements);
+    } else if (provided_array_size && provided_entries) {
+        /* - User provides: 
+         *   - array size
+         *   - the number of entries each work item encrypts
+         *   We calculate:
+         *   - work group size = max supported processing elements
+         *   - number of work groups = # needed to encrypt all of array size (function of 
+         *     array size and number entries encrypted by each work item)
+         */
+        num_processing_elements = CEILING_DIVIDE(array_size, entries);
+        // TODO: refactor arg parsing and encrypt_cl into one function?
+        local_work_size = MAX;
+        num_work_groups = CEILING_DIVIDE(num_processing_elements, local_work_size);
     } else {
-        int result;
-
-        result = sscanf(argv[1], "%d", &array_size);
-        if (result != 1) {
-            printf("result == %d\n", result);
-            fprintf(stderr, "Error: expected the size in bytes of the input/output arrays, but saw \"%s\"\n", argv[1]);
-            exit(EXIT_FAILURE);
-        }
-
-        result = sscanf(argv[2], "%d", &num_work_groups);
-        if (result != 1) {
-            printf("result == %d\n", result);
-            fprintf(stderr, "Error: expected the number of work groups (num_work_groups), but saw \"%s\"\n", argv[2]);
-            exit(EXIT_FAILURE);
-        }
-
-        result = sscanf(argv[3], "%d", &local_work_size);
-        if (result != 1) {
-            printf("result == %d\n", result);
-            fprintf(stderr, "Error: expected the local work size (local_work_size), but saw \"%s\"\n", argv[3]);
-            exit(EXIT_FAILURE);
-        }
+        fprintf(stderr, "Invalid mode of operation\n", option);
+        usage(argv);
     }
+
+    printf("entries == %lu\n", entries);
+    printf("entries_to_encrypt == %lu\n", entries_to_encrypt);
+    printf("num_processing_elements == %lu\n", num_processing_elements);
 
 	encrypt_cl(array_size, num_work_groups, local_work_size);
 	return 0;
@@ -408,29 +498,6 @@ int encrypt_cl(unsigned int array_size, unsigned int num_work_groups, unsigned i
 		clock_t tStartA = clock();
         size_t N;
 
-
-        /* 1 thread operates on 4 (uint4 vector type has 4 uints, (x, y, w, z)) consecutive 32 bit 
-         * (uint) fields at a time.  
-         *
-         * That is, 1 thread operates on 4*4 == 16 bytes (chars) of the input array.
-         *
-         * An input of N bytes needs N / 16 threads.
-         */
-        assert(array_size % 16 == 0);
-        /* unsigned int entries = 2; */
-        /* unsigned int entries = ((array_size / 16) + num_work_groups - 1) / num_work_groups; */
-        size_t entries_to_encrypt = array_size / 16;
-        /* A compute unit is a GPU core.
-         * A GPU core has many processing elements.
-         */
-        unsigned int num_processing_elements = num_work_groups * local_work_size;
-        unsigned int entries = CEILING_DIVIDE(entries_to_encrypt, num_processing_elements);
-		/* num_work_groups = (entries_to_encrypt + entries - 1)/entries; */
-		/* num_work_groups = 1024; */
-
-        printf("entries == %lu\n", entries);
-        printf("entries_to_encrypt == %lu\n", entries_to_encrypt);
-        printf("num_processing_elements == %lu\n", num_processing_elements);
 
 		err = 0;
 		err  = clSetKernelArg(encrypt_kernel, 0, sizeof(cl_mem), &buffer_state);
