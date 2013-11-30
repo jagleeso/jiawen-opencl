@@ -101,11 +101,12 @@ static const char *load_kernel_source(const char *filename) {
 	return buf;
 }
 
-static void usage(char **argv) {
+char* program_name;
+static void usage(void) {
 
 	printf("usage:\n");
 
-	printf("%s [-e ENTRIES] -a ARRAY_SIZE -G NUM_WORK_GROUPS -I WORK_GROUP_SIZE\n",argv[0]);
+	printf("%s [-e ENTRIES] -a ARRAY_SIZE -G NUM_WORK_GROUPS -I WORK_GROUP_SIZE\n", program_name);
 	printf("ENTRIES: the number of uint4 (16 byte) entries each work-item should encrypt in the OpenCL AES kernel\n");
 	printf("ARRAY_SIZE: the size in bytes of the data to encrypt\n");
 	printf("NUM_WORK_GROUPS: the number of work groups to use\n");
@@ -114,38 +115,41 @@ static void usage(char **argv) {
 	exit(EXIT_FAILURE);
 }
 
+/* e
+*/
+size_t entries;
+int provided_entries = 0;
+
+/* a
+*/
+unsigned int array_size;
+int provided_array_size = 0;
+
+/* G
+*/
+unsigned int num_work_groups;
+int provided_num_work_groups = 0;
+
+/* I
+*/
+unsigned int local_work_size;
+int provided_local_work_size = 0;
+
 static char *option_string = "e:a:G:I:";
 int main(int argc, char* argv[])
 {
-	char option;
-
-    /* e
-     */
-    size_t entries;
-    int provided_entries = 0;
- 
-    /* a
-     */
-    unsigned int array_size;
-    int provided_array_size = 0;
-
-    /* G
-     */
-    unsigned int num_work_groups;
-    int provided_num_work_groups = 0;
-
-    /* I
-     */
-    unsigned int local_work_size;
-    int provided_local_work_size = 0;
+    program_name = argv[0];
+	int option;
 
     int result;
 	while((option = getopt(argc, argv, option_string)) != -1) {
-		switch(option) {
+		switch((char)option) {
 		case 'e':
             result = sscanf(optarg, "%zd", &entries);
             if (result < 0) {
-                usage(argv);
+                printf("result == %d\n", result);
+                fprintf(stderr, "Error: the number of entries (i.e. groups of size 16 bytes) that each work item should encrypt\n");
+                usage();
             }
             provided_entries = 1;
 			break;
@@ -154,84 +158,52 @@ int main(int argc, char* argv[])
             if (result != 1) {
                 printf("result == %d\n", result);
                 fprintf(stderr, "Error: expected the size in bytes of the input/output arrays, but saw \"%s\"\n", optarg);
-                usage(argv);
+                usage();
             }
+            provided_array_size = 1;
             break;
         case 'G':
             result = sscanf(optarg, "%d", &num_work_groups);
             if (result != 1) {
                 printf("result == %d\n", result);
                 fprintf(stderr, "Error: expected the number of work groups (num_work_groups), but saw \"%s\"\n", optarg);
-                usage(argv);
+                usage();
             }
+            provided_num_work_groups = 1;
             break;
         case 'I':
             result = sscanf(optarg, "%d", &local_work_size);
             if (result != 1) {
                 printf("result == %d\n", result);
                 fprintf(stderr, "Error: expected the local work size (local_work_size), but saw \"%s\"\n", optarg);
-                usage(argv);
+                usage();
             }
+            provided_local_work_size = 1;
             break;
-		default:
-			fprintf(stderr, "invalid option %c\n", option);
-			usage(argv);
+		case '?':
+            fprintf(stderr, "\n");
+			usage();
+            abort();
 			break;
 		}
+        printf("option == %i\n", (int) option);
 	}
 
-    /* 1 thread operates on 4 (uint4 vector type has 4 uints, (x, y, w, z)) consecutive 32 bit 
-     * (uint) fields at a time.  
-     *
-     * That is, 1 thread operates on 4*4 == 16 bytes (chars) of the input array.
-     *
-     * An input of N bytes needs N / 16 threads.
-     */
-    assert(array_size % 16 == 0);
-    unsigned int num_processing_elements;
-    /* The total number of entries to encrypt in the input array.
-     */
-    unsigned int entries_to_encrypt;
-
-    /* Modes of operation:
-     */
-    entries_to_encrypt = array_size / 16;
-    if (provided_array_size && provided_num_work_groups && provided_local_work_size) {
-        /* - User provides: 
-         *   - array size
-         *   - number of work groups
-         *   - work group size
-         *   We calculate:
-         *   - the number of entries each work item encrypts
-         */
-        /* A compute unit is a GPU core.
-         * A GPU core has many processing elements.
-         */
-        num_processing_elements = num_work_groups * local_work_size;
-        entries = CEILING_DIVIDE(entries_to_encrypt, num_processing_elements);
-    } else if (provided_array_size && provided_entries) {
-        /* - User provides: 
-         *   - array size
-         *   - the number of entries each work item encrypts
-         *   We calculate:
-         *   - work group size = max supported processing elements
-         *   - number of work groups = # needed to encrypt all of array size (function of 
-         *     array size and number entries encrypted by each work item)
-         */
-        num_processing_elements = CEILING_DIVIDE(array_size, entries);
-        // TODO: refactor arg parsing and encrypt_cl into one function?
-        local_work_size = MAX;
-        num_work_groups = CEILING_DIVIDE(num_processing_elements, local_work_size);
-    } else {
-        fprintf(stderr, "Invalid mode of operation\n", option);
-        usage(argv);
+    if (option == -1) {
+        /* Read all the options.
+        */
+        if (optind < argc) {
+            fprintf(stderr, "Read the options but there was extra stuff:\n");
+            while (optind < argc) {
+                fprintf(stderr, "%s ", argv[optind++]);
+            }
+            fprintf(stderr, "\n");
+            usage();
+            abort();
+        }
     }
 
-    printf("entries == %lu\n", entries);
-    printf("entries_to_encrypt == %lu\n", entries_to_encrypt);
-    printf("num_processing_elements == %lu\n", num_processing_elements);
-
-	encrypt_cl(array_size, num_work_groups, local_work_size);
+	encrypt_cl();
 	return 0;
 }
 
@@ -245,7 +217,7 @@ if (errvar != CL_SUCCESS) \
 /* entries: the number of "entries" (i.e. groups of size 16) that each OpenCL kernel instance should handle
  * num_work_groups: the "global work size" (the number of OpenCL AES instances to split the encryption of the input array between).
  */
-int encrypt_cl(unsigned int array_size, unsigned int num_work_groups, unsigned int local_work_size) {
+int encrypt_cl(void) {
 #ifdef DEBUG 
 	printf("start of encrypt_cl\n");
 #endif
@@ -480,7 +452,7 @@ int encrypt_cl(unsigned int array_size, unsigned int num_work_groups, unsigned i
         CHECK_CL_SUCCESS("clEnqueueWriteBuffer", err);
 		err = clEnqueueWriteBuffer(commands, buffer_roundkeys, CL_TRUE, 0, 16 * 15, &ks.rd_key, 0, NULL, NULL);
         CHECK_CL_SUCCESS("clEnqueueWriteBuffer", err);
-		printf("rd_key %s\n", ks.rd_key);
+		printf("rd_key %s\n", (char*) ks.rd_key);
 		//err = clEnqueueWriteBuffer(commands, input, CL_TRUE, 0, sizeof(float) * count, data, 0, NULL, NULL);
 		//err = clEnqueueWriteBuffer(commands, key, CL_TRUE, 0, sizeof(float) * count, keyData, 0, NULL, NULL);
 		if (err != CL_SUCCESS)
@@ -492,12 +464,96 @@ int encrypt_cl(unsigned int array_size, unsigned int num_work_groups, unsigned i
         CHECK_CL_SUCCESS("clFinish", err);
 		tMemory += (double)(clock() - tStartM)/CLOCKS_PER_SEC;
 
-		// Set the arguments to our compute kernel
-		//printf("Set the arguments to our compute kernel\n");
-		//
-		clock_t tStartA = clock();
-        size_t N;
 
+
+		// Execute the kernel over the entire range of our 1d input data set
+		// using the maximum number of work group items for this device
+
+#ifdef DEBUG 
+		printf("num_work_groups is %d\n", num_work_groups);
+#endif
+
+		clock_t tStartE = clock();
+		cl_float t = 0.;
+		cl_ulong start = 0, end = 0;
+
+        size_t max_kernel_work_group_size;
+        err = clGetKernelWorkGroupInfo(encrypt_kernel, device_id[DEVICE], CL_KERNEL_WORK_GROUP_SIZE,
+                sizeof(size_t), &max_kernel_work_group_size, NULL);
+
+
+        cl_uint dims;
+        size_t max_work_items_dim1;
+        err = get_max_work_items(device_id[DEVICE], &dims, &max_work_items_dim1);
+        CHECK_CL_SUCCESS("get_max_work_items", err);
+        printf("> max dimensions: %i\n", dims);
+        printf("> max_work_items_dim1: %zd\n", max_work_items_dim1);
+        printf("> max_kernel_work_group_size: %zd\n", max_kernel_work_group_size);
+
+        /* 1 thread operates on 4 (uint4 vector type has 4 uints, (x, y, w, z)) consecutive 32 bit 
+         * (uint) fields at a time.  
+         *
+         * That is, 1 thread operates on 4*4 == 16 bytes (chars) of the input array.
+         *
+         * An input of N bytes needs N / 16 threads.
+         */
+        assert(array_size % 16 == 0);
+        unsigned int num_processing_elements;
+        /* The total number of entries to encrypt in the input array.
+        */
+        unsigned int entries_to_encrypt;
+
+        /* Modes of operation:
+        */
+        entries_to_encrypt = array_size / 16;
+        if (provided_array_size && provided_num_work_groups && provided_local_work_size) {
+            /* Each work item gets an equal sized chunk of the input data to encrypt.
+             *
+             * - User provides: 
+             *   - array size
+             *   - number of work groups
+             *   - work group size
+             *   We calculate:
+             *   - the number of entries each work item encrypts
+             */
+            /* A compute unit is a GPU core.
+             * A GPU core has many processing elements.
+             */
+            num_processing_elements = num_work_groups * local_work_size;
+            entries = CEILING_DIVIDE(entries_to_encrypt, num_processing_elements);
+        } else if (provided_array_size && provided_entries) {
+            /* Each work item encrypts the number of entries specified, where an entry is 16 bytes.
+             *
+             * - User provides: 
+             *   - array size
+             *   - the number of entries each work item encrypts
+             *   We calculate:
+             *   - work group size = max supported processing elements
+             *   - number of work groups = # needed to encrypt all of array size (function of 
+             *     array size and number entries encrypted by each work item)
+             */
+            num_processing_elements = CEILING_DIVIDE(array_size, entries);
+            local_work_size = MIN(max_kernel_work_group_size, max_work_items_dim1);
+            num_work_groups = CEILING_DIVIDE(num_processing_elements, local_work_size);
+        } else {
+            fprintf(stderr, "Invalid mode of operation\n");
+            usage();
+            abort();
+        }
+
+        printf("entries == %zd\n", entries);
+        printf("entries_to_encrypt == %u\n", entries_to_encrypt);
+        printf("num_processing_elements == %u\n", num_processing_elements);
+
+        unsigned int global = num_processing_elements;
+        unsigned int local = local_work_size;
+        printf("> GLOBAL = %u\n", global);
+        printf("> LOCAL = %u\n", local);
+
+
+		/* Set the arguments to our compute kernel
+         */
+		clock_t tStartA = clock();
 
 		err = 0;
 		err  = clSetKernelArg(encrypt_kernel, 0, sizeof(cl_mem), &buffer_state);
@@ -519,68 +575,29 @@ int encrypt_cl(unsigned int array_size, unsigned int num_work_groups, unsigned i
 		}
 		tArgument += (double)(clock() - tStartA)/CLOCKS_PER_SEC;
 
-
-		// Execute the kernel over the entire range of our 1d input data set
-		// using the maximum number of work group items for this device
-
-#ifdef DEBUG 
-		printf("num_work_groups is %d\n", num_work_groups);
-#endif
-
-		clock_t tStartE = clock();
-		cl_float t = 0.;
-		cl_ulong start = 0, end = 0;
+        /* Run the kernel.
+         */
         cl_uint work_dim = 1;
+        err = clEnqueueNDRangeKernel(commands, encrypt_kernel, work_dim, NULL, &global, &local, 0, NULL, &event);
+        CHECK_CL_SUCCESS("clEnqueueNDRangeKernel", err);
+        if (err) {
+            printf("Error: Failed to execute kernel!\n");
+            return EXIT_FAILURE;
+        }
+        err = clWaitForEvents(1, &event);
+        CHECK_CL_SUCCESS("clWaitForEvents", err);
+        err = clGetEventProfilingInfo(event, CL_PROFILING_COMMAND_START, sizeof(cl_ulong), &start, NULL);
+        CHECK_CL_SUCCESS("clGetEventProfilingInfo", err);
+        err = clGetEventProfilingInfo(event, CL_PROFILING_COMMAND_END, sizeof(cl_ulong), &end, NULL);
+        CHECK_CL_SUCCESS("clGetEventProfilingInfo", err);
+        // the resolution of the events is 1e-09 sec
+        t += (cl_float)(end - start)*(cl_float)(1e-06);
 
-        size_t max_kernel_work_group_size;
-        err = clGetKernelWorkGroupInfo(encrypt_kernel, device_id[DEVICE], CL_KERNEL_WORK_GROUP_SIZE,
-                sizeof(size_t), &max_kernel_work_group_size, NULL);
-
-
-        cl_uint dims;
-        size_t max_work_items_dim1;
-        err = get_max_work_items(device_id[DEVICE], &dims, &max_work_items_dim1);
-        CHECK_CL_SUCCESS("get_max_work_items", err);
-		printf("> max dimensions: %i\n", dims);
-		printf("> max_work_items_dim1: %zd\n", max_work_items_dim1);
-		printf("> max_kernel_work_group_size: %zd\n", max_kernel_work_group_size);
-
-		//for (i = 0; i<LOOP; i++) {
-            // local call
-            /* unsigned int global_one = MIN(max_kernel_work_group_size, max_work_items_dim1); */
-            /* Just one maxmimally sized work group.
-             */
-            /* unsigned int local_global = global_one; */
-            unsigned int global = num_processing_elements;
-            unsigned int local = local_work_size;
-            printf("> GLOBAL = %lu\n", global);
-            printf("> LOCAL = %lu\n", local);
-			err = clEnqueueNDRangeKernel(commands, encrypt_kernel, work_dim, NULL, &global, &local, 0, NULL, &event);
-            // global call
-			/* err = clEnqueueNDRangeKernel(commands, encrypt_kernel, work_dim, NULL, &global, &local, 0, NULL, &event); */
-            CHECK_CL_SUCCESS("clEnqueueNDRangeKernel", err);
-			//err = clEnqueueNDRangeKernel(commands, kernel, 1, NULL, &global, NULL, 0, NULL, NULL);
-			if (err)
-			{
-				printf("Error: Failed to execute kernel!\n");
-				return EXIT_FAILURE;
-			}
-			err = clWaitForEvents(1, &event);
-            CHECK_CL_SUCCESS("clWaitForEvents", err);
-			err = clGetEventProfilingInfo(event, CL_PROFILING_COMMAND_START, sizeof(cl_ulong), &start, NULL);
-            CHECK_CL_SUCCESS("clGetEventProfilingInfo", err);
-			err = clGetEventProfilingInfo(event, CL_PROFILING_COMMAND_END, sizeof(cl_ulong), &end, NULL);
-            CHECK_CL_SUCCESS("clGetEventProfilingInfo", err);
-			//END-START gives you hints on kind of “pure HW execution time”
-			//the resolution of the events is 1e-09 sec
-			t += (cl_float)(end - start)*(cl_float)(1e-06);
-		//}
-		printf("profile time: %f ms\n",t);
-		err = clFinish(commands);
+        printf("profile time: %f ms\n",t);
+        err = clFinish(commands);
         CHECK_CL_SUCCESS("clFinish", err);
-		// Wait for the command commands to get serviced before reading back results
-		//
-		tExecute += (double)(clock() - tStartE)/CLOCKS_PER_SEC;
+        // Wait for the command commands to get serviced before reading back results
+        tExecute += (double)(clock() - tStartE)/CLOCKS_PER_SEC;
 
 		// Read back the results from the device to verify the output
 		//
