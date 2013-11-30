@@ -469,10 +469,6 @@ int encrypt_cl(void) {
 		// Execute the kernel over the entire range of our 1d input data set
 		// using the maximum number of work group items for this device
 
-#ifdef DEBUG 
-		printf("num_work_groups is %d\n", num_work_groups);
-#endif
-
 		clock_t tStartE = clock();
 		cl_float t = 0.;
 		cl_ulong start = 0, end = 0;
@@ -532,20 +528,22 @@ int encrypt_cl(void) {
              *   - number of work groups = # needed to encrypt all of array size (function of 
              *     array size and number entries encrypted by each work item)
              */
-            num_processing_elements = CEILING_DIVIDE(array_size, entries);
+            num_processing_elements = CEILING_DIVIDE(entries_to_encrypt, entries);
             local_work_size = MIN(max_kernel_work_group_size, max_work_items_dim1);
-            num_work_groups = CEILING_DIVIDE(num_processing_elements, local_work_size);
+            num_work_groups = ROUND_UP(num_processing_elements, local_work_size)/local_work_size;
         } else {
             fprintf(stderr, "Invalid mode of operation\n");
             usage();
             abort();
         }
 
+		printf("num_work_groups is %d\n", num_work_groups);
+
         printf("entries == %zd\n", entries);
         printf("entries_to_encrypt == %u\n", entries_to_encrypt);
         printf("num_processing_elements == %u\n", num_processing_elements);
 
-        unsigned int global = num_processing_elements;
+        unsigned int global = num_work_groups * local_work_size;
         unsigned int local = local_work_size;
         printf("> GLOBAL = %u\n", global);
         printf("> LOCAL = %u\n", local);
@@ -610,8 +608,8 @@ int encrypt_cl(void) {
 			exit(1);
 		}
 
-        /* print_data("input", count, in); */
-        /* print_data("encrypted", count, out); */
+        print_data("input", count, in);
+        print_data("encrypted", count, out);
 
 		/* printf("input data is\n"); */
 		for (i=0; i<count; i++) {
