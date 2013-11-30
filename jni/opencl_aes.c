@@ -376,6 +376,7 @@ int encrypt_cl(void) {
 	printf("Create the compute kernel in the program we wish to run\n");
 #endif
 	encrypt_kernel = clCreateKernel(program, "AES_encrypt", &err);
+	/* encrypt_kernel = clCreateKernel(program, "AES_encrypt_coalesced", &err); */
 	/* encrypt_kernel = clCreateKernel(program, "AES_encrypt_old", &err); */
 	if (!encrypt_kernel || err != CL_SUCCESS) {
 		printf("Error: Failed to create compute kernel! err = %d\n", err);
@@ -608,8 +609,8 @@ int encrypt_cl(void) {
 			exit(1);
 		}
 
-        print_data("input", count, in);
-        print_data("encrypted", count, out);
+        /* print_data("input", count, in); */
+        /* print_data("encrypted", count, out); */
 
 		/* printf("input data is\n"); */
 		for (i=0; i<count; i++) {
