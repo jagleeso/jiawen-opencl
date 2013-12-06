@@ -38,9 +38,9 @@ sample_global_worksize() {
     echo "> Max work group size: $max_work_group_size"
 
     for work_group_size in $(seq 1 $max_work_group_size); do 
-        adb shell ./data/local/tmp/$EXECUTABLE -a $array_size -G $num_work_groups -I $work_group_size
+        adb shell ./data/local/tmp/$EXECUTABLE -a $array_size -G $num_work_groups -I $work_group_size "$@"
         echo
     done
 }
 
-sample_global_worksize $ARRAY_SIZE $NUM_WORK_GROUPS $MAX_WORK_GROUP_SIZE
+sample_global_worksize $ARRAY_SIZE $NUM_WORK_GROUPS $MAX_WORK_GROUP_SIZE "$@"

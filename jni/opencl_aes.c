@@ -141,21 +141,33 @@ int provided_num_work_groups = 0;
 unsigned int local_work_size = UINT_MAX; // mark as uninitialized
 int provided_local_work_size = 0; 
 
+/* t
+*/
+int local_tbox = 0; // false
+
+/* T
+*/
+int coalesced_local_tbox = 0; // false
+
 int mode = -1; // mark as uninitialized
 #define MODE_STRIDED_EQUAL_WORK_ITEM_PARTITION 0
 #define MODE_RUNTIME_LOCAL_WORK_SIZE 1
 #define MODE_COALESCED_EQUAL_WORK_ITEM_PARTITION 2
+#define MODE_STRIDED_TBOX_LOCAL_MEMORY 3
+#define MODE_COALESCED_TBOX_LOCAL_MEMORY 4
 
 char *modes[] = {
     "MODE_STRIDED_EQUAL_WORK_ITEM_PARTITION",
     "MODE_RUNTIME_LOCAL_WORK_SIZE",
     "MODE_COALESCED_EQUAL_WORK_ITEM_PARTITION",
+    "MODE_STRIDED_TBOX_LOCAL_MEMORY",
+    "MODE_COALESCED_TBOX_LOCAL_MEMORY",
 };
 
 #define MAX_KERNEL_NAME 1024
 char kernel_name[MAX_KERNEL_NAME];
 
-static char *option_string = "e:a:G:I:";
+static char *option_string = "e:a:G:I:tT";
 int main(int argc, char* argv[])
 {
     program_name = argv[0];
@@ -204,6 +216,12 @@ int main(int argc, char* argv[])
             }
             provided_local_work_size = 1;
             break;
+        case 't':
+            local_tbox = 1;
+            break;
+        case 'T':
+            coalesced_local_tbox = 1;
+            break;
 		case '?':
             fprintf(stderr, "\n");
 			usage();
@@ -247,7 +265,13 @@ int encrypt_cl(void) {
 
     /* Determine our mode of operation (need to load the right kernel).
      */
-    if (provided_array_size && provided_num_work_groups && provided_local_work_size) {
+    if (provided_array_size && provided_num_work_groups && provided_local_work_size && coalesced_local_tbox) {
+        strncpy(kernel_name, "AES_encrypt_coalesced_local_tbox", MAX_KERNEL_NAME);
+        mode = MODE_COALESCED_TBOX_LOCAL_MEMORY;
+    } else if (provided_array_size && provided_num_work_groups && provided_local_work_size && local_tbox) {
+        strncpy(kernel_name, "AES_encrypt_strided_local_tbox", MAX_KERNEL_NAME);
+        mode = MODE_STRIDED_TBOX_LOCAL_MEMORY;
+    } else if (provided_array_size && provided_num_work_groups && provided_local_work_size) {
         strncpy(kernel_name, "AES_encrypt_strided", MAX_KERNEL_NAME);
         mode = MODE_STRIDED_EQUAL_WORK_ITEM_PARTITION;
     } else if (provided_array_size && provided_entries && provided_local_work_size) { 
@@ -403,13 +427,14 @@ int encrypt_cl(void) {
 	err = clBuildProgram(program, 0, NULL, NULL, NULL, NULL);
 	if (err != CL_SUCCESS)
 	{
-		size_t len;
-		char b[2048];
-
-		printf("Error: Failed to build program executable!\n");
-		err = clGetProgramBuildInfo(program, device_id[DEVICE], CL_PROGRAM_BUILD_LOG, sizeof(b), b, &len);
+		size_t log_size;
+        err = clGetProgramBuildInfo(program, device_id[DEVICE], CL_PROGRAM_BUILD_LOG, 0, NULL, &log_size);
         CHECK_CL_SUCCESS("clGetProgramBuildInfo", err);
-		printf("%s\n", b);
+        char* program_log = (char*) malloc((log_size + 1)*sizeof(char));
+        clGetProgramBuildInfo(program, device_id[DEVICE], CL_PROGRAM_BUILD_LOG, log_size + 1, program_log, NULL);
+        printf("%s\n", program_log);
+        free(program_log);
+		printf("Error: Failed to build program executable!\n");
 		exit(1);
 	}
 
@@ -547,6 +572,16 @@ int encrypt_cl(void) {
         */
         entries_to_encrypt = array_size / 16;
         switch (mode) {
+            case MODE_COALESCED_TBOX_LOCAL_MEMORY:
+                /* Same as MODE_STRIDED_TBOX_LOCAL_MEMORY, but with coalesced accesses to the input as in 
+                 * MODE_COALESCED_EQUAL_WORK_ITEM_PARTITION.
+                 */
+            case MODE_STRIDED_TBOX_LOCAL_MEMORY:
+                /* Each work item gets an equal sized chunk of the input data to encrypt (in the same 
+                 * manner as MODE_STRIDED_EQUAL_WORK_ITEM_PARTITION), and the work items within a group 
+                 * synchronize using a local memory barrier so they can share the 4 T-boxes instead of 
+                 * re-reading them from constant memory (which is just a read-only global memory).
+                 */
             case MODE_STRIDED_EQUAL_WORK_ITEM_PARTITION:
                 /* Each work item gets an equal sized chunk of the input data to encrypt.
                  *
@@ -623,6 +658,8 @@ int encrypt_cl(void) {
         unsigned int local = UINT_MAX;
         size_t * local_ptr = (size_t*) 0xffffffff;
         switch (mode) {
+            case MODE_COALESCED_TBOX_LOCAL_MEMORY:
+            case MODE_STRIDED_TBOX_LOCAL_MEMORY:
             case MODE_STRIDED_EQUAL_WORK_ITEM_PARTITION:
             case MODE_COALESCED_EQUAL_WORK_ITEM_PARTITION:
                 global = num_work_groups * local_work_size;
@@ -669,7 +706,9 @@ int encrypt_cl(void) {
         CHECK_CL_SUCCESS("clSetKernelArg", err);
 
         if (strcmp("AES_encrypt_strided", kernel_name) == 0 ||
-            strcmp("AES_encrypt_coalesced", kernel_name) == 0) {
+            strcmp("AES_encrypt_coalesced", kernel_name) == 0 ||
+            strcmp("AES_encrypt_strided_local_tbox", kernel_name) == 0 ||
+            strcmp("AES_encrypt_coalesced_local_tbox", kernel_name) == 0) {
             err |= clSetKernelArg(encrypt_kernel, 3, sizeof(cl_uint), &entries);
             CHECK_CL_SUCCESS("clSetKernelArg", err);
             err |= clSetKernelArg(encrypt_kernel, 4, sizeof(cl_uint), &entries_to_encrypt);

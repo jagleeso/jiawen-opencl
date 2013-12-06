@@ -630,3 +630,151 @@ __kernel void AES_encrypt_local(__global uint4 *state, __constant uint4 *rk, uin
 	
 	state[global_id] = s;
 }
+
+/* MotoX only allows 80 work items, but the original AES_encrypt_local assumes the local work size is 256.
+ */
+__kernel void AES_encrypt_strided_local_tbox(__global uint4 *state, __constant uint4 *rk, uint rounds, uint entries, uint entries_to_encrypt) {
+	uint global_id = get_global_id(0);
+	uint local_id = get_local_id(0);
+	uint local_work_size = get_local_size(0);
+	uint4 s, t;
+	
+	__local uint Te_Local0[256];
+	__local uint Te_Local1[256];
+	__local uint Te_Local2[256];
+	__local uint Te_Local3[256];
+	
+	// everyone copy his own part
+    uint i;
+    for (i = local_id; i < 256; i += local_work_size) {
+        Te_Local0[i] = Te0[i];
+        Te_Local1[i] = Te1[i];
+        Te_Local2[i] = Te2[i];
+        Te_Local3[i] = Te3[i];
+    }
+	
+	barrier(CLK_LOCAL_MEM_FENCE);
+
+    uint start = entries * global_id;
+    uint end = min(entries_to_encrypt, entries*(global_id + 1));
+    for (i = start; i < end; i++) {
+        s = state[i] ^ rk[0];
+        
+        uint r = rounds >> 1;
+        uint4 offset0, offset1, offset2, offset3;
+        for (;;) {		
+            offset0 = s & 0xff;
+            offset1 = (s.yzwx >> 8) & 0xff;
+            offset2 = (s.zwxy >> 16) & 0xff;
+            offset3 = (s.wxyz >> 24);
+            t = (uint4)(Te_Local0[offset0.x], Te_Local0[offset0.y], Te_Local0[offset0.z], Te_Local0[offset0.w]) ^
+                (uint4)(Te_Local1[offset1.x], Te_Local1[offset1.y], Te_Local1[offset1.z], Te_Local1[offset1.w]) ^
+                (uint4)(Te_Local2[offset2.x], Te_Local2[offset2.y], Te_Local2[offset2.z], Te_Local2[offset2.w]) ^
+                (uint4)(Te_Local3[offset3.x], Te_Local3[offset3.y], Te_Local3[offset3.z], Te_Local3[offset3.w]) ^
+                rk[1];
+            
+            rk += 2;
+            if (--r == 0) {
+                break;
+            }
+            
+            offset0 = t & 0xff;
+            offset1 = (t.yzwx >> 8) & 0xff;
+            offset2 = (t.zwxy >> 16) & 0xff;
+            offset3 = (t.wxyz >> 24);
+            s = (uint4)(Te_Local0[offset0.x], Te_Local0[offset0.y], Te_Local0[offset0.z], Te_Local0[offset0.w]) ^
+                (uint4)(Te_Local1[offset1.x], Te_Local1[offset1.y], Te_Local1[offset1.z], Te_Local1[offset1.w]) ^
+                (uint4)(Te_Local2[offset2.x], Te_Local2[offset2.y], Te_Local2[offset2.z], Te_Local2[offset2.w]) ^
+                (uint4)(Te_Local3[offset3.x], Te_Local3[offset3.y], Te_Local3[offset3.z], Te_Local3[offset3.w]) ^
+                rk[0];
+        }
+        
+        offset0 = (t.zwxy >> 16) & 0xff;
+        offset1 = (t.wxyz >> 24);
+        offset2 = t & 0xff;
+        offset3 = (t.yzwx >> 8) & 0xff;
+        
+        s = ((uint4)(Te_Local2[offset2.x], Te_Local2[offset2.y], Te_Local2[offset2.z], Te_Local2[offset2.w]) & 0x000000ff) ^
+            ((uint4)(Te_Local3[offset3.x], Te_Local3[offset3.y], Te_Local3[offset3.z], Te_Local3[offset3.w]) & 0x0000ff00) ^
+            ((uint4)(Te_Local0[offset0.x], Te_Local0[offset0.y], Te_Local0[offset0.z], Te_Local0[offset0.w]) & 0x00ff0000) ^
+            ((uint4)(Te_Local1[offset1.x], Te_Local1[offset1.y], Te_Local1[offset1.z], Te_Local1[offset1.w]) & 0xff000000) ^
+            rk[0];
+        
+        state[i] = s;
+    }
+}
+
+__kernel void AES_encrypt_coalesced_local_tbox(__global uint4 *state, __constant uint4 *rk, uint rounds, uint entries, uint entries_to_encrypt) {
+	uint local_id = get_local_id(0);
+	uint work_group_size = get_local_size(0);
+    uint work_group_id = get_group_id(0);
+	uint local_work_size = get_local_size(0);
+
+	__local uint Te_Local0[256];
+	__local uint Te_Local1[256];
+	__local uint Te_Local2[256];
+	__local uint Te_Local3[256];
+	
+	// everyone copy his own part
+    uint i;
+    for (i = local_id; i < 256; i += local_work_size) {
+        Te_Local0[i] = Te0[i];
+        Te_Local1[i] = Te1[i];
+        Te_Local2[i] = Te2[i];
+        Te_Local3[i] = Te3[i];
+    }
+	
+	barrier(CLK_LOCAL_MEM_FENCE);
+
+	uint4 s, t;
+    uint entry;
+    for (entry = 0; entry < entries; entry++) {
+        uint i = local_id + entry*work_group_size + entries*work_group_size*work_group_id;
+        if (i > entries_to_encrypt - 1) {
+            break;
+        }
+        s = state[i] ^ rk[0];
+        
+        uint r = rounds >> 1;
+        uint4 offset0, offset1, offset2, offset3;
+        for (;;) {		
+            offset0 = s & 0xff;
+            offset1 = (s.yzwx >> 8) & 0xff;
+            offset2 = (s.zwxy >> 16) & 0xff;
+            offset3 = (s.wxyz >> 24);
+            t = (uint4)(Te_Local0[offset0.x], Te_Local0[offset0.y], Te_Local0[offset0.z], Te_Local0[offset0.w]) ^
+                (uint4)(Te_Local1[offset1.x], Te_Local1[offset1.y], Te_Local1[offset1.z], Te_Local1[offset1.w]) ^
+                (uint4)(Te_Local2[offset2.x], Te_Local2[offset2.y], Te_Local2[offset2.z], Te_Local2[offset2.w]) ^
+                (uint4)(Te_Local3[offset3.x], Te_Local3[offset3.y], Te_Local3[offset3.z], Te_Local3[offset3.w]) ^
+                rk[1];
+            
+            rk += 2;
+            if (--r == 0) {
+                break;
+            }
+            
+            offset0 = t & 0xff;
+            offset1 = (t.yzwx >> 8) & 0xff;
+            offset2 = (t.zwxy >> 16) & 0xff;
+            offset3 = (t.wxyz >> 24);
+            s = (uint4)(Te_Local0[offset0.x], Te_Local0[offset0.y], Te_Local0[offset0.z], Te_Local0[offset0.w]) ^
+                (uint4)(Te_Local1[offset1.x], Te_Local1[offset1.y], Te_Local1[offset1.z], Te_Local1[offset1.w]) ^
+                (uint4)(Te_Local2[offset2.x], Te_Local2[offset2.y], Te_Local2[offset2.z], Te_Local2[offset2.w]) ^
+                (uint4)(Te_Local3[offset3.x], Te_Local3[offset3.y], Te_Local3[offset3.z], Te_Local3[offset3.w]) ^
+                rk[0];
+        }
+        
+        offset0 = (t.zwxy >> 16) & 0xff;
+        offset1 = (t.wxyz >> 24);
+        offset2 = t & 0xff;
+        offset3 = (t.yzwx >> 8) & 0xff;
+        
+        s = ((uint4)(Te_Local2[offset2.x], Te_Local2[offset2.y], Te_Local2[offset2.z], Te_Local2[offset2.w]) & 0x000000ff) ^
+            ((uint4)(Te_Local3[offset3.x], Te_Local3[offset3.y], Te_Local3[offset3.z], Te_Local3[offset3.w]) & 0x0000ff00) ^
+            ((uint4)(Te_Local0[offset0.x], Te_Local0[offset0.y], Te_Local0[offset0.z], Te_Local0[offset0.w]) & 0x00ff0000) ^
+            ((uint4)(Te_Local1[offset1.x], Te_Local1[offset1.y], Te_Local1[offset1.z], Te_Local1[offset1.w]) & 0xff000000) ^
+            rk[0];
+        
+        state[i] = s;
+    }
+}
