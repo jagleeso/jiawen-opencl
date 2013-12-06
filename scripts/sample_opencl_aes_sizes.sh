@@ -9,11 +9,14 @@ cd $ROOT
 set -e
 executable=opencl_aes
 # global_worksize="$1"
-num_work_groups="$1"
-work_group_size="$2"
-shift 2
+# num_work_groups="$1"
+# work_group_size="$2"
+# shift 2
 
-max_array_size=$((512*1024*1024))
+max_array_size=$(( $1 * 1024 * 1024 ))
+shift 1 || (echo 1>&2 "ERROR: $0 max_array_size_MB" && exit 1)
+
+# max_array_size=$((512*1024*1024))
 
 # Experimentally determined best values
 # num_work_groups=4
@@ -162,11 +165,11 @@ sample_using_binary_exponentiation_guess() {
 
     array_size=$start_size
     while [ "$array_size" -le "$max_array_size" ]; do 
-        adb shell ./data/local/tmp/$executable $array_size $num_work_groups $work_group_size
+        adb shell ./data/local/tmp/$executable -a $array_size "$@"
         array_size=$((array_size * 2))
         echo
     done
 }
 
 # sample_using_constant_increment_guess
-sample_using_binary_exponentiation_guess
+sample_using_binary_exponentiation_guess "$@"

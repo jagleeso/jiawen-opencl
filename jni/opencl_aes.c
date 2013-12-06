@@ -20,6 +20,7 @@ Copyright ©2012 Advanced Micro Devices, Inc. All rights reserved.
 #include <errno.h>
 #include "aes.h"
 #include <inttypes.h>
+#include <limits.h>
 
 #include "common.h"
 
@@ -32,6 +33,11 @@ static const unsigned char key[] = {
 	0x88, 0x99, 0xaa, 0xbb,
 	0xcc, 0xdd, 0xee, 0xff,
 };
+
+inline int safe_cmp(const char * safe_str, const char * user_str) {
+    size_t len = strlen(safe_str);
+    return strncmp(safe_str, user_str, len);
+}
 
 #define DEBUG
  // Use a static data size for simplicity
@@ -117,7 +123,7 @@ static void usage(void) {
 
 /* e
 */
-size_t entries;
+size_t entries = UINT_MAX;
 int provided_entries = 0;
 
 /* a
@@ -127,13 +133,27 @@ int provided_array_size = 0;
 
 /* G
 */
-unsigned int num_work_groups;
-int provided_num_work_groups = 0;
+unsigned int num_work_groups = UINT_MAX; // mark as uninitialized
+int provided_num_work_groups = 0; 
 
 /* I
 */
-unsigned int local_work_size;
-int provided_local_work_size = 0;
+unsigned int local_work_size = UINT_MAX; // mark as uninitialized
+int provided_local_work_size = 0; 
+
+int mode = -1; // mark as uninitialized
+#define MODE_STRIDED_EQUAL_WORK_ITEM_PARTITION 0
+#define MODE_RUNTIME_LOCAL_WORK_SIZE 1
+#define MODE_COALESCED_EQUAL_WORK_ITEM_PARTITION 2
+
+char *modes[] = {
+    "MODE_STRIDED_EQUAL_WORK_ITEM_PARTITION",
+    "MODE_RUNTIME_LOCAL_WORK_SIZE",
+    "MODE_COALESCED_EQUAL_WORK_ITEM_PARTITION",
+};
+
+#define MAX_KERNEL_NAME 1024
+char kernel_name[MAX_KERNEL_NAME];
 
 static char *option_string = "e:a:G:I:";
 int main(int argc, char* argv[])
@@ -172,11 +192,15 @@ int main(int argc, char* argv[])
             provided_num_work_groups = 1;
             break;
         case 'I':
-            result = sscanf(optarg, "%d", &local_work_size);
-            if (result != 1) {
-                printf("result == %d\n", result);
-                fprintf(stderr, "Error: expected the local work size (local_work_size), but saw \"%s\"\n", optarg);
-                usage();
+            if (safe_cmp("NULL", optarg) == 0) {
+                local_work_size = 0;
+            } else {
+                result = sscanf(optarg, "%d", &local_work_size);
+                if (result != 1) {
+                    printf("result == %d\n", result);
+                    fprintf(stderr, "Error: expected the local work size (local_work_size), but saw \"%s\"\n", optarg);
+                    usage();
+                }
             }
             provided_local_work_size = 1;
             break;
@@ -186,7 +210,6 @@ int main(int argc, char* argv[])
             abort();
 			break;
 		}
-        printf("option == %i\n", (int) option);
 	}
 
     if (option == -1) {
@@ -221,6 +244,25 @@ int encrypt_cl(void) {
 #ifdef DEBUG 
 	printf("start of encrypt_cl\n");
 #endif
+
+    /* Determine our mode of operation (need to load the right kernel).
+     */
+    if (provided_array_size && provided_num_work_groups && provided_local_work_size) {
+        strncpy(kernel_name, "AES_encrypt_strided", MAX_KERNEL_NAME);
+        mode = MODE_STRIDED_EQUAL_WORK_ITEM_PARTITION;
+    } else if (provided_array_size && provided_entries && provided_local_work_size) { 
+        strncpy(kernel_name, "AES_encrypt", MAX_KERNEL_NAME);
+        mode = MODE_RUNTIME_LOCAL_WORK_SIZE;
+    } else if (provided_array_size && provided_entries) {
+        strncpy(kernel_name, "AES_encrypt_strided", MAX_KERNEL_NAME);
+        mode = MODE_COALESCED_EQUAL_WORK_ITEM_PARTITION;
+    } else {
+        fprintf(stderr, "Invalid mode of operation\n");
+        usage();
+        abort();
+    }
+    assert(mode != -1);
+    assert(strlen(kernel_name) != 0);
 	
 	unsigned int count = array_size;
 	/* unsigned int count = 1048576; */
@@ -375,7 +417,8 @@ int encrypt_cl(void) {
 #ifdef DEBUG 
 	printf("Create the compute kernel in the program we wish to run\n");
 #endif
-	encrypt_kernel = clCreateKernel(program, "AES_encrypt", &err);
+	printf("> kernel_name = %s\n", kernel_name);
+	encrypt_kernel = clCreateKernel(program, kernel_name, &err);
 	/* encrypt_kernel = clCreateKernel(program, "AES_encrypt_coalesced", &err); */
 	/* encrypt_kernel = clCreateKernel(program, "AES_encrypt_old", &err); */
 	if (!encrypt_kernel || err != CL_SUCCESS) {
@@ -503,49 +546,111 @@ int encrypt_cl(void) {
         /* Modes of operation:
         */
         entries_to_encrypt = array_size / 16;
-        if (provided_array_size && provided_num_work_groups && provided_local_work_size) {
-            /* Each work item gets an equal sized chunk of the input data to encrypt.
-             *
-             * - User provides: 
-             *   - array size
-             *   - number of work groups
-             *   - work group size
-             *   We calculate:
-             *   - the number of entries each work item encrypts
-             */
-            /* A compute unit is a GPU core.
-             * A GPU core has many processing elements.
-             */
-            num_processing_elements = num_work_groups * local_work_size;
-            entries = CEILING_DIVIDE(entries_to_encrypt, num_processing_elements);
-        } else if (provided_array_size && provided_entries) {
-            /* Each work item encrypts the number of entries specified, where an entry is 16 bytes.
-             *
-             * - User provides: 
-             *   - array size
-             *   - the number of entries each work item encrypts
-             *   We calculate:
-             *   - work group size = max supported processing elements
-             *   - number of work groups = # needed to encrypt all of array size (function of 
-             *     array size and number entries encrypted by each work item)
-             */
-            num_processing_elements = CEILING_DIVIDE(entries_to_encrypt, entries);
-            local_work_size = MIN(max_kernel_work_group_size, max_work_items_dim1);
-            num_work_groups = ROUND_UP(num_processing_elements, local_work_size)/local_work_size;
-        } else {
-            fprintf(stderr, "Invalid mode of operation\n");
-            usage();
-            abort();
+        switch (mode) {
+            case MODE_STRIDED_EQUAL_WORK_ITEM_PARTITION:
+                /* Each work item gets an equal sized chunk of the input data to encrypt.
+                 *
+                 * e.g. 2 work groups with 1 processing element each, with each processing element encrypting 
+                 * half the input
+                 *
+                 * ./opencl_aes -a 128 -G 2 -I 1
+                 *
+                 * - User provides: 
+                 *   - array size
+                 *   - number of work groups
+                 *   - work group size
+                 *   We calculate:
+                 *   - the number of entries each work item encrypts
+                 */
+                num_processing_elements = num_work_groups * local_work_size;
+                entries = CEILING_DIVIDE(entries_to_encrypt, num_processing_elements);
+                break;
+            case MODE_RUNTIME_LOCAL_WORK_SIZE:
+                /* Each work item encrypts the number of entries specified, where an entry is 16 bytes, and the 
+                 * local work size is specified as NULL to the OpenCL runtime so it can decide (hopefully 
+                 * optimally) what work group size to use (though it is irrelavent to us since we run the 
+                 * AES_encrypt kernel which uses only global id).
+                 *
+                 * e.g. 
+                 *
+                 * ./opencl_aes -a 128 -e 2 -I NULL
+                 *
+                 * - User provides: 
+                 *   - array size
+                 *   - the number of entries each work item encrypts
+                 *   - the local worksize (as NULL)
+                 *   We calculate:
+                 *   - work group size = determined by OpenCL runtime (set local_work_size == NULL)
+                 *   - number of work groups = # work items needed given each encrypt <entries>
+                 */
+                assert(local_work_size == 0);
+                num_work_groups = entries_to_encrypt / entries;
+                break;
+            case MODE_COALESCED_EQUAL_WORK_ITEM_PARTITION:
+                /* Each work item encrypts the number of entries specified, where an entry is 16 bytes.
+                 *
+                 * e.g. 
+                 * - 128/16 = 8 entries to encrypt in total
+                 * - so we have 8/2 = 4 work items needed to encrypt 
+                 * - we want to fully utilize each compute unit, so we use 80 processing elements in a work 
+                 *   group
+                 * - we only need 1 work group
+                 *
+                 * ./opencl_aes -a 128 -e 2
+                 *
+                 * - User provides: 
+                 *   - array size
+                 *   - the number of entries each work item encrypts
+                 *   We calculate:
+                 *   - work group size = max supported processing elements
+                 *   - number of work groups = # needed to encrypt all of array size (function of 
+                 *     array size and number entries encrypted by each work item)
+                 */
+                num_processing_elements = CEILING_DIVIDE(entries_to_encrypt, entries);
+                local_work_size = MIN(max_kernel_work_group_size, max_work_items_dim1);
+                num_work_groups = ROUND_UP(num_processing_elements, local_work_size)/local_work_size;
+                break;
+            default:
+                fprintf(stderr, "Invalid mode of operation\n");
+                usage();
+                abort();
+                break;
         }
+        assert(num_work_groups != UINT_MAX);
+        assert(local_work_size != UINT_MAX);
 
+        unsigned int global = UINT_MAX;
+        unsigned int local = UINT_MAX;
+        size_t * local_ptr = (size_t*) 0xffffffff;
+        switch (mode) {
+            case MODE_STRIDED_EQUAL_WORK_ITEM_PARTITION:
+            case MODE_COALESCED_EQUAL_WORK_ITEM_PARTITION:
+                global = num_work_groups * local_work_size;
+                local = local_work_size;
+                local_ptr = &local;
+                break;
+            case MODE_RUNTIME_LOCAL_WORK_SIZE:
+                global = num_work_groups;
+                local = 0;
+                local_ptr = NULL;
+                break;
+            default:
+                assert(0);
+                break;
+        }
+        assert(global != UINT_MAX);
+        assert(local != UINT_MAX);
+        assert(local_ptr != (size_t*) 0xffffffff);
+
+        printf("> mode = %s\n", modes[mode]);
 		printf("num_work_groups is %d\n", num_work_groups);
 
-        printf("entries == %zd\n", entries);
+        if (entries != UINT_MAX) {
+            printf("entries == %zd\n", entries);
+        }
         printf("entries_to_encrypt == %u\n", entries_to_encrypt);
         printf("num_processing_elements == %u\n", num_processing_elements);
 
-        unsigned int global = num_work_groups * local_work_size;
-        unsigned int local = local_work_size;
         printf("> GLOBAL = %u\n", global);
         printf("> LOCAL = %u\n", local);
 
@@ -555,17 +660,21 @@ int encrypt_cl(void) {
 		clock_t tStartA = clock();
 
 		err = 0;
-		err  = clSetKernelArg(encrypt_kernel, 0, sizeof(cl_mem), &buffer_state);
+
+		err = clSetKernelArg(encrypt_kernel, 0, sizeof(cl_mem), &buffer_state);
         CHECK_CL_SUCCESS("clSetKernelArg", err);
 		err |= clSetKernelArg(encrypt_kernel, 1, sizeof(cl_mem), &buffer_roundkeys);
         CHECK_CL_SUCCESS("clSetKernelArg", err);
 		err |= clSetKernelArg(encrypt_kernel, 2, sizeof(ks.rounds), &ks.rounds);
+        CHECK_CL_SUCCESS("clSetKernelArg", err);
 
-        CHECK_CL_SUCCESS("clSetKernelArg", err);
-		err |= clSetKernelArg(encrypt_kernel, 3, sizeof(cl_uint), &entries);
-        CHECK_CL_SUCCESS("clSetKernelArg", err);
-		err |= clSetKernelArg(encrypt_kernel, 4, sizeof(cl_uint), &entries_to_encrypt);
-        CHECK_CL_SUCCESS("clSetKernelArg", err);
+        if (strcmp("AES_encrypt_strided", kernel_name) == 0 ||
+            strcmp("AES_encrypt_coalesced", kernel_name) == 0) {
+            err |= clSetKernelArg(encrypt_kernel, 3, sizeof(cl_uint), &entries);
+            CHECK_CL_SUCCESS("clSetKernelArg", err);
+            err |= clSetKernelArg(encrypt_kernel, 4, sizeof(cl_uint), &entries_to_encrypt);
+            CHECK_CL_SUCCESS("clSetKernelArg", err);
+        }
 
 		if (err != CL_SUCCESS)
 		{
@@ -577,7 +686,7 @@ int encrypt_cl(void) {
         /* Run the kernel.
          */
         cl_uint work_dim = 1;
-        err = clEnqueueNDRangeKernel(commands, encrypt_kernel, work_dim, NULL, &global, &local, 0, NULL, &event);
+        err = clEnqueueNDRangeKernel(commands, encrypt_kernel, work_dim, NULL, &global, local_ptr, 0, NULL, &event);
         CHECK_CL_SUCCESS("clEnqueueNDRangeKernel", err);
         if (err) {
             printf("Error: Failed to execute kernel!\n");

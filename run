@@ -2,9 +2,9 @@
 
 # ./rl result/file.txt
 executable="$1"
-shift 1
-
 set -e
+set -x 
+shift 1 || (echo "ERROR: $0 executable" && exit 1)
 
 set -x 
 cd "$(dirname "$0")"/scripts

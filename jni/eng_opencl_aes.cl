@@ -326,7 +326,7 @@ __constant uint Te3[256] = {
 /* entries: the number of uint4 entries each invocation of this OpenCL kernel should encrypt.
  * entries_to_encrypt: the number of uint4 entries in state
  */
-__kernel void AES_encrypt(__global uint4 *state, __constant uint4 *rk, uint rounds, uint entries, uint entries_to_encrypt) {
+__kernel void AES_encrypt_strided(__global uint4 *state, __constant uint4 *rk, uint rounds, uint entries, uint entries_to_encrypt) {
 	uint global_id = get_global_id(0);
     /* NOTE: global_id is unique for all work-items, regardless of which group they're in.
      */
@@ -517,7 +517,7 @@ __kernel void AES_encrypt_split_array_global(__global uint4 *state, __constant u
     }
 }
 
-__kernel void AES_encrypt_old(__global uint4 *state, __constant uint4 *rk, uint rounds) {
+__kernel void AES_encrypt(__global uint4 *state, __constant uint4 *rk, uint rounds) {
 	uint global_id = get_global_id(0);
 	/* uint local_id = get_local_id(0); */
     /* printf("GLOBAL ID == %lu, LOCAL ID == %lu\n", global_id, local_id); */
