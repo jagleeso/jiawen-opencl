@@ -15,7 +15,8 @@ Copyright ©2012 Advanced Micro Devices, Inc. All rights reserved.
 #include <unistd.h>
 #include <sys/types.h>
 #include <sys/stat.h>
-#include <time.h>
+/* #include <sys/time.h> */
+/* #include <ctime> */
 #include <assert.h>
 #include <errno.h>
 #include "aes.h"
@@ -67,6 +68,16 @@ inline int safe_cmp(const char * safe_str, const char * user_str) {
 int encrypt_cl();
 
 int get_max_work_items(cl_device_id device_id, cl_uint *dims, size_t *max_work_items_dim1);
+
+double milliseconds(struct timeval t) {
+    return (t.tv_sec*1e3) + (((double)t.tv_usec)/1e3);
+}
+
+double get_time_ms(struct timeval start) {
+    struct timeval end;
+	gettimeofday(&end, NULL);
+    return milliseconds(end) - milliseconds(start);
+}
 
 static const char *load_kernel_source(const char *filename) {
 	size_t len = strlen(filename) + 1;
@@ -149,6 +160,11 @@ int local_tbox = 0; // false
 */
 int coalesced_local_tbox = 0; // false
 
+/* r 
+*/
+unsigned int runs = 2; // mark as uninitialized
+int provided_runs = 0; 
+
 int mode = -1; // mark as uninitialized
 #define MODE_STRIDED_EQUAL_WORK_ITEM_PARTITION 0
 #define MODE_RUNTIME_LOCAL_WORK_SIZE 1
@@ -167,7 +183,7 @@ char *modes[] = {
 #define MAX_KERNEL_NAME 1024
 char kernel_name[MAX_KERNEL_NAME];
 
-static char *option_string = "e:a:G:I:tT";
+static char *option_string = "e:a:G:I:tTr:";
 int main(int argc, char* argv[])
 {
     program_name = argv[0];
@@ -215,6 +231,19 @@ int main(int argc, char* argv[])
                 }
             }
             provided_local_work_size = 1;
+            break;
+        case 'r':
+            if (safe_cmp("NULL", optarg) == 0) {
+                runs = 0;
+            } else {
+                result = sscanf(optarg, "%d", &runs);
+                if (result != 1) {
+                    printf("result == %d\n", result);
+                    fprintf(stderr, "Error: expected the number of kernel (runs), but saw \"%s\"\n", optarg);
+                    usage();
+                }
+            }
+            provided_runs = 1;
             break;
         case 't':
             local_tbox = 1;
@@ -517,6 +546,11 @@ int encrypt_cl(void) {
 		//
 
 		clock_t tStartM = clock();
+
+        /* The timestamp just before we perform a copy the input array to global memory.
+         */
+        struct timeval before_copy_t;
+        gettimeofday(&before_copy_t, NULL);
 		err = clEnqueueWriteBuffer(commands, buffer_state, CL_TRUE, 0, count * sizeof(*in), in, 0, NULL, NULL);
         CHECK_CL_SUCCESS("clEnqueueWriteBuffer", err);
 		err = clEnqueueWriteBuffer(commands, buffer_roundkeys, CL_TRUE, 0, 16 * 15, &ks.rd_key, 0, NULL, NULL);
@@ -531,7 +565,8 @@ int encrypt_cl(void) {
 		}
 		err = clFinish(commands);
         CHECK_CL_SUCCESS("clFinish", err);
-		tMemory += (double)(clock() - tStartM)/CLOCKS_PER_SEC;
+        double copy_time = get_time_ms(before_copy_t);
+		/* tMemory += (double)(clock() - tStartM)/CLOCKS_PER_SEC; */
 
 
 
@@ -720,18 +755,27 @@ int encrypt_cl(void) {
 			printf("Error: Failed to set kernel arguments! %d\n", err);
 			exit(1);
 		}
-		tArgument += (double)(clock() - tStartA)/CLOCKS_PER_SEC;
+		/* tArgument += (double)(clock() - tStartA)/CLOCKS_PER_SEC; */
 
         /* Run the kernel.
          */
         cl_uint work_dim = 1;
-        err = clEnqueueNDRangeKernel(commands, encrypt_kernel, work_dim, NULL, &global, local_ptr, 0, NULL, &event);
-        CHECK_CL_SUCCESS("clEnqueueNDRangeKernel", err);
-        if (err) {
-            printf("Error: Failed to execute kernel!\n");
-            return EXIT_FAILURE;
+        double* kernel_run_time = malloc(sizeof(double)*runs);
+        for (i = 0; i < runs; i++) {
+            printf("starting run %u...\n", i);
+            struct timeval before_run;
+            gettimeofday(&before_run, NULL);
+
+            err = clEnqueueNDRangeKernel(commands, encrypt_kernel, work_dim, NULL, &global, local_ptr, 0, NULL, &event);
+            CHECK_CL_SUCCESS("clEnqueueNDRangeKernel", err);
+            if (err) {
+                printf("Error: Failed to execute kernel!\n");
+                return EXIT_FAILURE;
+            }
+            err = clWaitForEvents(1, &event);
+            kernel_run_time[i] = get_time_ms(before_run);
         }
-        err = clWaitForEvents(1, &event);
+
         CHECK_CL_SUCCESS("clWaitForEvents", err);
         err = clGetEventProfilingInfo(event, CL_PROFILING_COMMAND_START, sizeof(cl_ulong), &start, NULL);
         CHECK_CL_SUCCESS("clGetEventProfilingInfo", err);
@@ -740,11 +784,13 @@ int encrypt_cl(void) {
         // the resolution of the events is 1e-09 sec
         t += (cl_float)(end - start)*(cl_float)(1e-06);
 
-        printf("profile time: %f ms\n",t);
+        for (i = 0; i < runs; i++) {
+            printf("profile time %u: %f ms\n", i + 1, kernel_run_time[i]);
+        }
         err = clFinish(commands);
         CHECK_CL_SUCCESS("clFinish", err);
         // Wait for the command commands to get serviced before reading back results
-        tExecute += (double)(clock() - tStartE)/CLOCKS_PER_SEC;
+        /* tExecute += (double)(clock() - tStartE)/CLOCKS_PER_SEC; */
 
 		// Read back the results from the device to verify the output
 		//
@@ -768,40 +814,17 @@ int encrypt_cl(void) {
             }
 			/* printf("%02X", in[i]); */
 		}
-        /* printf("\n"); */
-		/* printf("encrypted data is\n"); */
-        /* size_t max_num_consec = 4; */
-        /* size_t num_consec = 1; */
-        /* unsigned char last; */
-		/* for (i=0; i<count; i++) { */
-        /*     if (i != 0 && out[i] == last) { */
-        /*         num_consec += 1; */
-        /*         if (num_consec > max_num_consec) { */
-        /*             printf("Error: encrypted output had more than the maximum number of consecutive repeated bytes %zd. in particular, we saw a repeated sequence of %zd.\n", max_num_consec, num_consec); */
-        /*             print_data("input", count, in); */
-        /*             print_data("encrypted", count, out); */
-        /*             exit(EXIT_FAILURE); */
-        /*         } */
-        /*     } else { */
-        /*         num_consec = 1; */
-        /*     } */
-        /*     last = out[i]; */
-			/* printf("%02X", out[i]); */
-		/* } */
-        /* printf("\n"); */
-		tRead += (double)(clock() - tStartR)/CLOCKS_PER_SEC;
-	//}
 
-
-
+		/* tRead += (double)(clock() - tStartR)/CLOCKS_PER_SEC; */
 
 	printf("-----------------------------------------------\n");
-	printf("encrypt_cl Time taken: %.2fs\n", (double)(clock() - tStart)/CLOCKS_PER_SEC);
-	printf("cl Fill data Time taken: %.2fs\n", tFill); 
-	printf("cl memory copy Time taken: %.2fs\n", tMemory); 
-	printf("cl set Argument Time taken: %.2fs\n", tArgument); 
-	printf("cl Execute kernel time taken: %.2fs\n", tExecute); 
-	printf("cl read memory taken: %.2fs\n", tRead); 
+	/* printf("encrypt_cl Time taken: %.2fs\n", (double)(clock() - tStart)/CLOCKS_PER_SEC); */
+	/* printf("cl Fill data Time taken: %.2fs\n", tFill);  */
+	/* printf("cl memory copy Time taken: %.2fs\n", tMemory);  */
+	printf("copy time: %.2f ms\n", copy_time); 
+	/* printf("cl set Argument Time taken: %.2fs\n", tArgument);  */
+	/* printf("cl Execute kernel time taken: %.2fs\n", tExecute);  */
+	/* printf("cl read memory taken: %.2fs\n", tRead);  */
 
 	// Validate our results
 	//
@@ -831,6 +854,7 @@ int encrypt_cl(void) {
     CHECK_CL_SUCCESS("clReleaseCommandQueue", err);
 	clReleaseContext(context);
     CHECK_CL_SUCCESS("clReleaseContext", err);
+    free(kernel_run_time);
 }
 
 int get_max_work_items(cl_device_id device_id, cl_uint *dims, size_t *max_work_items_dim1) {
