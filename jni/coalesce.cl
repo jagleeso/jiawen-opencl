@@ -34,3 +34,32 @@ __kernel void coalesce_optimal(
     }
 
 }
+
+/* Precondition:
+   elems is divisble by 4 * G * (spacing + 1).
+ */
+__kernel void coalesce_spacing(
+        __global uint4 *src,
+        uint elems,
+        uint spacing)
+{
+    uint global_id = get_global_id(0);
+    uint G = get_global_size(0);
+
+    uint4 pmin;
+
+    uint n, i;
+    uint count = (elems/4) / (G*(spacing + 1));
+    uint idx = global_id*(spacing + 1);
+    for (n = 0; n < count; n++) {
+        for (i = 0; i < spacing + 1; i++) {
+            pmin = src[idx + i];
+        }
+        idx += G*(spacing + 1);
+    }
+
+    if (global_id == 0) {
+        src[0] = 0;
+    }
+
+}

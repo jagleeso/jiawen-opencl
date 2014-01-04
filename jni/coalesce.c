@@ -54,17 +54,24 @@ int provided_local_work_size = 0;
 unsigned int min_profile_time_ms = UINT_MAX; // mark as uninitialized
 int provided_min_profile_time_ms = 0; 
 
+/* s
+*/
+unsigned int spacing = UINT_MAX; // mark as uninitialized
+int provided_spacing = 0; 
+
 int mode = -1; // mark as uninitialized
 #define MODE_COALESCE_OPTIMAL 0
+#define MODE_COALESCE_SPACING 1
 
 char *modes[] = {
     "MODE_COALESCE_OPTIMAL",
+    "MODE_COALESCE_SPACING",
 };
 
 #define MAX_KERNEL_NAME 1024
 char kernel_name[MAX_KERNEL_NAME];
 
-static char *option_string = "a:G:I:t:";
+static char *option_string = "a:G:I:t:s:";
 int main(int argc, char* argv[])
 {
     program_name = argv[0];
@@ -117,6 +124,19 @@ int main(int argc, char* argv[])
             }
             provided_min_profile_time_ms = 1;
             break;
+        case 's':
+            if (safe_cmp("NULL", optarg) == 0) {
+                spacing = 0;
+            } else {
+                result = sscanf(optarg, "%d", &spacing);
+                if (result != 1) {
+                    printf("result == %d\n", result);
+                    fprintf(stderr, "Error: expected the minimum profile time (spacing), but saw \"%s\"\n", optarg);
+                    usage();
+                }
+            }
+            provided_spacing = 1;
+            break;
 		case '?':
             fprintf(stderr, "\n");
 			usage();
@@ -163,7 +183,10 @@ int coalesce(void) {
 
     /* Determine our mode of operation (need to load the right kernel).
      */
-    if (provided_array_size && provided_min_profile_time_ms && provided_num_work_groups) {
+    if (provided_array_size && provided_min_profile_time_ms && provided_num_work_groups && provided_spacing) {
+        strncpy(kernel_name, "coalesce_spacing", MAX_KERNEL_NAME);
+        mode = MODE_COALESCE_SPACING;
+    } else if (provided_array_size && provided_min_profile_time_ms && provided_num_work_groups) {
         strncpy(kernel_name, "coalesce_optimal", MAX_KERNEL_NAME);
         mode = MODE_COALESCE_OPTIMAL;
     } else {
@@ -322,8 +345,6 @@ int coalesce(void) {
 #ifdef DEBUG 
 	printf("Create the input and output arrays in device memory for our calculation\n");
 #endif
-	printf("> array_size: %u\n", array_size);
-	printf("> array size in bytes: %u bytes\n", array_size*sizeof(cl_uint));
 	// dynamic buffer size please
 	in_buffer = clCreateBuffer(context, CL_MEM_READ_WRITE | CL_MEM_ALLOC_HOST_PTR, array_size * sizeof(cl_uint), NULL, &err);
     CHECK_CL_SUCCESS("clCreateBuffer", err);
@@ -392,9 +413,18 @@ int coalesce(void) {
     size_t * local_ptr = (size_t*) 0xffffffff;
     switch (mode) {
         case MODE_COALESCE_OPTIMAL:
+        case MODE_COALESCE_SPACING:
             local = preferred_multiple;
-            global = num_work_groups * local;
             local_ptr = &local;
+            global = num_work_groups * local;
+            break;
+    }
+    switch (mode) {
+        case MODE_COALESCE_OPTIMAL:
+            break;
+        case MODE_COALESCE_SPACING:
+            assert(array_size % 4 == 0);
+            array_size = 4*ROUND_UP(array_size/4, global*(spacing + 1));
             break;
         default:
             fprintf(stderr, "Invalid mode of operation\n");
@@ -407,7 +437,14 @@ int coalesce(void) {
     assert(local != UINT_MAX);
     assert(local_ptr != (size_t*) 0xffffffff);
 
+	printf("> array_size: %u\n", array_size);
+	printf("> array size in bytes: %u bytes\n", array_size*sizeof(cl_uint));
     printf("> mode = %s\n", modes[mode]);
+    switch (mode) {
+        case MODE_COALESCE_SPACING:
+            printf("> spacing: %u\n", spacing);
+            break;
+    }
 
     printf("num_work_groups is %d\n", num_work_groups);
 
@@ -493,6 +530,11 @@ int runKernel(
     CHECK_CL_SUCCESS("clSetKernelArg", err);
     err |= clSetKernelArg(coalesce_kernel, 1, sizeof(cl_uint), &array_size);
     CHECK_CL_SUCCESS("clSetKernelArg", err);
+    switch (mode) {
+        case MODE_COALESCE_SPACING: 
+            err |= clSetKernelArg(coalesce_kernel, 2, sizeof(cl_uint), &spacing);
+            CHECK_CL_SUCCESS("clSetKernelArg", err);
+    }
     err = clEnqueueNDRangeKernel(commands, coalesce_kernel, work_dim, NULL, &global, local_ptr, 0, NULL, event);
     CHECK_CL_SUCCESS("clEnqueueNDRangeKernel", err);
     if (err) {
