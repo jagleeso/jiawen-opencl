@@ -143,6 +143,16 @@ int main(int argc, char* argv[])
 	return 0;
 }
 
+int runKernel(
+        cl_mem in_buffer,
+        cl_command_queue commands,
+        cl_kernel coalesce_kernel,
+        cl_uint work_dim,
+        unsigned int global,
+        size_t * local_ptr,
+        cl_event * event
+);
+
 /* entries: the number of "entries" (i.e. groups of size 16) that each OpenCL kernel instance should handle
  * num_work_groups: the "global work size" (the number of OpenCL AES instances to split the encryption of the input array between).
  */
@@ -172,13 +182,13 @@ int coalesce(void) {
 	cl_context context;                 // compute context
 	cl_command_queue commands;          // compute command queue
 	cl_program program;                 // compute program
-	cl_kernel kernel;                   // compute kernel
+	cl_kernel coalesce_kernel;                   // compute kernel
 	//cl_kernel decrypt_kernel;                   // compute kernel
 	cl_event event;
 	
-	static cl_mem in_buffer;
+	cl_mem in_buffer;
 
-	unsigned char* in = malloc(sizeof(unsigned char)*array_size);              //plain text
+	cl_uint* in = malloc(sizeof(cl_uint)*array_size);              //plain text
     assert(in != NULL);
 
 	initFns();
@@ -294,11 +304,11 @@ int coalesce(void) {
 	printf("Create the compute kernel in the program we wish to run\n");
 #endif
 	printf("> kernel_name = %s\n", kernel_name);
-	kernel = clCreateKernel(program, kernel_name, &err);
+	coalesce_kernel = clCreateKernel(program, kernel_name, &err);
 
-	/* kernel = clCreateKernel(program, "AES_encrypt_coalesced", &err); */
-	/* kernel = clCreateKernel(program, "AES_encrypt_old", &err); */
-	if (!kernel || err != CL_SUCCESS) {
+	/* coalesce_kernel = clCreateKernel(program, "AES_encrypt_coalesced", &err); */
+	/* coalesce_kernel = clCreateKernel(program, "AES_encrypt_old", &err); */
+	if (!coalesce_kernel || err != CL_SUCCESS) {
 		printf("Error: Failed to create compute kernel! err = %d\n", err);
 		size_t len;
 		char b[2048];
@@ -313,8 +323,9 @@ int coalesce(void) {
 	printf("Create the input and output arrays in device memory for our calculation\n");
 #endif
 	printf("> array_size: %u\n", array_size);
+	printf("> array size in bytes: %u bytes\n", array_size*sizeof(cl_uint));
 	// dynamic buffer size please
-	in_buffer = clCreateBuffer(context, CL_MEM_READ_WRITE | CL_MEM_ALLOC_HOST_PTR, array_size, NULL, &err);
+	in_buffer = clCreateBuffer(context, CL_MEM_READ_WRITE | CL_MEM_ALLOC_HOST_PTR, array_size * sizeof(cl_uint), NULL, &err);
     CHECK_CL_SUCCESS("clCreateBuffer", err);
 	if (!in_buffer)
 	{
@@ -336,7 +347,7 @@ int coalesce(void) {
      */
     struct timeval before_copy_t;
     gettimeofday(&before_copy_t, NULL);
-    err = clEnqueueWriteBuffer(commands, in_buffer, CL_TRUE, 0, array_size * sizeof(*in), in, 0, NULL, NULL);
+    err = clEnqueueWriteBuffer(commands, in_buffer, CL_TRUE, 0, array_size * sizeof(cl_uint), in, 0, NULL, NULL);
     CHECK_CL_SUCCESS("clEnqueueWriteBuffer", err);
     if (err != CL_SUCCESS)
     {
@@ -350,14 +361,14 @@ int coalesce(void) {
     // Execute the kernel over the entire range of our 1d input data set
     // using the maximum number of work group items for this device
 
-    cl_ulong start = 0, end = 0;
+    /* cl_ulong start = 0, end = 0; */
 
     size_t max_kernel_work_group_size;
-    err = clGetKernelWorkGroupInfo(kernel, device_id[DEVICE], CL_KERNEL_WORK_GROUP_SIZE,
+    err = clGetKernelWorkGroupInfo(coalesce_kernel, device_id[DEVICE], CL_KERNEL_WORK_GROUP_SIZE,
             sizeof(size_t), &max_kernel_work_group_size, NULL);
 
     size_t preferred_multiple = -1;
-    err = clGetKernelWorkGroupInfo(kernel,
+    err = clGetKernelWorkGroupInfo(coalesce_kernel,
             device_id[0],
             CL_KERNEL_PREFERRED_WORK_GROUP_SIZE_MULTIPLE,
             sizeof(size_t),
@@ -373,15 +384,6 @@ int coalesce(void) {
     printf("> max_work_items_dim1: %zd\n", max_work_items_dim1);
     printf("> max_kernel_work_group_size: %zd\n", max_kernel_work_group_size);
     printf("> CL_KERNEL_PREFERRED_WORK_GROUP_SIZE_MULTIPLE: %zd\n", preferred_multiple);
-
-    /* 1 thread operates on 4 (uint4 vector type has 4 uints, (x, y, w, z)) consecutive 32 bit 
-     * (uint) fields at a time.  
-     *
-     * That is, 1 thread operates on 4*4 == 16 bytes (chars) of the input array.
-     *
-     * An input of N bytes needs N / 16 threads.
-     */
-    assert(array_size % 16 == 0);
 
     /* Modes of operation:
     */
@@ -413,10 +415,10 @@ int coalesce(void) {
     printf("> LOCAL = %u\n", local);
 
     err = 0;
-    err = clSetKernelArg(kernel, 0, sizeof(cl_mem), &in_buffer);
-    CHECK_CL_SUCCESS("clSetKernelArg", err);
-    err |= clSetKernelArg(kernel, 1, sizeof(cl_uint), &array_size);
-    CHECK_CL_SUCCESS("clSetKernelArg", err);
+    /* err |= clSetKernelArg(coalesce_kernel, 0, sizeof(cl_mem), &in_buffer); */
+    /* CHECK_CL_SUCCESS("clSetKernelArg", err); */
+    /* err |= clSetKernelArg(coalesce_kernel, 1, sizeof(cl_uint), &array_size); */
+    /* CHECK_CL_SUCCESS("clSetKernelArg", err); */
 
     /* Run the kernel a minimum number of times so that it can be averaged over the min_profile_time_ms.
      */
@@ -429,24 +431,13 @@ int coalesce(void) {
         printf("trying %u runs...\n", runs);
 
         printf("run once to handle cache effects...\n");
-        err = clEnqueueNDRangeKernel(commands, kernel, work_dim, NULL, &global, local_ptr, 0, NULL, &event);
-        CHECK_CL_SUCCESS("clEnqueueNDRangeKernel", err);
-        if (err) {
-            printf("Error: Failed to execute kernel!\n");
-            return EXIT_FAILURE;
-        }
-        err = clWaitForEvents(1, &event);
+        runKernel(in_buffer, commands, coalesce_kernel, work_dim, global, local_ptr, &event);
 
+        printf("start real runs...\n");
         struct timeval before_runs;
         gettimeofday(&before_runs, NULL);
         for (i = 0; i < runs; i++) {
-            err = clEnqueueNDRangeKernel(commands, kernel, work_dim, NULL, &global, local_ptr, 0, NULL, &event);
-            CHECK_CL_SUCCESS("clEnqueueNDRangeKernel", err);
-            if (err) {
-                printf("Error: Failed to execute kernel!\n");
-                return EXIT_FAILURE;
-            }
-            err = clWaitForEvents(1, &event);
+            runKernel(in_buffer, commands, coalesce_kernel, work_dim, global, local_ptr, &event);
         }
         total_kernel_run_time = get_time_ms(before_runs);
         if (total_kernel_run_time >= min_profile_time_ms) {
@@ -456,11 +447,10 @@ int coalesce(void) {
         runs = runs * 2;
     }
 
-    CHECK_CL_SUCCESS("clWaitForEvents", err);
-    err = clGetEventProfilingInfo(event, CL_PROFILING_COMMAND_START, sizeof(cl_ulong), &start, NULL);
-    CHECK_CL_SUCCESS("clGetEventProfilingInfo", err);
-    err = clGetEventProfilingInfo(event, CL_PROFILING_COMMAND_END, sizeof(cl_ulong), &end, NULL);
-    CHECK_CL_SUCCESS("clGetEventProfilingInfo", err);
+    /* err = clGetEventProfilingInfo(event, CL_PROFILING_COMMAND_START, sizeof(cl_ulong), &start, NULL); */
+    /* CHECK_CL_SUCCESS("clGetEventProfilingInfo", err); */
+    /* err = clGetEventProfilingInfo(event, CL_PROFILING_COMMAND_END, sizeof(cl_ulong), &end, NULL); */
+    /* CHECK_CL_SUCCESS("clGetEventProfilingInfo", err); */
     // the resolution of the events is 1e-09 sec
 
     err = clFinish(commands);
@@ -478,7 +468,7 @@ int coalesce(void) {
     CHECK_CL_SUCCESS("clReleaseMemObject", err);
 	clReleaseProgram(program);
     CHECK_CL_SUCCESS("clReleaseProgram", err);
-	clReleaseKernel(kernel);
+	clReleaseKernel(coalesce_kernel);
     CHECK_CL_SUCCESS("clReleaseKernel", err);
 	clReleaseCommandQueue(commands);
     CHECK_CL_SUCCESS("clReleaseCommandQueue", err);
@@ -486,4 +476,34 @@ int coalesce(void) {
     CHECK_CL_SUCCESS("clReleaseContext", err);
 
     return EXIT_SUCCESS;
+}
+
+int runKernel(
+        cl_mem in_buffer,
+        cl_command_queue commands,
+        cl_kernel coalesce_kernel,
+        cl_uint work_dim,
+        unsigned int global,
+        size_t * local_ptr,
+        cl_event * event
+)
+{
+    int err = 0;
+    err |= clSetKernelArg(coalesce_kernel, 0, sizeof(cl_mem), &in_buffer);
+    CHECK_CL_SUCCESS("clSetKernelArg", err);
+    err |= clSetKernelArg(coalesce_kernel, 1, sizeof(cl_uint), &array_size);
+    CHECK_CL_SUCCESS("clSetKernelArg", err);
+    err = clEnqueueNDRangeKernel(commands, coalesce_kernel, work_dim, NULL, &global, local_ptr, 0, NULL, event);
+    CHECK_CL_SUCCESS("clEnqueueNDRangeKernel", err);
+    if (err) {
+        printf("Error: Failed to execute kernel!\n");
+        return EXIT_FAILURE;
+    }
+    err = clFinish(commands);
+    CHECK_CL_SUCCESS("clFinish", err);
+    err = clReleaseEvent(*event);
+    CHECK_CL_SUCCESS("clReleaseEvent", err);
+    /* err = clWaitForEvents(1, event); */
+    /* CHECK_CL_SUCCESS("clWaitForEvents", err); */
+    return err;
 }

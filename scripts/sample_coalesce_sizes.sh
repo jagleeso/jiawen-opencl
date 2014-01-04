@@ -9,12 +9,13 @@ cd $ROOT
 set -e
 executable=coalesce
 
-max_array_size=$(( $1 * 1024 * 1024 ))
+# e.g. $1 = 512MB -> 512*1024*1024 bytes / 4 bytes per int
+max_array_size=$(( ($1 * 1024 * 1024) / 4 ))
 num_work_groups="$2"
 min_profile_time_ms="$3"
 shift 3 || (echo 1>&2 "ERROR: $0 max_array_size_MB num_work_groups min_profile_time_ms" && exit 1)
 # start_size=16
-start_size=$((128*1024*1024))
+start_size=4
 
 sample_using_binary_exp() {
 
