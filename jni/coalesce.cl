@@ -14,29 +14,26 @@ __kernel void coalesce_optimal(
     uint idx = global_id;
     uint stride = get_global_size(0);
 
-    /* uint pmin = (uint) -1; */
+    /* Based on timing measurements, it looks like the OpenCL compiler will optimize 
+     * away any reads that can't subsequently affect a write.  To work around this, make 
+     * every read appear to matter by adding each zero entry to local variable pmin, and 
+     * writing it only for the first work-item.
+     */
     uint4 pmin;
 
     uint n;
-    for (n = 0; n < count && (idx + 1)*4 < elems; n++, idx += stride) {
-        /* pmin = min( pmin, src[idx].x ); */
-        /* pmin = min( pmin, src[idx].y ); */
-        /* pmin = min( pmin, src[idx].z ); */
-        /* pmin = min( pmin, src[idx].w ); */
+    for (n = 0; n < count; n++, idx += stride) {
+        pmin += src[idx];
+    }
 
-        /* pmin = src[idx].x; */
-        /* pmin = src[idx].y; */
-        /* pmin = src[idx].z; */
-        /* pmin = src[idx].w; */
-
-        pmin = src[idx];
-        /* src[idx] = (uint4)(0, 0, 0, 0); */
+    if (global_id == 0) {
+        src[0] = pmin;
     }
 
 }
 
 /* Precondition:
-   elems is divisble by 4 * G * (spacing + 1).
+ * elems is divisble by 4 * G * (spacing + 1).
  */
 __kernel void coalesce_spacing(
         __global uint4 *src,
@@ -51,15 +48,15 @@ __kernel void coalesce_spacing(
     uint n, i;
     uint count = (elems/4) / (G*(spacing + 1));
     uint idx = global_id*(spacing + 1);
-    for (n = 0; n < count; n++) {
+    uint stride = G*(spacing + 1);
+    for (n = 0; n < count; n++, idx += stride) {
         for (i = 0; i < spacing + 1; i++) {
-            pmin = src[idx + i];
+            pmin += src[idx + i];
         }
-        idx += G*(spacing + 1);
     }
 
     if (global_id == 0) {
-        src[0] = 0;
+        src[0] = pmin;
     }
 
 }
