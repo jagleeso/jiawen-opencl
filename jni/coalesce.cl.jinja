@@ -40,7 +40,11 @@ __kernel void coalesce_optimal(
  * elems is divisble by 4 * G * (spacing + 1).
  */
 {% macro coalesce_spacing(spacing) -%}
+{% if spacing is not none %}
 __kernel void coalesce_spacing_{{spacing}}(
+{% else %}
+__kernel void coalesce_spacing(
+{% endif %}
         __global uint4 *src,
         uint elems,
         uint spacing)
@@ -55,10 +59,16 @@ __kernel void coalesce_spacing_{{spacing}}(
     uint idx = global_id*(spacing + 1);
     uint stride = G*(spacing + 1);
     for (n = 0; n < count; n++, idx += stride) {
+        {% if spacing is not none %}
 
         {% for i in range(0, spacing + 1) -%}
         pmin += src[idx + {{i}}];
         {% endfor %}
+        {% else %}
+        for (i = 0; i < spacing + 1; i++) {
+            pmin += src[idx + i];
+        }
+        {% endif %}
     }
 
     if (global_id == 0) {
@@ -68,6 +78,9 @@ __kernel void coalesce_spacing_{{spacing}}(
 }
 {%- endmacro -%}
 
-{% for i in range(0, config.MAX_SPACING) %}
+{% for i in range(0, config.MAX_SPACING + 1) %}
 {{ coalesce_spacing(i) }}
-{% endfor %}
+{% endfor -%}
+
+{{ coalesce_spacing(None) }}
+

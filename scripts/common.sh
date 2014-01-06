@@ -1,9 +1,12 @@
 #!/bin/bash
-ROOT=../
+ROOT=$(readlink -f ../)
 
 build() {
     local executable="$1"
     shift 1
+    cd "$ROOT"
+    make templates
+    cd -
     ndk-build PROGRAM=$executable
 }
 

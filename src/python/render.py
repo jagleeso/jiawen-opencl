@@ -19,7 +19,7 @@ def main():
         outfile = args.output
     else:
         fname, ext = os.path.splitext(args.jinja_file)
-        if ext == 'jinja':
+        if ext == '.jinja':
             # strip jinja extension
             outfile = fname
         else:

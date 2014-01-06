@@ -184,7 +184,14 @@ int coalesce(void) {
     /* Determine our mode of operation (need to load the right kernel).
      */
     if (provided_array_size && provided_min_profile_time_ms && provided_num_work_groups && provided_spacing) {
-        strncpy(kernel_name, "coalesce_spacing", MAX_KERNEL_NAME);
+        if (
+                spacing >= 0 &&
+                spacing <= 12 // MAX_SPACING
+           ) {
+            snprintf(kernel_name, MAX_KERNEL_NAME, "coalesce_spacing_%u", spacing);
+        } else {
+            strncpy(kernel_name, "coalesce_spacing", MAX_KERNEL_NAME);
+        }
         mode = MODE_COALESCE_SPACING;
     } else if (provided_array_size && provided_min_profile_time_ms && provided_num_work_groups) {
         strncpy(kernel_name, "coalesce_optimal", MAX_KERNEL_NAME);
