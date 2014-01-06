@@ -10,11 +10,12 @@ set -e
 max_array_size_MB="$1"
 num_work_groups="$2"
 min_profile_time_ms="$3"
-max_spacing="$4"
-prefix="$5"
-shift 5 || (echo 1>&2 "ERROR: $0 max_array_size_MB num_work_groups min_profile_time_ms max_spacing prefix" && exit 1)
+min_spacing="$4"
+max_spacing="$5"
+prefix="$6"
+shift 6 || (echo 1>&2 "ERROR: $0 max_array_size_MB num_work_groups min_profile_time_ms min_spacing max_spacing prefix" && exit 1)
 
-for spacing in $(seq 0 $max_spacing); do 
+for spacing in $(seq $min_spacing $max_spacing); do 
     scripts/sample_coalesce_sizes.sh \
         "$max_array_size_MB" "$num_work_groups" "$min_profile_time_ms" \
         -s "$spacing" \

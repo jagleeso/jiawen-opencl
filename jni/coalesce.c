@@ -211,9 +211,6 @@ int coalesce(void) {
 	
 	cl_mem in_buffer;
 
-	cl_uint* in = malloc(sizeof(cl_uint)*array_size);              //plain text
-    assert(in != NULL);
-
 	initFns();
 	cl_platform_id platform = NULL;//the chosen platform
 	err = clGetPlatformIDs(1, &platform, NULL);
@@ -345,48 +342,6 @@ int coalesce(void) {
 #ifdef DEBUG 
 	printf("Create the input and output arrays in device memory for our calculation\n");
 #endif
-	// dynamic buffer size please
-	in_buffer = clCreateBuffer(context, CL_MEM_READ_WRITE | CL_MEM_ALLOC_HOST_PTR, array_size * sizeof(cl_uint), NULL, &err);
-    CHECK_CL_SUCCESS("clCreateBuffer", err);
-	if (!in_buffer)
-	{
-		printf("Error: Failed to allocate device memory!\n");
-		exit(1);
-	}    
-
-	// Get the maximum work group size for executing the kernel on the device
-#ifdef DEBUG 
-	printf("Get the maximum work group size for executing the kernel on the device\n");
-#endif
-
-	unsigned int i = 0;
-	for(i = 0; i < array_size; i++) {
-		in[i] = 0;
-	}
-
-    /* The timestamp just before we perform a copy the input array to global memory.
-     */
-    struct timeval before_copy_t;
-    gettimeofday(&before_copy_t, NULL);
-    err = clEnqueueWriteBuffer(commands, in_buffer, CL_TRUE, 0, array_size * sizeof(cl_uint), in, 0, NULL, NULL);
-    CHECK_CL_SUCCESS("clEnqueueWriteBuffer", err);
-    if (err != CL_SUCCESS)
-    {
-        printf("Error: Failed to write to source array!\n");
-        exit(1);
-    }
-    err = clFinish(commands);
-    CHECK_CL_SUCCESS("clFinish", err);
-    double copy_time = get_time_ms(before_copy_t);
-
-    // Execute the kernel over the entire range of our 1d input data set
-    // using the maximum number of work group items for this device
-
-    /* cl_ulong start = 0, end = 0; */
-
-    size_t max_kernel_work_group_size;
-    err = clGetKernelWorkGroupInfo(coalesce_kernel, device_id[DEVICE], CL_KERNEL_WORK_GROUP_SIZE,
-            sizeof(size_t), &max_kernel_work_group_size, NULL);
 
     size_t preferred_multiple = -1;
     err = clGetKernelWorkGroupInfo(coalesce_kernel,
@@ -396,15 +351,6 @@ int coalesce(void) {
             &preferred_multiple,
             NULL);
     CHECK_CL_SUCCESS("clGetKernelWorkGroupInfo", err);
-
-    cl_uint dims;
-    size_t max_work_items_dim1;
-    err = get_max_work_items(device_id[DEVICE], &dims, &max_work_items_dim1);
-    CHECK_CL_SUCCESS("get_max_work_items", err);
-    printf("> max dimensions: %i\n", dims);
-    printf("> max_work_items_dim1: %zd\n", max_work_items_dim1);
-    printf("> max_kernel_work_group_size: %zd\n", max_kernel_work_group_size);
-    printf("> CL_KERNEL_PREFERRED_WORK_GROUP_SIZE_MULTIPLE: %zd\n", preferred_multiple);
 
     /* Modes of operation:
     */
@@ -436,6 +382,56 @@ int coalesce(void) {
     assert(global != UINT_MAX);
     assert(local != UINT_MAX);
     assert(local_ptr != (size_t*) 0xffffffff);
+
+    /* Allocate the host memory input array (initialized to all zeros),
+     * then allocate a OpenCL memory buffer to copy it to.
+     */
+	cl_uint* in = malloc(sizeof(cl_uint)*array_size);
+    assert(in != NULL);
+	unsigned int i = 0;
+	for(i = 0; i < array_size; i++) {
+		in[i] = 0;
+	}
+	in_buffer = clCreateBuffer(context, CL_MEM_READ_WRITE | CL_MEM_ALLOC_HOST_PTR, array_size * sizeof(cl_uint), NULL, &err);
+    CHECK_CL_SUCCESS("clCreateBuffer", err);
+	if (!in_buffer)
+	{
+		printf("Error: Failed to allocate device memory!\n");
+		exit(1);
+	}    
+
+	// Get the maximum work group size for executing the kernel on the device
+#ifdef DEBUG 
+	printf("Get the maximum work group size for executing the kernel on the device\n");
+#endif
+
+    /* The timestamp just before we perform a copy the input array to global memory.
+     */
+    struct timeval before_copy_t;
+    gettimeofday(&before_copy_t, NULL);
+    err = clEnqueueWriteBuffer(commands, in_buffer, CL_TRUE, 0, array_size * sizeof(cl_uint), in, 0, NULL, NULL);
+    CHECK_CL_SUCCESS("clEnqueueWriteBuffer", err);
+    if (err != CL_SUCCESS)
+    {
+        printf("Error: Failed to write to source array!\n");
+        exit(1);
+    }
+    err = clFinish(commands);
+    CHECK_CL_SUCCESS("clFinish", err);
+    double copy_time = get_time_ms(before_copy_t);
+
+    // Execute the kernel over the entire range of our 1d input data set
+    // using the maximum number of work group items for this device
+
+    /* cl_ulong start = 0, end = 0; */
+
+    cl_uint dims;
+    size_t max_work_items_dim1;
+    err = get_max_work_items(device_id[DEVICE], &dims, &max_work_items_dim1);
+    CHECK_CL_SUCCESS("get_max_work_items", err);
+    printf("> max dimensions: %i\n", dims);
+    printf("> max_work_items_dim1: %zd\n", max_work_items_dim1);
+    printf("> CL_KERNEL_PREFERRED_WORK_GROUP_SIZE_MULTIPLE: %zd\n", preferred_multiple);
 
 	printf("> array_size: %u\n", array_size);
 	printf("> array size in bytes: %u bytes\n", array_size*sizeof(cl_uint));
