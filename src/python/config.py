@@ -1,0 +1,1 @@
+MAX_SPACING = 12

@@ -305,16 +305,16 @@ int coalesce(void) {
 	printf("Build the program executable\n");
 #endif
 	//
-	err = clBuildProgram(program, 0, NULL, NULL, NULL, NULL);
-	if (err != CL_SUCCESS)
+	int build_program_err = clBuildProgram(program, 0, NULL, NULL, NULL, NULL);
+    size_t log_size;
+    err = clGetProgramBuildInfo(program, device_id[DEVICE], CL_PROGRAM_BUILD_LOG, 0, NULL, &log_size);
+    CHECK_CL_SUCCESS("clGetProgramBuildInfo", err);
+    char* program_log = (char*) malloc((log_size + 1)*sizeof(char));
+    clGetProgramBuildInfo(program, device_id[DEVICE], CL_PROGRAM_BUILD_LOG, log_size + 1, program_log, NULL);
+    printf("%s\n", program_log);
+    free(program_log);
+	if (build_program_err != CL_SUCCESS)
 	{
-		size_t log_size;
-        err = clGetProgramBuildInfo(program, device_id[DEVICE], CL_PROGRAM_BUILD_LOG, 0, NULL, &log_size);
-        CHECK_CL_SUCCESS("clGetProgramBuildInfo", err);
-        char* program_log = (char*) malloc((log_size + 1)*sizeof(char));
-        clGetProgramBuildInfo(program, device_id[DEVICE], CL_PROGRAM_BUILD_LOG, log_size + 1, program_log, NULL);
-        printf("%s\n", program_log);
-        free(program_log);
 		printf("Error: Failed to build program executable!\n");
 		exit(1);
 	}
