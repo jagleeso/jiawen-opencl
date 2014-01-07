@@ -19,5 +19,6 @@ for spacing in $(seq $min_spacing $max_spacing); do
     scripts/sample_coalesce_sizes.sh \
         "$max_array_size_MB" "$num_work_groups" "$min_profile_time_ms" \
         -s "$spacing" \
+        "$@" \
         | tee "$prefix.${spacing}_spacing.txt"
 done
