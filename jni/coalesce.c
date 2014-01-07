@@ -380,7 +380,11 @@ int coalesce(void) {
         case MODE_COALESCE_OPTIMAL:
         case MODE_COALESCE_SPACING:
         case MODE_COALESCE_SPACING_UNROLL_GROUP:
-            local = preferred_multiple;
+            if (provided_local_work_size) {
+                local = local_work_size;
+            } else {
+                local = preferred_multiple;
+            }
             local_ptr = &local;
             global = num_work_groups * local;
             break;

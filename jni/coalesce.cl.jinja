@@ -100,7 +100,7 @@ __kernel void coalesce_spacing_group_{{spacing}}(
     for (n = 0; n < count; n++, idx += stride*{{group_size}}) {
         {% for i in range(0, group_size) -%}
         {% for j in range(0, spacing + 1) -%}
-        pmin += src[idx + i*stride + {{j}}];
+        pmin += src[idx + {{i}}*stride + {{j}}];
         {% endfor %}
         {% endfor %}
     }
@@ -120,7 +120,8 @@ __kernel void coalesce_spacing_group_{{spacing}}(
 {{ coalesce_spacing(None) }}
 
 {% if config.ENABLE_UNROLL_GROUP_MODE %}
-{% for i in range(0, config.MAX_SPACING + 1) %}
+{# {% for i in range(0, config.MAX_SPACING + 1) %} #}
+{% for i in range(0, 3 + 1) %}
 {{ coalesce_spacing_group(i, config.WORK_GROUP_SIZE) }}
 {% endfor -%}
 {% endif %}

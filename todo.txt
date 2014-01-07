@@ -1,5 +1,27 @@
 - try to make 0 spacing outperform 1 spacing (unroll loop by global size to test hypothesis that lack of 
   performance is due to cost of comparison operations)
+  - performed better at 0 spacing when doing work group unrolling (80 gbps instead of 60 
+    gbps), but increasing the source code size of the kernel to execute reduces the 
+    CL_KERNEL_PREFERRED_WORK_GROUP_SIZE_MULTIPLE:
+    ** NEVERMIND, code was wrong (might have cached global reads); I think it'll do worse.
+
+    spacing | work group size
+    0       | 128
+    1       | 128
+    2       | 128
+    3       | 128
+    4       | 112
+    5       | 96
+    6       | 80
+    7       | 80
+    8       | 64
+    9       | 64
+    10      | 64
+    11      | 64
+    12      | 48
+
+    try old experiment with work group size = 48 just to make sure this isn't the cause...
+    or not, since its 128 for 0
 
 - make sure coalescing is happening for current encryption implementation
 

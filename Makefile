@@ -10,9 +10,9 @@ example-aes:
 coalesce:
 	ndk-build PROGRAM=coalesce
 
-PYTHON_SCRIPTS=src/python
-%: %.jinja $(PYTHON_SCRIPTS)/render.py
-	$(PYTHON_SCRIPTS)/render.py $<
+PYTHON_SRC=src/python
+%: %.jinja $(PYTHON_SRC)/render.py $(PYTHON_SRC)/config.py
+	$(PYTHON_SRC)/render.py $<
 
 templates: jni/coalesce.cl
 .PHONY: templates
