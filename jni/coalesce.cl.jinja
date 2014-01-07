@@ -78,9 +78,49 @@ __kernel void coalesce_spacing(
 }
 {%- endmacro -%}
 
+{% macro coalesce_spacing_group(spacing, group_size) -%}
+/* Precondition:
+ * elems is divisble by 4 * G * (spacing + 1) * {{group_size}}
+ * (i.e. the work group size is {{group_size}}).
+ */
+__kernel void coalesce_spacing_group_{{spacing}}(
+        __global uint4 *src,
+        uint elems,
+        uint spacing)
+{
+    uint global_id = get_global_id(0);
+    uint G = get_global_size(0);
+
+    uint4 pmin;
+
+    uint n, i;
+    uint count = (elems/4) / (G*(spacing + 1)*{{group_size}});
+    uint idx = global_id*(spacing + 1);
+    uint stride = G*(spacing + 1);
+    for (n = 0; n < count; n++, idx += stride*{{group_size}}) {
+        {% for i in range(0, group_size) -%}
+        {% for j in range(0, spacing + 1) -%}
+        pmin += src[idx + i*stride + {{j}}];
+        {% endfor %}
+        {% endfor %}
+    }
+
+    if (global_id == 0) {
+        src[0] = pmin;
+    }
+
+}
+{%- endmacro -%}
+
+
 {% for i in range(0, config.MAX_SPACING + 1) %}
 {{ coalesce_spacing(i) }}
 {% endfor -%}
 
 {{ coalesce_spacing(None) }}
 
+{% if config.ENABLE_UNROLL_GROUP_MODE %}
+{% for i in range(0, config.MAX_SPACING + 1) %}
+{{ coalesce_spacing_group(i, config.WORK_GROUP_SIZE) }}
+{% endfor -%}
+{% endif %}

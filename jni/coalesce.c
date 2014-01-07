@@ -59,19 +59,25 @@ int provided_min_profile_time_ms = 0;
 unsigned int spacing = UINT_MAX; // mark as uninitialized
 int provided_spacing = 0; 
 
+/* u
+*/
+int unroll_group = 0;
+
 int mode = -1; // mark as uninitialized
 #define MODE_COALESCE_OPTIMAL 0
 #define MODE_COALESCE_SPACING 1
+#define MODE_COALESCE_SPACING_UNROLL_GROUP 2
 
 char *modes[] = {
     "MODE_COALESCE_OPTIMAL",
     "MODE_COALESCE_SPACING",
+    "MODE_COALESCE_SPACING_UNROLL_GROUP",
 };
 
 #define MAX_KERNEL_NAME 1024
 char kernel_name[MAX_KERNEL_NAME];
 
-static char *option_string = "a:G:I:t:s:";
+static char *option_string = "a:G:I:t:s:u";
 int main(int argc, char* argv[])
 {
     program_name = argv[0];
@@ -137,6 +143,9 @@ int main(int argc, char* argv[])
             }
             provided_spacing = 1;
             break;
+        case 'u':
+            unroll_group = 1;
+            break;
 		case '?':
             fprintf(stderr, "\n");
 			usage();
@@ -183,7 +192,10 @@ int coalesce(void) {
 
     /* Determine our mode of operation (need to load the right kernel).
      */
-    if (provided_array_size && provided_min_profile_time_ms && provided_num_work_groups && provided_spacing) {
+    if (provided_array_size && provided_min_profile_time_ms && provided_num_work_groups && provided_spacing && unroll_group) {
+        snprintf(kernel_name, MAX_KERNEL_NAME, "coalesce_spacing_group_%u", spacing);
+        mode = MODE_COALESCE_SPACING_UNROLL_GROUP;
+    } else if (provided_array_size && provided_min_profile_time_ms && provided_num_work_groups && provided_spacing) {
         if (
                 spacing >= 0 &&
                 spacing <= 12 // MAX_SPACING
@@ -367,6 +379,7 @@ int coalesce(void) {
     switch (mode) {
         case MODE_COALESCE_OPTIMAL:
         case MODE_COALESCE_SPACING:
+        case MODE_COALESCE_SPACING_UNROLL_GROUP:
             local = preferred_multiple;
             local_ptr = &local;
             global = num_work_groups * local;
@@ -378,6 +391,10 @@ int coalesce(void) {
         case MODE_COALESCE_SPACING:
             assert(array_size % 4 == 0);
             array_size = 4*ROUND_UP(array_size/4, global*(spacing + 1));
+            break;
+        case MODE_COALESCE_SPACING_UNROLL_GROUP:
+            assert(array_size % 4 == 0);
+            array_size = 4*ROUND_UP(array_size/4, global*(spacing + 1)*local);
             break;
         default:
             fprintf(stderr, "Invalid mode of operation\n");
@@ -445,6 +462,7 @@ int coalesce(void) {
     printf("> mode = %s\n", modes[mode]);
     switch (mode) {
         case MODE_COALESCE_SPACING:
+        case MODE_COALESCE_SPACING_UNROLL_GROUP:
             printf("> spacing: %u\n", spacing);
             break;
     }
@@ -535,6 +553,7 @@ int runKernel(
     CHECK_CL_SUCCESS("clSetKernelArg", err);
     switch (mode) {
         case MODE_COALESCE_SPACING: 
+        case MODE_COALESCE_SPACING_UNROLL_GROUP:
             err |= clSetKernelArg(coalesce_kernel, 2, sizeof(cl_uint), &spacing);
             CHECK_CL_SUCCESS("clSetKernelArg", err);
     }
