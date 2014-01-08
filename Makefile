@@ -9,6 +9,8 @@ example-aes:
 	ndk-build PROGRAM=example-aes
 coalesce:
 	ndk-build PROGRAM=coalesce
+memcopy:
+	ndk-build PROGRAM=memcopy
 
 PYTHON_SRC=src/python
 %: %.jinja $(PYTHON_SRC)/render.py $(PYTHON_SRC)/config.py

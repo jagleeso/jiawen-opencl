@@ -17,19 +17,21 @@
 #include "common.h"
 
 #define DEBUG
-#define KERNEL			"/data/local/tmp/coalesce.cl"
+#define KERNEL			"/data/local/tmp/memcopy.cl"
 
 #define LOOP (1000)
 
 #define DEVICE 0  
-int coalesce();
+int memcopy();
 
 char* program_name;
 static void usage(void) {
 
-	printf("usage:\n");
+	printf("usage: %s -a ARRAY_SIZE -G WORK_GROUP_SIZE -t MIN_PROFILE_TIME_MS\n", program_name);
 
 	printf("ARRAY_SIZE: the size in bytes of the data to encrypt\n");
+	printf("WORK_GROUP_SIZE: the local_work_size parameter to clEnqueueNDRangeKernel\n");
+	printf("MIN_PROFILE_TIME_MS: the minimum amount of time needed for the runs of a benchmark (we report an average over such runs)\n");
 
 	exit(EXIT_FAILURE);
 }
@@ -44,40 +46,42 @@ int provided_array_size = 0;
 unsigned int num_work_groups = UINT_MAX; // mark as uninitialized
 int provided_num_work_groups = 0; 
 
-/* I
-*/
-unsigned int local_work_size = UINT_MAX; // mark as uninitialized
-int provided_local_work_size = 0; 
-
 /* t
 */
 unsigned int min_profile_time_ms = UINT_MAX; // mark as uninitialized
 int provided_min_profile_time_ms = 0; 
 
-/* s
-*/
-unsigned int spacing = UINT_MAX; // mark as uninitialized
-int provided_spacing = 0; 
-
-/* u
-*/
-int unroll_group = 0;
-
 int mode = -1; // mark as uninitialized
-#define MODE_COALESCE_OPTIMAL 0
-#define MODE_COALESCE_SPACING 1
-#define MODE_COALESCE_SPACING_UNROLL_GROUP 2
+#define MODE_CPU_GPU 0
 
 char *modes[] = {
-    "MODE_COALESCE_OPTIMAL",
-    "MODE_COALESCE_SPACING",
-    "MODE_COALESCE_SPACING_UNROLL_GROUP",
+    "MODE_CPU_GPU",
 };
 
 #define MAX_KERNEL_NAME 1024
 char kernel_name[MAX_KERNEL_NAME];
 
-static char *option_string = "a:G:I:t:s:u";
+#define ASSERT_OR_PRINTF(condition, ...) \
+    if (!(condition)) { \
+        printf(__VA_ARGS__); \
+        assert(condition); \
+    } \
+
+void check_output(cl_uint* in, cl_uint* out, size_t count) {
+    int i;
+    for (i = 0; i < count; i++) {
+        ASSERT_OR_PRINTF(out[i] == in[i] + 1, "in[%i] == %i, out[%i] == %i\n", i, in[i], out[i], i);
+    }
+}
+
+void check_input(cl_uint* in, size_t count) {
+    int i;
+    for (i = 0; i < count; i++) {
+        assert(in[i] == 0);
+    }
+}
+
+static char *option_string = "G:t:a:";
 int main(int argc, char* argv[])
 {
     program_name = argv[0];
@@ -104,19 +108,6 @@ int main(int argc, char* argv[])
             }
             provided_num_work_groups = 1;
             break;
-        case 'I':
-            if (safe_cmp("NULL", optarg) == 0) {
-                local_work_size = 0;
-            } else {
-                result = sscanf(optarg, "%d", &local_work_size);
-                if (result != 1) {
-                    printf("result == %d\n", result);
-                    fprintf(stderr, "Error: expected the local work size (local_work_size), but saw \"%s\"\n", optarg);
-                    usage();
-                }
-            }
-            provided_local_work_size = 1;
-            break;
         case 't':
             if (safe_cmp("NULL", optarg) == 0) {
                 min_profile_time_ms = 0;
@@ -129,22 +120,6 @@ int main(int argc, char* argv[])
                 }
             }
             provided_min_profile_time_ms = 1;
-            break;
-        case 's':
-            if (safe_cmp("NULL", optarg) == 0) {
-                spacing = 0;
-            } else {
-                result = sscanf(optarg, "%d", &spacing);
-                if (result != 1) {
-                    printf("result == %d\n", result);
-                    fprintf(stderr, "Error: expected the minimum profile time (spacing), but saw \"%s\"\n", optarg);
-                    usage();
-                }
-            }
-            provided_spacing = 1;
-            break;
-        case 'u':
-            unroll_group = 1;
             break;
 		case '?':
             fprintf(stderr, "\n");
@@ -168,73 +143,42 @@ int main(int argc, char* argv[])
         }
     }
 
-	coalesce();
+	memcopy();
 	return 0;
 }
 
-int runKernel(
-        cl_mem in_buffer,
-        cl_command_queue commands,
-        cl_kernel coalesce_kernel,
-        cl_uint work_dim,
-        unsigned int global,
-        size_t * local_ptr,
-        cl_event * event
-);
-
-/* entries: the number of "entries" (i.e. groups of size 16) that each OpenCL kernel instance should handle
- * num_work_groups: the "global work size" (the number of OpenCL AES instances to split the encryption of the input array between).
- */
-int coalesce(void) {
+int memcopy(void) {
 
     /* Determine our mode of operation (need to load the right kernel).
      */
-    if (provided_array_size && provided_min_profile_time_ms && provided_num_work_groups && provided_spacing && unroll_group) {
-        snprintf(kernel_name, MAX_KERNEL_NAME, "coalesce_spacing_group_%u", spacing);
-        mode = MODE_COALESCE_SPACING_UNROLL_GROUP;
-    } else if (provided_array_size && provided_min_profile_time_ms && provided_num_work_groups && provided_spacing) {
-        if (
-                spacing >= 0 &&
-                spacing <= 12 // MAX_SPACING
-           ) {
-            snprintf(kernel_name, MAX_KERNEL_NAME, "coalesce_spacing_%u", spacing);
-        } else {
-            strncpy(kernel_name, "coalesce_spacing", MAX_KERNEL_NAME);
-        }
-        mode = MODE_COALESCE_SPACING;
-    } else if (provided_array_size && provided_min_profile_time_ms && provided_num_work_groups) {
-        strncpy(kernel_name, "coalesce_optimal", MAX_KERNEL_NAME);
-        mode = MODE_COALESCE_OPTIMAL;
+
+    if (provided_array_size && provided_num_work_groups && provided_min_profile_time_ms) {
+        mode = MODE_CPU_GPU;
     } else {
         fprintf(stderr, "Invalid mode of operation\n");
         usage();
         abort();
     }
+    strncpy(kernel_name, "memcopy", MAX_KERNEL_NAME);
     assert(mode != -1);
     assert(strlen(kernel_name) != 0);
 	
-	int err;                            // error code returned from api calls
-	/* size_t global;                      // global domain size for our calculation */
-	/* size_t local;                       // local domain size for our calculation */
-
-	cl_device_id *device_id;             // compute device id 
-	cl_context context;                 // compute context
-	cl_command_queue commands;          // compute command queue
-	cl_program program;                 // compute program
-	cl_kernel coalesce_kernel;                   // compute kernel
-	//cl_kernel decrypt_kernel;                   // compute kernel
+	int err;
+	cl_device_id *device_id;
+	cl_context context;
+	cl_command_queue commands;
+	cl_program program;
+	cl_kernel memcopy_kernel;
 	cl_event event;
 	
 	cl_mem in_buffer;
 
 	initFns();
-	cl_platform_id platform = NULL;//the chosen platform
+	cl_platform_id platform = NULL;
 	err = clGetPlatformIDs(1, &platform, NULL);
     CHECK_CL_SUCCESS("clGetPlatformIDs", err);
 
 	cl_uint numDevices = 0;
-	//int gpu = 1;
-	//err = clGetDeviceIDs(NULL, gpu ? CL_DEVICE_TYPE_GPU : CL_DEVICE_TYPE_CPU, 1, &device_id, NULL);
 	device_id = (cl_device_id*)malloc(2 * sizeof(cl_device_id));
 	err = clGetDeviceIDs(platform, CL_DEVICE_TYPE_ALL, 2, device_id, &numDevices);
 	if (err != CL_SUCCESS)
@@ -322,11 +266,9 @@ int coalesce(void) {
 
 	// Create the compute kernel in the program we wish to run
 	printf("> kernel_name = %s\n", kernel_name);
-	coalesce_kernel = clCreateKernel(program, kernel_name, &err);
+	memcopy_kernel = clCreateKernel(program, kernel_name, &err);
 
-	/* coalesce_kernel = clCreateKernel(program, "AES_encrypt_coalesced", &err); */
-	/* coalesce_kernel = clCreateKernel(program, "AES_encrypt_old", &err); */
-	if (!coalesce_kernel || err != CL_SUCCESS) {
+	if (!memcopy_kernel || err != CL_SUCCESS) {
 		printf("Error: Failed to create compute kernel! err = %d\n", err);
 		size_t len;
 		char b[2048];
@@ -337,7 +279,7 @@ int coalesce(void) {
 	}
 
     size_t preferred_multiple = -1;
-    err = clGetKernelWorkGroupInfo(coalesce_kernel,
+    err = clGetKernelWorkGroupInfo(memcopy_kernel,
             device_id[0],
             CL_KERNEL_PREFERRED_WORK_GROUP_SIZE_MULTIPLE,
             sizeof(size_t),
@@ -351,28 +293,11 @@ int coalesce(void) {
     unsigned int local = UINT_MAX;
     size_t * local_ptr = (size_t*) 0xffffffff;
     switch (mode) {
-        case MODE_COALESCE_OPTIMAL:
-        case MODE_COALESCE_SPACING:
-        case MODE_COALESCE_SPACING_UNROLL_GROUP:
-            if (provided_local_work_size) {
-                local = local_work_size;
-            } else {
-                local = preferred_multiple;
-            }
+        case MODE_CPU_GPU:
+            local = preferred_multiple;
             local_ptr = &local;
             global = num_work_groups * local;
-            break;
-    }
-    switch (mode) {
-        case MODE_COALESCE_OPTIMAL:
-            break;
-        case MODE_COALESCE_SPACING:
-            assert(array_size % 4 == 0);
-            array_size = 4*ROUND_UP(array_size/4, global*(spacing + 1));
-            break;
-        case MODE_COALESCE_SPACING_UNROLL_GROUP:
-            assert(array_size % 4 == 0);
-            array_size = 4*ROUND_UP(array_size/4, global*(spacing + 1)*local);
+            array_size = ROUND_UP(array_size, 4*global);
             break;
         default:
             fprintf(stderr, "Invalid mode of operation\n");
@@ -389,33 +314,65 @@ int coalesce(void) {
      * then allocate a OpenCL memory buffer to copy it to.
      */
 	cl_uint* in = malloc(sizeof(cl_uint)*array_size);
+	cl_uint* out = malloc(sizeof(cl_uint)*array_size);
     assert(in != NULL);
 	unsigned int i = 0;
 	for(i = 0; i < array_size; i++) {
 		in[i] = 0;
 	}
-	in_buffer = clCreateBuffer(context, CL_MEM_READ_WRITE | CL_MEM_ALLOC_HOST_PTR, array_size * sizeof(cl_uint), NULL, &err);
-    CHECK_CL_SUCCESS("clCreateBuffer", err);
-	if (!in_buffer)
-	{
-		printf("Error: Failed to allocate device memory!\n");
-		exit(1);
-	}    
+
 
     /* The timestamp just before we perform a copy the input array to global memory.
      */
-    struct timeval before_copy_t;
-    gettimeofday(&before_copy_t, NULL);
-    err = clEnqueueWriteBuffer(commands, in_buffer, CL_TRUE, 0, array_size * sizeof(cl_uint), in, 0, NULL, NULL);
-    CHECK_CL_SUCCESS("clEnqueueWriteBuffer", err);
-    if (err != CL_SUCCESS)
-    {
-        printf("Error: Failed to write to source array!\n");
-        exit(1);
-    }
-    err = clFinish(commands);
-    CHECK_CL_SUCCESS("clFinish", err);
-    double copy_time = get_time_ms(before_copy_t);
+    /* struct timeval before_copy_t; */
+    /* gettimeofday(&before_copy_t, NULL); */
+    BENCHMARK_THEN_RUN(
+
+        /* Create buffer
+         */
+        in_buffer = clCreateBuffer(context, CL_MEM_READ_WRITE | CL_MEM_ALLOC_HOST_PTR, array_size * sizeof(cl_uint), NULL, &err);
+        CHECK_CL_SUCCESS("clCreateBuffer", err);
+        if (!in_buffer)
+        {
+            printf("Error: Failed to allocate device memory!\n");
+            exit(1);
+        }    
+        ,
+
+        /* Perform the copy.
+         */
+        err = clEnqueueWriteBuffer(commands, in_buffer, CL_TRUE, 0, array_size * sizeof(cl_uint), in, 0, NULL, NULL);
+        CHECK_CL_SUCCESS("clEnqueueWriteBuffer", err);
+        if (err != CL_SUCCESS)
+        {
+            printf("Error: Failed to write to source array!\n");
+            exit(1);
+        }
+        err = clFinish(commands);
+        CHECK_CL_SUCCESS("clFinish", err);
+        ,
+
+        /* Cleanup buffer.
+         */
+        clReleaseMemObject(in_buffer);
+        CHECK_CL_SUCCESS("clReleaseMemObject", err);
+        ,
+
+        total_cpu_to_gpu_copy_time,
+        avg_cpu_to_gpu_copy_time,
+        cpu_to_gpu_runs,
+        min_profile_time_ms);
+
+    /* err = clEnqueueWriteBuffer(commands, in_buffer, CL_TRUE, 0, array_size * sizeof(cl_uint), in, 0, NULL, NULL); */
+    /* CHECK_CL_SUCCESS("clEnqueueWriteBuffer", err); */
+    /* if (err != CL_SUCCESS) */
+    /* { */
+    /*     printf("Error: Failed to write to source array!\n"); */
+    /*     exit(1); */
+    /* } */
+    /* err = clFinish(commands); */
+    /* CHECK_CL_SUCCESS("clFinish", err); */
+    /* double copy_time = get_time_ms(before_copy_t); */
 
     // Execute the kernel over the entire range of our 1d input data set
     // using the maximum number of work group items for this device
@@ -431,13 +388,6 @@ int coalesce(void) {
 	printf("> array_size: %u\n", array_size);
 	printf("> array size in bytes: %u bytes\n", array_size*sizeof(cl_uint));
     printf("> mode = %s\n", modes[mode]);
-    switch (mode) {
-        case MODE_COALESCE_SPACING:
-        case MODE_COALESCE_SPACING_UNROLL_GROUP:
-            printf("> spacing: %u\n", spacing);
-            break;
-    }
-
     printf("num_work_groups is %d\n", num_work_groups);
 
     printf("> GLOBAL = %u\n", global);
@@ -445,60 +395,15 @@ int coalesce(void) {
 
     err = 0;
 
+    err |= clSetKernelArg(memcopy_kernel, 0, sizeof(cl_mem), &in_buffer);
+    CHECK_CL_SUCCESS("clSetKernelArg", err);
+    err |= clSetKernelArg(memcopy_kernel, 1, sizeof(cl_uint), &array_size);
+    CHECK_CL_SUCCESS("clSetKernelArg", err);
+
     /* Run the kernel a minimum number of times so that it can be averaged over the min_profile_time_ms.
      */
     cl_uint work_dim = 1;
-    BENCHMARK(
-            runKernel(in_buffer, commands, coalesce_kernel, work_dim, global, local_ptr, &event), 
-            total_kernel_run_time,
-            avg_kernel_run_time,
-            runs,
-            min_profile_time_ms);
-
-    err = clFinish(commands);
-    CHECK_CL_SUCCESS("clFinish", err);
-
-	printf("-----------------------------------------------\n");
-    printf("average profile time: %f ms\n", avg_kernel_run_time);
-	printf("copy time: %.2f ms\n", copy_time); 
-
-	// Shutdown and cleanup
-	clReleaseMemObject(in_buffer);
-    CHECK_CL_SUCCESS("clReleaseMemObject", err);
-	clReleaseProgram(program);
-    CHECK_CL_SUCCESS("clReleaseProgram", err);
-	clReleaseKernel(coalesce_kernel);
-    CHECK_CL_SUCCESS("clReleaseKernel", err);
-	clReleaseCommandQueue(commands);
-    CHECK_CL_SUCCESS("clReleaseCommandQueue", err);
-	clReleaseContext(context);
-    CHECK_CL_SUCCESS("clReleaseContext", err);
-
-    return EXIT_SUCCESS;
-}
-
-int runKernel(
-        cl_mem in_buffer,
-        cl_command_queue commands,
-        cl_kernel coalesce_kernel,
-        cl_uint work_dim,
-        unsigned int global,
-        size_t * local_ptr,
-        cl_event * event
-)
-{
-    int err = 0;
-    err |= clSetKernelArg(coalesce_kernel, 0, sizeof(cl_mem), &in_buffer);
-    CHECK_CL_SUCCESS("clSetKernelArg", err);
-    err |= clSetKernelArg(coalesce_kernel, 1, sizeof(cl_uint), &array_size);
-    CHECK_CL_SUCCESS("clSetKernelArg", err);
-    switch (mode) {
-        case MODE_COALESCE_SPACING: 
-        case MODE_COALESCE_SPACING_UNROLL_GROUP:
-            err |= clSetKernelArg(coalesce_kernel, 2, sizeof(cl_uint), &spacing);
-            CHECK_CL_SUCCESS("clSetKernelArg", err);
-    }
-    err = clEnqueueNDRangeKernel(commands, coalesce_kernel, work_dim, NULL, &global, local_ptr, 0, NULL, event);
+    err = clEnqueueNDRangeKernel(commands, memcopy_kernel, work_dim, NULL, &global, local_ptr, 0, NULL, &event);
     CHECK_CL_SUCCESS("clEnqueueNDRangeKernel", err);
     if (err) {
         printf("Error: Failed to execute kernel!\n");
@@ -506,7 +411,53 @@ int runKernel(
     }
     err = clFinish(commands);
     CHECK_CL_SUCCESS("clFinish", err);
-    err = clReleaseEvent(*event);
+    err = clReleaseEvent(event);
     CHECK_CL_SUCCESS("clReleaseEvent", err);
-    return err;
+
+    BENCHMARK_THEN_RUN(
+
+        /* Setup (nothing to do).
+         */
+        ,
+
+        /* Perform the copy.
+         */
+        err = clEnqueueReadBuffer(commands, in_buffer, CL_TRUE, 0, array_size * sizeof(cl_uint), out, 0, NULL, NULL);
+        if (err != CL_SUCCESS) {
+            printf("Error: Failed to read output array! %d\n", err);
+            exit(1);
+        }
+        err = clFinish(commands);
+        CHECK_CL_SUCCESS("clFinish", err);
+        ,
+
+        /* Cleanup (nothing to do).
+         */
+        ,
+
+        total_gpu_to_cpu_copy_time,
+        avg_gpu_to_cpu_copy_time,
+        gpu_to_cpu_runs,
+        min_profile_time_ms)
+    check_input(in, array_size);
+    check_output(in, out, array_size);
+
+	printf("-----------------------------------------------\n");
+    /* printf("average profile time: %f ms\n", avg_kernel_run_time); */
+	printf("average CPU-to-GPU copy time: %.2f ms\n", avg_cpu_to_gpu_copy_time); 
+	printf("average GPU-to-CPU copy time: %.2f ms\n", avg_gpu_to_cpu_copy_time); 
+
+	// Shutdown and cleanup
+	clReleaseMemObject(in_buffer);
+    CHECK_CL_SUCCESS("clReleaseMemObject", err);
+	clReleaseProgram(program);
+    CHECK_CL_SUCCESS("clReleaseProgram", err);
+	clReleaseKernel(memcopy_kernel);
+    CHECK_CL_SUCCESS("clReleaseKernel", err);
+	clReleaseCommandQueue(commands);
+    CHECK_CL_SUCCESS("clReleaseCommandQueue", err);
+	clReleaseContext(context);
+    CHECK_CL_SUCCESS("clReleaseContext", err);
+
+    return EXIT_SUCCESS;
 }

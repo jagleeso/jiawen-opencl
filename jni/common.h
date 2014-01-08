@@ -29,5 +29,44 @@ int get_max_work_items(cl_device_id device_id, cl_uint *dims, size_t *max_work_i
 double milliseconds(struct timeval t);
 double get_time_ms(struct timeval start);
 
+#define BENCHMARK(code, total_run_time, avg_run_time, runs, min_profile_time_ms) \
+    double total_run_time = 0; \
+    double avg_run_time = 0; \
+    int runs = 1; \
+    while (1) { \
+        printf("trying %u runs...\n", runs); \
+        printf("run once to handle cache effects...\n"); \
+        code; \
+        printf("start real runs...\n"); \
+        struct timeval before_runs; \
+        gettimeofday(&before_runs, NULL); \
+        for (i = 0; i < runs; i++) { \
+            code; \
+        } \
+        total_run_time = get_time_ms(before_runs); \
+        if (total_run_time >= min_profile_time_ms) { \
+            avg_run_time = total_run_time / (double) runs; \
+            break; \
+        } \
+        runs = runs * 2; \
+    } \
 
+
+
+/* If skip_benchmark is false, first benchmark:
+ * - setup, code, teardown
+ * Then, run:
+ * - setup, code 
+ */
+#define BENCHMARK_THEN_RUN(setup, code, teardown, total_run_time, avg_run_time, runs, min_profile_time_ms) \
+    BENCHMARK(setup; \
+            code; \
+            teardown;, \
+            total_run_time, \
+            avg_run_time, \
+            runs, \
+            min_profile_time_ms); \
+    setup; \
+    code; \
+    
 #endif /* end of include guard: COMMON_H */

@@ -19,6 +19,10 @@ ifeq ($(PROGRAM),example-aes)
 else
 ifeq ($(PROGRAM),coalesce)
 	LOCAL_SRC_FILES := aopencl.c coalesce.c $(COMMON_SRC_FILES)
+else
+ifeq ($(PROGRAM),memcopy)
+	LOCAL_SRC_FILES := aopencl.c memcopy.c $(COMMON_SRC_FILES)
+endif
 endif
 endif
 endif

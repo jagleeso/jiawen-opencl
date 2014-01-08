@@ -14,7 +14,10 @@ copy_program_over() {
     local executable="$1"
     shift 1
     adb push libs/armeabi-v7a/$executable /data/local/tmp
-    adb push jni/$opencl /data/local/tmp
+    tmpdir=$(mktemp -d)
+    cp jni/*.cl $tmpdir
+    adb push $tmpdir /data/local/tmp
+    rm -r $tmpdir
 }
 
 run_program() {
@@ -66,5 +69,34 @@ sample_powers_of_2_using_constant_start() {
         run_program $executable $array_size
         array_size=$((array_size * 2))
         echo
+    done
+}
+
+# sample_array_size_using_constant_increment 100 512 memcopy_with_size
+sample_array_size_using_constant_increment() {
+    local executable="$1"
+    local samples="$2"
+    local max_array_size_MB="$3"
+    local run_with_size="$4"
+    shift 4
+
+    # The max array size rounded down to a number divisible by 16*samples (requirement of uint4 
+    # datatype).
+    local rounded_max_array_size_bytes=$(( ((max_array_size_MB*1024*1024)/(16*samples))*(16*samples) ))
+    # uint -> 4 bytes
+    local max_array_size=$((rounded_max_array_size_bytes/4))
+    # Sample size is is increment*16*i for i=1..100 
+    # i.e. 100 samples spaced evenly apart, each yielding a size divisible by 16
+    local increment=$(( max_array_size/samples ))
+    echo "> Max array_size (bytes): $rounded_max_array_size_bytes"
+    echo "> Max array_size: $rounded_max_array_size_bytes"
+    echo "> Sample array_size increment (bytes): $increment"
+    echo "> Samples: $samples"
+
+    build $executable
+    copy_program_over $executable
+
+    for array_size in $(seq $increment $increment $max_array_size); do 
+        $run_with_size $array_size
     done
 }
