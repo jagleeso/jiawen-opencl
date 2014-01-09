@@ -51,11 +51,17 @@ int provided_num_work_groups = 0;
 unsigned int min_profile_time_ms = UINT_MAX; // mark as uninitialized
 int provided_min_profile_time_ms = 0; 
 
+/* r
+*/
+int reuse_buffer = 0;
+
 int mode = -1; // mark as uninitialized
 #define MODE_CPU_GPU 0
+#define MODE_REUSE_BUFFER 1
 
 char *modes[] = {
     "MODE_CPU_GPU",
+    "MODE_REUSE_BUFFER",
 };
 
 #define MAX_KERNEL_NAME 1024
@@ -81,7 +87,7 @@ void check_input(cl_uint* in, size_t count) {
     }
 }
 
-static char *option_string = "G:t:a:";
+static char *option_string = "G:t:a:r";
 int main(int argc, char* argv[])
 {
     program_name = argv[0];
@@ -152,8 +158,10 @@ int memcopy(void) {
     /* Determine our mode of operation (need to load the right kernel).
      */
 
-    if (provided_array_size && provided_num_work_groups && provided_min_profile_time_ms) {
+    if (provided_array_size && provided_num_work_groups && provided_min_profile_time_ms && reuse_buffer) {
         mode = MODE_CPU_GPU;
+    } else if (provided_array_size && provided_num_work_groups && provided_min_profile_time_ms) {
+        mode = MODE_REUSE_BUFFER;
     } else {
         fprintf(stderr, "Invalid mode of operation\n");
         usage();
@@ -294,6 +302,7 @@ int memcopy(void) {
     size_t * local_ptr = (size_t*) 0xffffffff;
     switch (mode) {
         case MODE_CPU_GPU:
+        case MODE_REUSE_BUFFER:
             local = preferred_multiple;
             local_ptr = &local;
             global = num_work_groups * local;
@@ -322,46 +331,81 @@ int memcopy(void) {
 	}
 
 
-    /* The timestamp just before we perform a copy the input array to global memory.
-     */
-    /* struct timeval before_copy_t; */
-    /* gettimeofday(&before_copy_t, NULL); */
-    BENCHMARK_THEN_RUN(
+#define CREATE_BUFFER \
+    in_buffer = clCreateBuffer(context, CL_MEM_READ_WRITE | CL_MEM_ALLOC_HOST_PTR, array_size * sizeof(cl_uint), NULL, &err); \
+    CHECK_CL_SUCCESS("clCreateBuffer", err); \
+    if (!in_buffer) \
+    { \
+        printf("Error: Failed to allocate device memory!\n"); \
+        exit(1); \
+    } \
 
+    double total_cpu_to_gpu_copy_time;
+    double avg_cpu_to_gpu_copy_time;
+    int cpu_to_gpu_runs;
+    if (mode == MODE_REUSE_BUFFER) {
         /* Create buffer
          */
-        in_buffer = clCreateBuffer(context, CL_MEM_READ_WRITE | CL_MEM_ALLOC_HOST_PTR, array_size * sizeof(cl_uint), NULL, &err);
-        CHECK_CL_SUCCESS("clCreateBuffer", err);
-        if (!in_buffer)
-        {
-            printf("Error: Failed to allocate device memory!\n");
-            exit(1);
-        }    
-        ,
+        CREATE_BUFFER;
+        BENCHMARK_THEN_RUN(
+            /* Nothing to initialize.
+             */
+            ,
 
-        /* Perform the copy.
-         */
-        err = clEnqueueWriteBuffer(commands, in_buffer, CL_TRUE, 0, array_size * sizeof(cl_uint), in, 0, NULL, NULL);
-        CHECK_CL_SUCCESS("clEnqueueWriteBuffer", err);
-        if (err != CL_SUCCESS)
-        {
-            printf("Error: Failed to write to source array!\n");
-            exit(1);
-        }
-        err = clFinish(commands);
-        CHECK_CL_SUCCESS("clFinish", err);
-        ,
+            /* Perform the copy.
+             */
+            err = clEnqueueWriteBuffer(commands, in_buffer, CL_TRUE, 0, array_size * sizeof(cl_uint), in, 0, NULL, NULL);
+            CHECK_CL_SUCCESS("clEnqueueWriteBuffer", err);
+            if (err != CL_SUCCESS)
+            {
+                printf("Error: Failed to write to source array!\n");
+                exit(1);
+            }
+            err = clFinish(commands);
+            CHECK_CL_SUCCESS("clFinish", err);
+            ,
 
-        /* Cleanup buffer.
-         */
-        clReleaseMemObject(in_buffer);
-        CHECK_CL_SUCCESS("clReleaseMemObject", err);
-        ,
+            /* Nothing to cleanup.
+             */
+            ,
 
-        total_cpu_to_gpu_copy_time,
-        avg_cpu_to_gpu_copy_time,
-        cpu_to_gpu_runs,
-        min_profile_time_ms);
+            total_cpu_to_gpu_copy_time,
+            avg_cpu_to_gpu_copy_time,
+            cpu_to_gpu_runs,
+            min_profile_time_ms);
+
+    } else {
+        BENCHMARK_THEN_RUN(
+
+            /* Create buffer
+             */
+            CREATE_BUFFER
+            ,
+
+            /* Perform the copy.
+             */
+            err = clEnqueueWriteBuffer(commands, in_buffer, CL_TRUE, 0, array_size * sizeof(cl_uint), in, 0, NULL, NULL);
+            CHECK_CL_SUCCESS("clEnqueueWriteBuffer", err);
+            if (err != CL_SUCCESS)
+            {
+                printf("Error: Failed to write to source array!\n");
+                exit(1);
+            }
+            err = clFinish(commands);
+            CHECK_CL_SUCCESS("clFinish", err);
+            ,
+
+            /* Cleanup buffer.
+             */
+            clReleaseMemObject(in_buffer);
+            CHECK_CL_SUCCESS("clReleaseMemObject", err);
+            ,
+
+            total_cpu_to_gpu_copy_time,
+            avg_cpu_to_gpu_copy_time,
+            cpu_to_gpu_runs,
+            min_profile_time_ms);
+    }
 
     /* err = clEnqueueWriteBuffer(commands, in_buffer, CL_TRUE, 0, array_size * sizeof(cl_uint), in, 0, NULL, NULL); */
     /* CHECK_CL_SUCCESS("clEnqueueWriteBuffer", err); */
@@ -414,6 +458,9 @@ int memcopy(void) {
     err = clReleaseEvent(event);
     CHECK_CL_SUCCESS("clReleaseEvent", err);
 
+    double total_gpu_to_cpu_copy_time;
+    double avg_gpu_to_cpu_copy_time;
+    int gpu_to_cpu_runs;
     BENCHMARK_THEN_RUN(
 
         /* Setup (nothing to do).

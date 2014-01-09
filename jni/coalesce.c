@@ -448,6 +448,9 @@ int coalesce(void) {
     /* Run the kernel a minimum number of times so that it can be averaged over the min_profile_time_ms.
      */
     cl_uint work_dim = 1;
+    double total_kernel_run_time;
+    double avg_kernel_run_time;
+    int runs;
     BENCHMARK(
             runKernel(in_buffer, commands, coalesce_kernel, work_dim, global, local_ptr, &event), 
             total_kernel_run_time,

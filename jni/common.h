@@ -30,9 +30,9 @@ double milliseconds(struct timeval t);
 double get_time_ms(struct timeval start);
 
 #define BENCHMARK(code, total_run_time, avg_run_time, runs, min_profile_time_ms) \
-    double total_run_time = 0; \
-    double avg_run_time = 0; \
-    int runs = 1; \
+    total_run_time = 0; \
+    avg_run_time = 0; \
+    runs = 1; \
     while (1) { \
         printf("trying %u runs...\n", runs); \
         printf("run once to handle cache effects...\n"); \
