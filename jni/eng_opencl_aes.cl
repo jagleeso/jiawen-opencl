@@ -705,10 +705,17 @@ __kernel void AES_encrypt_strided_local_tbox(__global uint4 *state, __constant u
     }
 }
 
-__kernel void AES_encrypt_coalesced_local_tbox(__global uint4 *state, __constant uint4 *rk, uint rounds, uint entries, uint entries_to_encrypt) {
+__kernel void AES_encrypt_coalesced_local_tbox(
+        __global uint4 *state,
+        __constant uint4 *rk,
+        uint rounds,
+        uint entries,
+        uint entries_to_encrypt) {
+
+    uint global_id = get_global_id(0);
+    uint stride = get_global_size(0);
+
 	uint local_id = get_local_id(0);
-	uint work_group_size = get_local_size(0);
-    uint work_group_id = get_group_id(0);
 	uint local_work_size = get_local_size(0);
 
 	__local uint Te_Local0[256];
@@ -728,12 +735,8 @@ __kernel void AES_encrypt_coalesced_local_tbox(__global uint4 *state, __constant
 	barrier(CLK_LOCAL_MEM_FENCE);
 
 	uint4 s, t;
-    uint entry;
-    for (entry = 0; entry < entries; entry++) {
-        uint i = local_id + entry*work_group_size + entries*work_group_size*work_group_id;
-        if (i > entries_to_encrypt - 1) {
-            break;
-        }
+    uint end = min(entries*stride, entries_to_encrypt);
+    for (i = global_id; i < end; i += stride) {
         __constant uint4 * _rk = rk;
         s = state[i] ^ _rk[0];
         
