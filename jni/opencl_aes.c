@@ -104,6 +104,10 @@ int local_tbox = 0; // false
 */
 int coalesced_local_tbox = 0; // false
 
+/* R 
+*/
+int runtime_local_worksize = 0;
+
 /* r 
 */
 unsigned int runs = 2; // mark as uninitialized
@@ -127,7 +131,7 @@ char *modes[] = {
 #define MAX_KERNEL_NAME 1024
 char kernel_name[MAX_KERNEL_NAME];
 
-static char *option_string = "e:a:G:I:tTr:";
+static char *option_string = "e:a:G:I:tTr:R";
 int main(int argc, char* argv[])
 {
     program_name = argv[0];
@@ -192,6 +196,9 @@ int main(int argc, char* argv[])
         case 't':
             local_tbox = 1;
             break;
+        case 'R':
+            runtime_local_worksize = 1;
+            break;
         case 'T':
             coalesced_local_tbox = 1;
             break;
@@ -231,16 +238,16 @@ int encrypt_cl(void) {
 
     /* Determine our mode of operation (need to load the right kernel).
      */
-    if (provided_array_size && provided_num_work_groups && provided_local_work_size && coalesced_local_tbox) {
+    if (provided_array_size && provided_num_work_groups && coalesced_local_tbox) {
         strncpy(kernel_name, "AES_encrypt_coalesced_local_tbox", MAX_KERNEL_NAME);
         mode = MODE_COALESCED_TBOX_LOCAL_MEMORY;
-    } else if (provided_array_size && provided_num_work_groups && provided_local_work_size && local_tbox) {
+    } else if (provided_array_size && provided_num_work_groups && local_tbox) {
         strncpy(kernel_name, "AES_encrypt_strided_local_tbox", MAX_KERNEL_NAME);
         mode = MODE_STRIDED_TBOX_LOCAL_MEMORY;
-    } else if (provided_array_size && provided_num_work_groups && provided_local_work_size) {
+    } else if (provided_array_size && provided_num_work_groups) {
         strncpy(kernel_name, "AES_encrypt_strided", MAX_KERNEL_NAME);
         mode = MODE_STRIDED_EQUAL_WORK_ITEM_PARTITION;
-    } else if (provided_array_size && provided_entries && provided_local_work_size) { 
+    } else if (provided_array_size && provided_entries && runtime_local_worksize) { 
         strncpy(kernel_name, "AES_encrypt", MAX_KERNEL_NAME);
         mode = MODE_RUNTIME_LOCAL_WORK_SIZE;
     } else if (provided_array_size && provided_entries) {
@@ -518,6 +525,14 @@ int encrypt_cl(void) {
         err = clGetKernelWorkGroupInfo(encrypt_kernel, device_id[DEVICE], CL_KERNEL_WORK_GROUP_SIZE,
                 sizeof(size_t), &max_kernel_work_group_size, NULL);
 
+        size_t preferred_multiple = -1;
+        err = clGetKernelWorkGroupInfo(encrypt_kernel,
+                device_id[0],
+                CL_KERNEL_PREFERRED_WORK_GROUP_SIZE_MULTIPLE,
+                sizeof(size_t),
+                &preferred_multiple,
+                NULL);
+        CHECK_CL_SUCCESS("clGetKernelWorkGroupInfo", err);
 
         cl_uint dims;
         size_t max_work_items_dim1;
@@ -525,6 +540,7 @@ int encrypt_cl(void) {
         CHECK_CL_SUCCESS("get_max_work_items", err);
         printf("> max dimensions: %i\n", dims);
         printf("> max_work_items_dim1: %zd\n", max_work_items_dim1);
+        printf("> CL_KERNEL_PREFERRED_WORK_GROUP_SIZE_MULTIPLE: %zd\n", preferred_multiple);
         printf("> max_kernel_work_group_size: %zd\n", max_kernel_work_group_size);
 
         /* 1 thread operates on 4 (uint4 vector type has 4 uints, (x, y, w, z)) consecutive 32 bit 
@@ -543,6 +559,9 @@ int encrypt_cl(void) {
         /* Modes of operation:
         */
         entries_to_encrypt = array_size / 16;
+        if (!provided_local_work_size) {
+            local_work_size = preferred_multiple;
+        }
         switch (mode) {
             case MODE_COALESCED_TBOX_LOCAL_MEMORY:
                 /* Same as MODE_STRIDED_TBOX_LOCAL_MEMORY, but with coalesced accesses to the input as in 
@@ -614,7 +633,6 @@ int encrypt_cl(void) {
                  *     array size and number entries encrypted by each work item)
                  */
                 num_processing_elements = CEILING_DIVIDE(entries_to_encrypt, entries);
-                local_work_size = MIN(max_kernel_work_group_size, max_work_items_dim1);
                 num_work_groups = ROUND_UP(num_processing_elements, local_work_size)/local_work_size;
                 break;
             default:
