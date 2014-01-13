@@ -6,7 +6,7 @@ set -e
 set -x 
 shift 1 || (echo "ERROR: $0 executable" && exit 1)
 
-set -x 
+# set -x 
 cd "$(dirname "$0")"/scripts
 echo $PWD
 source common.sh
